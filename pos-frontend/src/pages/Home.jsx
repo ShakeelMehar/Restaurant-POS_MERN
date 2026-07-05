@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import BottomNav from "../components/shared/BottomNav";
+
 import Greetings from "../components/home/Greetings";
 import { BsCashCoin } from "react-icons/bs";
 import { GrInProgress } from "react-icons/gr";
@@ -28,7 +28,7 @@ const Home = () => {
       <div className="flex-[2] min-w-0">
         <PopularDishes />
       </div>
-      <BottomNav />
+
     </section>
   );
 };

@@ -14,6 +14,7 @@ import { removeAllItems } from "../../redux/slices/cartSlice";
 import { removeCustomer } from "../../redux/slices/customerSlice";
 import Invoice from "../invoice/Invoice";
 import { useNavigate } from "react-router-dom";
+import { FaPlus, FaPrint, FaCheckCircle, FaMoneyBillWave, FaCreditCard, FaGlobe, FaTimes } from "react-icons/fa";
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -65,7 +66,7 @@ const Bill = () => {
       totalWithTax: totalPriceWithTax,
     },
     items: cartData,
-    table: customerData.table.tableId,
+    table: customerData.table?.tableId,
     paymentMethod: paymentMethod,
     ...extraFields,
   });
@@ -233,6 +234,8 @@ const Bill = () => {
     },
   });
 
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+
   return (
     <>
       <div className="flex items-center justify-between px-5 mt-2">
@@ -255,43 +258,124 @@ const Bill = () => {
           PKR {totalPriceWithTax.toFixed(2)}
         </h1>
       </div>
-      <div className="flex items-center gap-3 px-5 mt-4">
+      
+      {/* Cart Action Footer */}
+      <div className="flex flex-col gap-3 px-5 mt-6 pb-4">
+        <div className="flex items-center gap-3 w-full">
+          <button 
+            onClick={() => dispatch(removeAllItems())}
+            className="flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#383838] px-4 py-3 w-full rounded-lg text-[#f5f5f5] font-semibold transition-all">
+            <FaPlus className="text-[#ababab]" /> New Order
+          </button>
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#383838] px-4 py-3 w-full rounded-lg text-[#f5f5f5] font-semibold transition-all">
+            <FaPrint className="text-[#ababab]" /> Print Order
+          </button>
+        </div>
         <button
-          onClick={() => setPaymentMethod("Cash")}
-          className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] font-semibold ${
-            paymentMethod === "Cash" ? "bg-[#383737]" : ""
-          }`}
+          onClick={() => {
+            if (cartData.length === 0) {
+              enqueueSnackbar("Add at least one item to continue.", { variant: "warning" });
+              return;
+            }
+            setShowCheckoutModal(true);
+          }}
+          className="flex items-center justify-center gap-3 bg-primary hover:brightness-110 px-4 py-4 w-full rounded-lg text-base font-bold text-xl transition-all shadow-[0_0_15px_rgba(246,177,0,0.2)]"
         >
-          Cash
-        </button>
-        <button
-          onClick={() => setPaymentMethod("Online")}
-          className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] font-semibold ${
-            paymentMethod === "Online" ? "bg-[#383737]" : ""
-          }`}
-        >
-          Online
-        </button>
-      </div>
-
-      <div className="flex items-center gap-3 px-5 mt-4">
-        <button className="bg-[#025cca] px-4 py-3 w-full rounded-lg text-[#f5f5f5] font-semibold text-lg">
-          Print Receipt
-        </button>
-        <button
-          onClick={handlePlaceOrder}
-          className="bg-[#f6b100] px-4 py-3 w-full rounded-lg text-[#1f1f1f] font-semibold text-lg"
-        >
-          {isEditingOrder
-            ? updateExistingOrderMutation.isPending
-              ? "Updating..."
-              : "Update Order"
-            : "Place Order"}
+          <FaCheckCircle /> {isEditingOrder ? "Update Order" : "Proceed to Checkout"}
         </button>
       </div>
 
       {showInvoice && (
         <Invoice orderInfo={orderInfo} setShowInvoice={setShowInvoice} />
+      )}
+
+      {/* Checkout Dialog Modal */}
+      {showCheckoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-[#1f1f1f] w-[500px] rounded-2xl p-6 shadow-2xl">
+            <h2 className="text-2xl font-bold text-[#f5f5f5] mb-6 border-b border-[#2a2a2a] pb-4">Checkout Review</h2>
+            
+            {/* Order Summary */}
+            <div className="mb-6 bg-[#1a1a1a] rounded-lg p-4">
+              <div className="flex justify-between text-[#ababab] mb-2">
+                <span>Total Items:</span>
+                <span className="text-[#f5f5f5] font-semibold">{cartData.length}</span>
+              </div>
+              <div className="flex justify-between text-[#ababab] mb-2">
+                <span>Subtotal:</span>
+                <span className="text-[#f5f5f5] font-semibold">PKR {total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-[#ababab] mb-2">
+                <span>Tax (5.25%):</span>
+                <span className="text-[#f5f5f5] font-semibold">PKR {tax.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-xl font-bold mt-4 border-t border-[#2a2a2a] pt-4 text-[#f5f5f5]">
+                <span>Total:</span>
+                <span className="text-primary">PKR {totalPriceWithTax.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Payment Methods */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-[#f5f5f5] mb-3">Payment Method</h3>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setPaymentMethod("Cash")}
+                  className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
+                    paymentMethod === "Cash" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                  }`}
+                >
+                  <FaMoneyBillWave size={24} />
+                  Cash
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("Card")}
+                  className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
+                    paymentMethod === "Card" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                  }`}
+                >
+                  <FaCreditCard size={24} />
+                  Card
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("Online")}
+                  className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
+                    paymentMethod === "Online" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                  }`}
+                >
+                  <FaGlobe size={24} />
+                  Online
+                </button>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 mt-8">
+              <button 
+                onClick={() => setShowCheckoutModal(false)}
+                className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#2a2a2a] hover:bg-[#383838] rounded-lg text-[#f5f5f5] font-bold transition-all"
+              >
+                <FaTimes /> Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  if(!paymentMethod) {
+                    enqueueSnackbar("Please select a payment method!", { variant: "warning" });
+                    return;
+                  }
+                  setShowCheckoutModal(false);
+                  handlePlaceOrder();
+                }}
+                disabled={!paymentMethod}
+                className="flex-[2] flex items-center justify-center gap-2 py-4 bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-[#1f1f1f] font-bold text-xl transition-all shadow-lg"
+              >
+                <FaCheckCircle /> Cash Out
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

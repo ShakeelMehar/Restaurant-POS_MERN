@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import BottomNav from "../components/shared/BottomNav";
+
 import BackButton from "../components/shared/BackButton";
 import TableCard from "../components/tables/TableCard";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -151,7 +151,7 @@ const Tables = () => {
         onClose={() => setIsAddTableOpen(false)}
       />
 
-      <BottomNav />
+
     </section>
   );
 };

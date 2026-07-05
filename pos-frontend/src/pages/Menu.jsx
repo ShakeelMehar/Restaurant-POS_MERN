@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import BottomNav from "../components/shared/BottomNav";
-import BackButton from "../components/shared/BackButton";
+
 import { MdRestaurantMenu } from "react-icons/md";
 import MenuContainer from "../components/menu/MenuContainer";
-import CustomerInfo from "../components/menu/CustomerInfo";
 import CartInfo from "../components/menu/CartInfo";
 import Bill from "../components/menu/Bill";
 import { useSelector } from "react-redux";
@@ -25,7 +23,6 @@ const Menu = () => {
       <div className="flex-[3] min-w-0">
         <div className="flex items-center justify-between px-10 py-4">
           <div className="flex items-center gap-4">
-            <BackButton />
             <h1 className="text-[#f5f5f5] text-2xl font-bold tracking-wider">
               {isEditingOrder ? "Modify Order" : "Menu"}
             </h1>
@@ -36,32 +33,12 @@ const Menu = () => {
               Browse Catalog
             </button>
           </div>
-          <div className="flex items-center justify-around gap-4">
-            <div className="flex items-center gap-3 cursor-pointer">
-              <MdRestaurantMenu className="text-[#f5f5f5] text-4xl" />
-              <div className="flex flex-col items-start">
-                <h1 className="text-md text-[#f5f5f5] font-semibold tracking-wide">
-                  {customerData.customerName || "Customer Name"}
-                </h1>
-                <p className="text-xs text-[#ababab] font-medium">
-                  Table : {customerData.table?.tableNo || "N/A"}
-                </p>
-                {isEditingOrder && (
-                  <p className="text-xs font-semibold text-[#F6B100]">
-                    Editing existing order
-                  </p>
-                )}
-              </div>
-            </div>
           </div>
-        </div>
 
         <MenuContainer />
       </div>
       {/* Right Div */}
-      <div className="mt-4 mr-3 flex-[1] self-start rounded-lg bg-[#1a1a1a] pt-2">
-        {/* Customer Info */}
-        <CustomerInfo />
+      <div className="mt-4 mr-3 flex-[1] self-start rounded-lg bg-base pt-2">
         <hr className="border-[#2a2a2a] border-t-2" />
         {/* Cart Items */}
         <CartInfo />
@@ -70,7 +47,7 @@ const Menu = () => {
         <Bill />
       </div>
 
-      <BottomNav />
+
     </section>
   );
 };

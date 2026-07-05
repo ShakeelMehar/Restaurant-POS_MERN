@@ -27,11 +27,21 @@ function Layout() {
           path="/"
           element={
             <ProtectedRoutes>
-              <Home />
+              <Navigate to="/menu" replace />
             </ProtectedRoutes>
           }
         />
-        <Route path="/auth" element={isAuth ? <Navigate to="/" /> : <Auth />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoutes>
+              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                <Home />
+              </RoleGuard>
+            </ProtectedRoutes>
+          }
+        />
+        <Route path="/auth" element={isAuth ? <Navigate to="/menu" /> : <Auth />} />
         <Route
           path="/orders"
           element={
@@ -60,7 +70,9 @@ function Layout() {
           path="/dashboard"
           element={
             <ProtectedRoutes>
-              <Dashboard />
+              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                <Dashboard />
+              </RoleGuard>
             </ProtectedRoutes>
           }
         />
@@ -68,7 +80,9 @@ function Layout() {
           path="/catalog"
           element={
             <ProtectedRoutes>
-              <Catalog />
+              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                <Catalog />
+              </RoleGuard>
             </ProtectedRoutes>
           }
         />
@@ -84,6 +98,14 @@ function ProtectedRoutes({ children }) {
     return <Navigate to="/auth" />;
   }
 
+  return children;
+}
+
+function RoleGuard({ allowedRoles, children }) {
+  const { role } = useSelector((state) => state.user);
+  if (!allowedRoles.includes(role)) {
+    return <Navigate to="/menu" replace />;
+  }
   return children;
 }
 

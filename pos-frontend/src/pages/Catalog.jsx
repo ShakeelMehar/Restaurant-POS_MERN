@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BackButton from "../components/shared/BackButton";
-import BottomNav from "../components/shared/BottomNav";
+
 import AddCategoryModal from "../components/dashboard/AddCategoryModal";
 import AddDishModal from "../components/dashboard/AddDishModal";
 import {
@@ -201,7 +201,7 @@ const Catalog = () => {
         onClose={() => setIsDishModalOpen(false)}
       />
 
-      <BottomNav />
+
     </section>
   );
 };

@@ -91,81 +91,184 @@ export const tables = [
     { id: 15, name: "Table 15", status: "Booked", initial: "TW", seats: 3 },
 ];
 
-export const startersItem = [
-    { id: 1, name: "Samosa", price: 100, category: "Vegetarian" },
-    { id: 2, name: "Pakora", price: 120, category: "Vegetarian" },
-    { id: 3, name: "Chicken Tikka", price: 300, category: "Non-Vegetarian" },
-    { id: 4, name: "Seekh Kebab", price: 350, category: "Non-Vegetarian" },
-    { id: 5, name: "Chapli Kebab", price: 400, category: "Non-Vegetarian" },
-    { id: 6, name: "Dahi Bhalla", price: 150, category: "Vegetarian" },
+export const biryaniItems = [
+    {
+        id: 1,
+        name: "Chicken Biryani",
+        price: 300,
+        description: "Fragrant basmati rice layered with spiced marinated chicken.",
+        category: "Biryani",
+        optionGroups: [
+            {
+                id: "portion",
+                name: "Portion Size",
+                required: true,
+                options: [
+                    { id: "student", name: "Student", extraPrice: 0 },
+                    { id: "half", name: "Half", extraPrice: 100 },
+                    { id: "full", name: "Full", extraPrice: 300 },
+                    { id: "double", name: "Double Chicken", extraPrice: 500 }
+                ]
+            },
+            {
+                id: "type",
+                name: "Type",
+                required: true,
+                options: [
+                    { id: "chicken", name: "Chicken", extraPrice: 0 },
+                    { id: "sada", name: "Sada (Plain)", extraPrice: -50 }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: "Beef Biryani",
+        price: 350,
+        description: "Aromatic basmati rice cooked with tender, spicy beef.",
+        category: "Biryani",
+        optionGroups: [
+            {
+                id: "portion",
+                name: "Portion Size",
+                required: true,
+                options: [
+                    { id: "student", name: "Student", extraPrice: 0 },
+                    { id: "half", name: "Half", extraPrice: 100 },
+                    { id: "full", name: "Full", extraPrice: 350 },
+                    { id: "double", name: "Double Beef", extraPrice: 550 }
+                ]
+            },
+            {
+                id: "type",
+                name: "Type",
+                required: true,
+                options: [
+                    { id: "beef", name: "Beef", extraPrice: 0 },
+                    { id: "sada", name: "Sada (Plain)", extraPrice: -50 }
+                ]
+            }
+        ]
+    }
 ];
 
-export const mainCourse = [
-    { id: 1, name: "Chicken Karahi", price: 800, category: "Non-Vegetarian" },
-    { id: 2, name: "Mutton Karahi", price: 1200, category: "Non-Vegetarian" },
-    { id: 3, name: "Sindhi Biryani", price: 600, category: "Non-Vegetarian" },
-    { id: 4, name: "Nihari", price: 700, category: "Non-Vegetarian" },
-    { id: 5, name: "Haleem", price: 500, category: "Non-Vegetarian" },
-    { id: 6, name: "Daal Chawal", price: 300, category: "Vegetarian" },
+export const pulaoItems = [
+    {
+        id: 1,
+        name: "Chicken Pulao",
+        price: 250,
+        description: "Mildly spiced rice cooked in rich chicken broth.",
+        category: "Pulao",
+        optionGroups: [
+            {
+                id: "portion",
+                name: "Portion Size",
+                required: true,
+                options: [
+                    { id: "student", name: "Student", extraPrice: 0 },
+                    { id: "half", name: "Half", extraPrice: 100 },
+                    { id: "full", name: "Full", extraPrice: 300 },
+                    { id: "double", name: "Double Chicken", extraPrice: 500 }
+                ]
+            },
+            {
+                id: "type",
+                name: "Type",
+                required: true,
+                options: [
+                    { id: "chicken", name: "Chicken", extraPrice: 0 },
+                    { id: "sada", name: "Sada (Plain)", extraPrice: -50 }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: "Beef Pulao",
+        price: 300,
+        description: "Traditional rice dish cooked in savory beef stock.",
+        category: "Pulao",
+        optionGroups: [
+            {
+                id: "portion",
+                name: "Portion Size",
+                required: true,
+                options: [
+                    { id: "student", name: "Student", extraPrice: 0 },
+                    { id: "half", name: "Half", extraPrice: 100 },
+                    { id: "full", name: "Full", extraPrice: 350 },
+                    { id: "double", name: "Double Beef", extraPrice: 550 }
+                ]
+            },
+            {
+                id: "type",
+                name: "Type",
+                required: true,
+                options: [
+                    { id: "beef", name: "Beef", extraPrice: 0 },
+                    { id: "sada", name: "Sada (Plain)", extraPrice: -50 }
+                ]
+            }
+        ]
+    }
 ];
 
-export const beverages = [
-    { id: 1, name: "Lassi", price: 150, category: "Cold" },
-    { id: 2, name: "Rooh Afza", price: 100, category: "Cold" },
-    { id: 3, name: "Doodh Patti", price: 120, category: "Hot" },
-    { id: 4, name: "Peshawari Kahwa", price: 80, category: "Hot" },
-    { id: 5, name: "Mango Shake", price: 200, category: "Cold" },
-    { id: 6, name: "Lemonade", price: 100, category: "Cold" },
+export const drinksItems = [
+    { id: 1, name: "Pepsi", price: 100, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }, { id: "large", name: "1.5L", extraPrice: 150 }] }] },
+    { id: 2, name: "Coke", price: 100, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }, { id: "large", name: "1.5L", extraPrice: 150 }] }] },
+    { id: 3, name: "Sprite", price: 100, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }, { id: "large", name: "1.5L", extraPrice: 150 }] }] },
+    { id: 4, name: "Next Cola", price: 80, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }] }] },
+    { id: 5, name: "Gourmet Cola", price: 80, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }] }] },
+    { id: 6, name: "Malta", price: 80, category: "Cold", optionGroups: [{ id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }] }] },
 ];
 
-export const soups = [
-    { id: 1, name: "Chicken Corn Soup", price: 200, category: "Non-Vegetarian" },
-    { id: 2, name: "Hot & Sour Soup", price: 250, category: "Non-Vegetarian" },
-    { id: 3, name: "Yakhni", price: 150, category: "Non-Vegetarian" },
-    { id: 4, name: "Thai Soup", price: 300, category: "Non-Vegetarian" },
-    { id: 5, name: "Mulligatawny Soup", price: 250, category: "Non-Vegetarian" },
-    { id: 6, name: "Lentil Soup", price: 150, category: "Vegetarian" },
-];
-
-export const desserts = [
-    { id: 1, name: "Kheer", price: 200, category: "Vegetarian" },
-    { id: 2, name: "Gulab Jamun", price: 150, category: "Vegetarian" },
-    { id: 3, name: "Rasmalai", price: 250, category: "Vegetarian" },
-    { id: 4, name: "Jalebi", price: 100, category: "Vegetarian" },
-];
-
-export const bbqGrills = [
-    { id: 1, name: "Bihari Boti", price: 400, category: "Non-Vegetarian" },
-    { id: 2, name: "Malai Boti", price: 450, category: "Non-Vegetarian" },
-    { id: 3, name: "Reshmi Kebab", price: 400, category: "Non-Vegetarian" },
-];
-
-export const naanRoti = [
-    { id: 1, name: "Roghni Naan", price: 80, category: "Breads" },
-    { id: 2, name: "Garlic Naan", price: 100, category: "Breads" },
-    { id: 3, name: "Tandoori Roti", price: 30, category: "Breads" },
-    { id: 4, name: "Puri", price: 50, category: "Breads" },
-    { id: 5, name: "Paratha", price: 60, category: "Breads" },
-    { id: 6, name: "Keema Naan", price: 200, category: "Breads" },
-];
-
-export const streetFood = [
-    { id: 1, name: "Bun Kebab", price: 150, category: "Street Food" },
-    { id: 2, name: "Gol Gappay", price: 200, category: "Street Food" },
-    { id: 3, name: "Chana Chaat", price: 120, category: "Street Food" },
-    { id: 4, name: "Aloo Tikki", price: 100, category: "Street Food" },
-    { id: 5, name: "Shawarma", price: 250, category: "Street Food" },
+export const extrasItems = [
+    {
+        id: 1,
+        name: "Plain Rice",
+        price: 100,
+        description: "Freshly steamed plain white rice.",
+        category: "Extras",
+        optionGroups: [
+            {
+                id: "portion",
+                name: "Portion Size",
+                required: true,
+                options: [
+                    { id: "100", name: "100 PKR", extraPrice: 0 },
+                    { id: "half", name: "Half", extraPrice: 50 },
+                    { id: "200", name: "200 PKR", extraPrice: 100 },
+                    { id: "full", name: "Full", extraPrice: 200 },
+                    { id: "300", name: "300 PKR", extraPrice: 200 }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: "Raita",
+        price: 50,
+        category: "Extras",
+        optionGroups: [
+            { id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }, { id: "large", name: "Large", extraPrice: 50 }] }
+        ]
+    },
+    {
+        id: 3,
+        name: "Salad",
+        price: 50,
+        category: "Extras",
+        optionGroups: [
+            { id: "size", name: "Size", required: true, options: [{ id: "reg", name: "Regular", extraPrice: 0 }, { id: "large", name: "Large", extraPrice: 50 }] }
+        ]
+    }
 ];
 
 export const menus = [
-    { id: 1, name: "Starters", bgColor: "#b73e3e", icon: "🍲", items: startersItem },
-    { id: 2, name: "Main Course", bgColor: "#5b45b0", icon: "🍛", items: mainCourse },
-    { id: 3, name: "Beverages", bgColor: "#7f167f", icon: "🍹", items: beverages },
-    { id: 4, name: "Soups", bgColor: "#735f32", icon: "🍜", items: soups },
-    { id: 5, name: "Desserts", bgColor: "#1d2569", icon: "🍰", items: desserts },
-    { id: 6, name: "BBQ & Grills", bgColor: "#285430", icon: "🍖", items: bbqGrills },
-    { id: 7, name: "Naan & Roti", bgColor: "#b73e3e", icon: "🫓", items: naanRoti },
-    { id: 8, name: "Street Food", bgColor: "#5b45b0", icon: "🥙", items: streetFood },
+    { id: 1, name: "Biryani", bgColor: "#b73e3e", icon: "🍛", items: biryaniItems },
+    { id: 2, name: "Pulao", bgColor: "#5b45b0", icon: "🥘", items: pulaoItems },
+    { id: 3, name: "Drinks", bgColor: "#7f167f", icon: "🍹", items: drinksItems },
+    { id: 4, name: "Extras", bgColor: "#735f32", icon: "🥗", items: extrasItems },
 ];
 
 export const metricsData = [

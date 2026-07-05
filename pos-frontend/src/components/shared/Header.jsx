@@ -42,32 +42,7 @@ const Header = () => {
     logoutMutation.mutate();
   };
 
-  const quickActions =
-    userData.role === "Admin"
-      ? isDashboardRoute
-        ? [
-            {
-              key: "home",
-              icon: <FaHomeSolid className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/"),
-              label: "Home",
-            },
-            {
-              key: "orders",
-              icon: <MdOutlineReorder className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/orders"),
-              label: "Orders",
-            },
-          ]
-        : [
-            {
-              key: "dashboard",
-              icon: <MdDashboard className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/dashboard"),
-              label: "Dashboard",
-            },
-          ]
-      : [];
+  const activeTab = location.pathname;
 
   return (
     <header className="flex justify-between items-center py-4 px-8 bg-[#1a1a1a]">
@@ -103,18 +78,44 @@ const Header = () => {
         )}
       </div>
 
+      {/* TOGGLE TABS */}
+      <div className="flex flex-wrap gap-3 mx-4">
+        <button
+          onClick={() => navigate("/menu")}
+          className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
+            activeTab === "/menu" || activeTab === "/"
+              ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
+              : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+          }`}
+        >
+          Cashier POS
+        </button>
+        <button
+          onClick={() => navigate("/orders")}
+          className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
+            activeTab === "/orders"
+              ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
+              : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+          }`}
+        >
+          Orders
+        </button>
+        {userData.role === "Admin" && (
+          <button
+            onClick={() => navigate("/home")}
+            className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
+              activeTab === "/home"
+                ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
+                : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+            }`}
+          >
+            Dashboard
+          </button>
+        )}
+      </div>
+
       {/* LOGGED USER DETAILS */}
       <div className="flex items-center gap-4">
-        {quickActions.map((action) => (
-          <button
-            key={action.key}
-            onClick={action.onClick}
-            title={action.label}
-            className="rounded-[15px] bg-[#1f1f1f] p-3 cursor-pointer"
-          >
-            {action.icon}
-          </button>
-        ))}
         <div className="relative">
           <button
             onClick={() => setIsNotificationOpen((prev) => !prev)}

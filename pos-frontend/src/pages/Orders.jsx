@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import BottomNav from "../components/shared/BottomNav";
+
 import OrderCard from "../components/orders/OrderCard";
 import OrderDetailsModal from "../components/orders/OrderDetailsModal";
 import BackButton from "../components/shared/BackButton";
@@ -84,7 +84,7 @@ const Orders = () => {
         onClose={() => setSelectedOrder(null)}
       />
 
-      <BottomNav />
+
     </section>
   );
 };

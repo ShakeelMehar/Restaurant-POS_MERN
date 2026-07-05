@@ -21,9 +21,10 @@ const register = async (req, res, next) => {
                 const error = createHttpError(400, "User already exist!");
                 return next(error);
             }
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = {
                 _id: "mock-user-" + Date.now(),
-                name, phone, email, password, role
+                name, phone, email, password: hashedPassword, role
             };
             mockDb.users.push(newUser);
             return res.status(201).json({success: true, message: "New user created!", data: newUser});

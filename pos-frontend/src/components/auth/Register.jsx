@@ -50,86 +50,111 @@ const Register = ({setIsRegister}) => {
   });
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="w-full">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-[#ababab] mb-2 text-sm font-medium">
+          <label className="block text-gray-300 text-sm font-semibold mb-1.5 ml-1">
             Employee Name
           </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter employee name"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              placeholder="e.g. John Doe"
+              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
               required
             />
           </div>
         </div>
+        
         <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Employee Email
+          <label className="block text-gray-300 text-sm font-semibold mb-1.5 ml-1">
+            Email Address
           </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+            </div>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter employee email"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              placeholder="name@restaurant.com"
+              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
               required
             />
           </div>
         </div>
+
         <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Employee Phone
+          <label className="block text-gray-300 text-sm font-semibold mb-1.5 ml-1">
+            Phone Number
           </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </div>
             <input
               type="number"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="Enter employee phone"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              placeholder="+92 300 1234567"
+              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
               required
             />
           </div>
         </div>
+
         <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
+          <label className="block text-gray-300 text-sm font-semibold mb-1.5 ml-1">
             Password
           </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter password"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              placeholder="••••••••"
+              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
               required
             />
           </div>
         </div>
+
         <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
+          <label className="block text-gray-300 text-sm font-semibold mb-2 ml-1">
             Choose your role
           </label>
-
           <div className="flex item-center gap-3 mt-4">
-            {["Waiter", "Cashier", "Admin"].map((role) => {
+            {["Cashier", "Admin", "Super Admin"].map((role) => {
               return (
                 <button
                   key={role}
                   type="button"
                   onClick={() => handleRoleSelection(role)}
-                  className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] ${
-                    formData.role === role ? "bg-indigo-700" : ""
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-all ${
+                    formData.role === role 
+                      ? "bg-[#c6893f] border-[#c6893f] text-white shadow-[0_0_15px_rgba(198,137,63,0.3)]" 
+                      : "bg-[#1a1a1a] border-[#333] text-gray-400 hover:border-[#c6893f] hover:text-white"
                   }`}
                 >
                   {role}
@@ -141,9 +166,13 @@ const Register = ({setIsRegister}) => {
 
         <button
           type="submit"
-          className="w-full rounded-lg mt-6 py-3 text-lg bg-yellow-400 text-gray-900 font-bold"
+          disabled={registerMutation.isPending}
+          className="w-full bg-gradient-to-r from-[#c6893f] to-[#a56c2d] hover:from-[#d19752] hover:to-[#b87c38] text-white font-bold rounded-xl py-4 mt-4 transition-all shadow-[0_0_20px_rgba(198,137,63,0.3)] hover:shadow-[0_0_25px_rgba(198,137,63,0.5)] active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Sign up
+          {registerMutation.isPending ? "Registering..." : "Create Account"}
+          {!registerMutation.isPending && (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+          )}
         </button>
       </form>
     </div>
