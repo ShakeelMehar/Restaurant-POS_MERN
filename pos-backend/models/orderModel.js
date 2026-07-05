@@ -21,6 +21,7 @@ const orderSchema = new mongoose.Schema({
     },
     items: [],
     table: { type: mongoose.Schema.Types.ObjectId, ref: "Table" },
+    cashier: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     paymentMethod: String,
     paymentData: {
         razorpay_order_id: String,

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
 import BackButton from "../components/shared/BackButton";
 import TableCard from "../components/tables/TableCard";
@@ -10,6 +11,7 @@ import AddTableModal from "../components/tables/AddTableModal";
 const Tables = () => {
   const [status, setStatus] = useState("all");
   const [isAddTableOpen, setIsAddTableOpen] = useState(false);
+  const { role } = useSelector((state) => state.user);
 
   useEffect(() => {
     document.title = "POS | Tables";
@@ -91,12 +93,14 @@ const Tables = () => {
             </button>
           </div>
 
-          <button
-            onClick={() => setIsAddTableOpen(true)}
-            className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
-          >
-            Add Table
-          </button>
+          {["Admin", "Super Admin"].includes(role) && (
+            <button
+              onClick={() => setIsAddTableOpen(true)}
+              className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
+            >
+              Add Table
+            </button>
+          )}
         </div>
       </div>
 
@@ -117,12 +121,14 @@ const Tables = () => {
               Add your first table to continue the order flow and assign guests
               to a seat.
             </p>
-            <button
-              onClick={() => setIsAddTableOpen(true)}
-              className="mt-6 rounded-lg bg-[#F6B100] px-5 py-3 font-semibold text-[#1f1f1f]"
-            >
-              Add First Table
-            </button>
+            {["Admin", "Super Admin"].includes(role) && (
+              <button
+                onClick={() => setIsAddTableOpen(true)}
+                className="mt-6 rounded-lg bg-[#F6B100] px-5 py-3 font-semibold text-[#1f1f1f]"
+              >
+                Add First Table
+              </button>
+            )}
           </div>
         )}
 

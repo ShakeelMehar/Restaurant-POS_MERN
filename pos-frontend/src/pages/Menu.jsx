@@ -15,6 +15,7 @@ const Menu = () => {
     }, [])
 
   const customerData = useSelector((state) => state.customer);
+  const { role } = useSelector((state) => state.user);
   const isEditingOrder = Boolean(customerData.editingOrderId);
 
   return (
@@ -26,12 +27,14 @@ const Menu = () => {
             <h1 className="text-[#f5f5f5] text-2xl font-bold tracking-wider">
               {isEditingOrder ? "Modify Order" : "Menu"}
             </h1>
-            <button
-              onClick={() => navigate("/catalog?tab=categories")}
-              className="rounded-lg bg-[#1a1a1a] px-4 py-2 text-sm font-semibold text-[#f5f5f5]"
-            >
-              Browse Catalog
-            </button>
+            {["Admin", "Super Admin"].includes(role) && (
+              <button
+                onClick={() => navigate("/catalog?tab=categories")}
+                className="rounded-lg bg-[#1a1a1a] px-4 py-2 text-sm font-semibold text-[#f5f5f5]"
+              >
+                Browse Catalog
+              </button>
+            )}
           </div>
           </div>
 

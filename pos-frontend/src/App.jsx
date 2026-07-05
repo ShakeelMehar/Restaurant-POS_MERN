@@ -5,11 +5,12 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { Home, Auth, Orders, Tables, Menu, Dashboard, Catalog } from "./pages";
+import { Auth, Orders, Tables, Menu, Dashboard, Catalog, Staff, Reports } from "./pages";
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
+import AdminLayout from "./components/shared/AdminLayout";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -28,16 +29,6 @@ function Layout() {
           element={
             <ProtectedRoutes>
               <Navigate to="/menu" replace />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoutes>
-              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
-                <Home />
-              </RoleGuard>
             </ProtectedRoutes>
           }
         />
@@ -67,25 +58,19 @@ function Layout() {
           }
         />
         <Route
-          path="/dashboard"
           element={
             <ProtectedRoutes>
               <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
-                <Dashboard />
+                <AdminLayout />
               </RoleGuard>
             </ProtectedRoutes>
           }
-        />
-        <Route
-          path="/catalog"
-          element={
-            <ProtectedRoutes>
-              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
-                <Catalog />
-              </RoleGuard>
-            </ProtectedRoutes>
-          }
-        />
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/staff" element={<Staff />} />
+          <Route path="/reports" element={<Reports />} />
+        </Route>
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
     </>

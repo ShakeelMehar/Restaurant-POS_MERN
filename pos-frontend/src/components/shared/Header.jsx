@@ -100,16 +100,16 @@ const Header = () => {
         >
           Orders
         </button>
-        {userData.role === "Admin" && (
+        {["Admin", "Super Admin"].includes(userData.role) && (
           <button
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/dashboard")}
             className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
-              activeTab === "/home"
+              activeTab === "/dashboard"
                 ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
                 : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
             }`}
           >
-            Dashboard
+            Admin Dashboard
           </button>
         )}
       </div>
