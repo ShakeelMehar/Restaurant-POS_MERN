@@ -3,6 +3,7 @@ import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItems, removeAllItems } from "../../redux/slices/cartSlice";
+import TabGroup from "../shared/TabGroup";
 
 const CartInfo = () => {
   const cartData = useSelector((state) => state.cart);
@@ -51,20 +52,17 @@ const CartInfo = () => {
         </button>
       </div>
 
-      <div className="flex bg-[#1a1a1a] rounded-xl p-1 mb-6 border border-[#2a2a2a]">
-        {["Dine In", "Takeaway", "Delivery"].map((type) => (
-          <button 
-            key={type}
-            onClick={() => setOrderType(type)}
-            className={`flex-1 py-2.5 rounded-lg font-bold text-[15px] transition-colors ${
-              orderType === type 
-                ? "bg-[#2a2a2a] text-[#f5f5f5] shadow-md border border-[#383838]" 
-                : "text-[#ababab] hover:text-[#f5f5f5]"
-            }`}
-          >
-            {type}
-          </button>
-        ))}
+      <div className="mb-6">
+        <TabGroup
+          tabs={[
+            { id: "Dine In", label: "Dine In" },
+            { id: "Takeaway", label: "Takeaway" },
+            { id: "Delivery", label: "Delivery" }
+          ]}
+          activeTab={orderType}
+          onTabChange={setOrderType}
+          fullWidth={true}
+        />
       </div>
 
       <div className="overflow-y-scroll scrollbar-hide h-[450px]" ref={scrolLRef} >

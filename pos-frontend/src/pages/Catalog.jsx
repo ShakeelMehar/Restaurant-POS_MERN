@@ -10,6 +10,7 @@ import {
   selectMenuCategories,
   selectTotalDishCount,
 } from "../redux/slices/menuSlice";
+import TabGroup from "../components/shared/TabGroup";
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -49,44 +50,35 @@ const Catalog = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => setTab("categories")}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold sm:text-base ${
-              activeTab === "categories"
-                ? "bg-[#383838] text-[#f5f5f5]"
-                : "bg-[#262626] text-[#ababab]"
-            }`}
-          >
-            Categories ({categories.length})
-          </button>
-          <button
-            onClick={() => setTab("dishes")}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold sm:text-base ${
-              activeTab === "dishes"
-                ? "bg-[#383838] text-[#f5f5f5]"
-                : "bg-[#262626] text-[#ababab]"
-            }`}
-          >
-            Dishes ({totalDishCount})
-          </button>
-          <button
-            onClick={() => navigate("/menu")}
-            className="rounded-lg bg-[#1f1f1f] px-4 py-2 text-sm font-semibold text-[#f5f5f5] sm:text-base"
-          >
-            Open Menu
-          </button>
-          <button
-            onClick={() => setIsCategoryModalOpen(true)}
-            className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
-          >
-            Add Category
-          </button>
-          <button
-            onClick={() => setIsDishModalOpen(true)}
-            className="rounded-lg bg-[#2e4a40] px-4 py-2 text-sm font-semibold text-[#02ca3a] sm:text-base"
-          >
-            Add Dish
-          </button>
+          <TabGroup
+            tabs={[
+              { id: "categories", label: `Categories (${categories.length})` },
+              { id: "dishes", label: `Dishes (${totalDishCount})` }
+            ]}
+            activeTab={activeTab}
+            onTabChange={setTab}
+          />
+          
+          <div className="ml-auto flex items-center gap-3">
+            {/* <button
+              onClick={() => navigate("/menu")}
+              className="rounded-lg bg-[#2a2a2a] px-6 py-2.5 text-sm font-bold text-[#f5f5f5] transition-all hover:bg-[#383838] sm:text-base"
+            >
+              Open Menu
+            </button> */}
+            <button
+              onClick={() => setIsCategoryModalOpen(true)}
+              className="rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-[#1a1a1a] transition-all hover:bg-yellow-500 hover:shadow-[0_0_15px_rgba(246,177,0,0.4)] sm:text-base"
+            >
+              Add Category
+            </button>
+            <button
+              onClick={() => setIsDishModalOpen(true)}
+              className="rounded-lg bg-[#f5f5f5] px-6 py-2.5 text-sm font-bold text-[#1a1a1a] transition-all hover:bg-white hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] sm:text-base"
+            >
+              Add Dish
+            </button>
+          </div>
         </div>
       </div>
 
