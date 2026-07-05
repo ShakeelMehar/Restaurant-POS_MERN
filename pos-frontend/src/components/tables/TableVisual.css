@@ -1,0 +1,232 @@
+/* ========================================================
+   TableVisual — Pure CSS Restaurant Table with Chairs
+   ======================================================== */
+
+/* --- Design Tokens --- */
+:root {
+  --tv-surface-bg: #3a3a3a;
+  --tv-surface-border: #4a4a4a;
+  --tv-chair-bg: #4a4a4a;
+  --tv-chair-border: #555;
+  --tv-label-color: #e0e0e0;
+  --tv-booked-surface: #2e4a40;
+  --tv-booked-border: #3aaf6f;
+  --tv-booked-chair: #3aaf6f;
+  --tv-available-surface: #3a3a3a;
+  --tv-available-border: #4a4a4a;
+  --tv-available-chair: #4a4a4a;
+  --tv-hover-glow: rgba(246, 177, 0, 0.35);
+  --tv-chair-size: 18px;
+  --tv-chair-short: 10px;
+  --tv-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Wrapper --- */
+.tv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: transform var(--tv-transition), filter var(--tv-transition);
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.tv:hover {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+/* --- Chairs Container --- */
+.tv__chairs-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Space for chairs to sit outside the table surface */
+  padding: 22px;
+}
+
+/* --- Table Surface --- */
+.tv__surface {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 2px solid var(--tv-surface-border);
+  background: var(--tv-surface-bg);
+  transition: background var(--tv-transition), border-color var(--tv-transition),
+    box-shadow var(--tv-transition);
+  position: relative;
+  z-index: 1;
+}
+
+/* Surface sizes */
+.tv__surface--small {
+  width: 64px;
+  height: 56px;
+  border-radius: 10px;
+}
+
+.tv__surface--medium {
+  width: 80px;
+  height: 64px;
+  border-radius: 12px;
+}
+
+.tv__surface--large {
+  width: 110px;
+  height: 64px;
+  border-radius: 14px;
+}
+
+.tv__surface--xlarge {
+  width: 130px;
+  height: 70px;
+  border-radius: 14px;
+}
+
+/* --- Label --- */
+.tv__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tv-label-color);
+  letter-spacing: 0.5px;
+  user-select: none;
+  text-transform: uppercase;
+}
+
+/* --- Chair (base) --- */
+.tv__chair {
+  position: absolute;
+  background: var(--tv-chair-bg);
+  border: 1.5px solid var(--tv-chair-border);
+  border-radius: 4px;
+  transition: background var(--tv-transition), border-color var(--tv-transition),
+    box-shadow var(--tv-transition);
+  z-index: 0;
+}
+
+/* =================================================
+   Chair positions  (relative to .tv__chairs-container)
+   The table surface is centered; chairs sit outside.
+   ================================================= */
+
+/* --- Top chairs --- */
+.tv__chair--top {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px 4px 2px 2px;
+}
+
+.tv__chair--top-left {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  top: 0;
+  left: calc(50% - 24px);
+  transform: translateX(-50%);
+  border-radius: 4px 4px 2px 2px;
+}
+
+.tv__chair--top-right {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  top: 0;
+  left: calc(50% + 24px);
+  transform: translateX(-50%);
+  border-radius: 4px 4px 2px 2px;
+}
+
+/* --- Bottom chairs --- */
+.tv__chair--bottom {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 4px 4px;
+}
+
+.tv__chair--bottom-left {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  bottom: 0;
+  left: calc(50% - 24px);
+  transform: translateX(-50%);
+  border-radius: 2px 2px 4px 4px;
+}
+
+.tv__chair--bottom-right {
+  width: var(--tv-chair-size);
+  height: var(--tv-chair-short);
+  bottom: 0;
+  left: calc(50% + 24px);
+  transform: translateX(-50%);
+  border-radius: 2px 2px 4px 4px;
+}
+
+/* --- Left / Right chairs --- */
+.tv__chair--left {
+  width: var(--tv-chair-short);
+  height: var(--tv-chair-size);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px 2px 2px 4px;
+}
+
+.tv__chair--right {
+  width: var(--tv-chair-short);
+  height: var(--tv-chair-size);
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 2px 4px 4px 2px;
+}
+
+/* =================================================
+   Status Variants
+   ================================================= */
+
+/* -- Available -- */
+.tv--available .tv__surface {
+  background: var(--tv-available-surface);
+  border-color: var(--tv-available-border);
+}
+
+.tv--available .tv__chair {
+  background: var(--tv-available-chair);
+  border-color: var(--tv-chair-border);
+}
+
+.tv--available:hover .tv__surface {
+  border-color: #F6B100;
+  box-shadow: 0 0 18px var(--tv-hover-glow);
+}
+
+.tv--available:hover .tv__chair {
+  background: #665200;
+  border-color: #F6B100;
+}
+
+/* -- Booked -- */
+.tv--booked .tv__surface {
+  background: var(--tv-booked-surface);
+  border-color: var(--tv-booked-border);
+}
+
+.tv--booked .tv__chair {
+  background: #2a5e43;
+  border-color: var(--tv-booked-border);
+}
+
+.tv--booked .tv__label {
+  color: #6ee7a0;
+}
+
+.tv--booked:hover .tv__surface {
+  box-shadow: 0 0 14px rgba(58, 175, 111, 0.3);
+}
