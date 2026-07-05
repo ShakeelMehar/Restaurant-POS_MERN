@@ -4,13 +4,13 @@ import { FaCartPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/slices/cartSlice";
 import { selectMenuCategories } from "../../redux/slices/menuSlice";
+import VariantPickerModal from "./VariantPickerModal";
 
 
 const MenuContainer = () => {
   const categories = useSelector(selectMenuCategories);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [itemCount, setItemCount] = useState(0);
-  const [itemId, setItemId] = useState();
+  const [selectedItemForModal, setSelectedItemForModal] = useState(null);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -32,27 +32,29 @@ const MenuContainer = () => {
     categories.find((category) => category.id === selectedCategoryId) ||
     categories[0];
 
-  const increment = (id) => {
-    setItemId(id);
-    if (itemCount >= 4) return;
-    setItemCount((prev) => prev + 1);
-  };
+  const handleAddToCartFromModal = (data) => {
+    const { item, quantity, selectedVariants, pricePerQuantity, totalPrice } = data;
+    
+    // Generate a variant string ID like "portion-half_type-chicken"
+    const variantId = Object.entries(selectedVariants)
+      .map(([key, val]) => `${key}-${val.id}`)
+      .join("_");
 
-  const decrement = (id) => {
-    setItemId(id);
-    if (itemCount <= 0) return;
-    setItemCount((prev) => prev - 1);
-  };
+    const variantNameStr = Object.values(selectedVariants)
+      .map(v => v.name)
+      .join(", ");
 
-  const handleAddToCart = (item) => {
-    if(itemCount === 0) return;
-
-    const {name, price} = item;
-    const newObj = { id: new Date(), name, pricePerQuantity: price, quantity: itemCount, price: price * itemCount };
+    const newObj = { 
+      id: new Date().getTime(), 
+      name: `${item.name} (${variantNameStr})`, 
+      variantId,
+      pricePerQuantity, 
+      quantity, 
+      price: totalPrice 
+    };
 
     dispatch(addItems(newObj));
-    setItemCount(0);
-  }
+  };
 
 
   return (
@@ -80,8 +82,6 @@ const MenuContainer = () => {
               style={{ backgroundColor: menu.bgColor }}
               onClick={() => {
                 setSelectedCategoryId(menu.id);
-                setItemId(0);
-                setItemCount(0);
               }}
             >
               <div className="flex items-center justify-between w-full">
@@ -107,35 +107,19 @@ const MenuContainer = () => {
           return (
             <div
               key={item.id}
-              className="flex flex-col items-start justify-between p-4 rounded-lg h-[150px] cursor-pointer hover:bg-[#2a2a2a] bg-[#1a1a1a]"
+              onClick={() => setSelectedItemForModal(item)}
+              className="flex flex-col items-start justify-between p-4 rounded-lg h-[120px] cursor-pointer hover:bg-[#2a2a2a] bg-[#1a1a1a]"
             >
               <div className="flex items-start justify-between w-full">
                 <h1 className="text-[#f5f5f5] text-lg font-semibold">
                   {item.name}
                 </h1>
-                <button onClick={() => handleAddToCart(item)} className="bg-[#2e4a40] text-[#02ca3a] p-2 rounded-lg"><FaCartPlus size={20} /></button>
+                <button className="bg-[#2e4a40] text-[#02ca3a] p-2 rounded-lg pointer-events-none"><FaCartPlus size={20} /></button>
               </div>
               <div className="flex items-center justify-between w-full">
                 <p className="text-[#f5f5f5] text-xl font-bold">
                   PKR {item.price}
                 </p>
-                <div className="flex items-center justify-between bg-[#1f1f1f] px-4 py-3 rounded-lg gap-6 w-[50%]">
-                  <button
-                    onClick={() => decrement(item.id)}
-                    className="text-yellow-500 text-2xl"
-                  >
-                    &minus;
-                  </button>
-                  <span className="text-white">
-                    {itemId == item.id ? itemCount : "0"}
-                  </span>
-                  <button
-                    onClick={() => increment(item.id)}
-                    className="text-yellow-500 text-2xl"
-                  >
-                    &#43;
-                  </button>
-                </div>
               </div>
             </div>
           );
@@ -147,6 +131,13 @@ const MenuContainer = () => {
       </div>
         </>
       )}
+
+      <VariantPickerModal 
+        isOpen={!!selectedItemForModal}
+        onClose={() => setSelectedItemForModal(null)}
+        item={selectedItemForModal}
+        onAddToCart={handleAddToCartFromModal}
+      />
     </>
   );
 };
