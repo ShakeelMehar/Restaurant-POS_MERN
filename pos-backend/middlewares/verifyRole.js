@@ -7,7 +7,7 @@ const checkRole = (allowedRoles) => {
             return next(error);
         }
 
-        if (!allowedRoles.includes(req.user.role)) {
+        if (!req.user.role || !allowedRoles.includes(req.user.role.toLowerCase())) {
             const error = createHttpError(403, "Forbidden: You don't have enough permissions!");
             return next(error);
         }

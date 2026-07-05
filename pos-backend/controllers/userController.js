@@ -137,7 +137,12 @@ const logout = async (req, res, next) => {
 
 const getAllStaff = async (req, res, next) => {
     try {
-        const staff = await User.find({ role: "cashier" }).select("-password");
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const staff = mockDb.users.filter(u => u.role && u.role.toLowerCase() === "cashier");
+            return res.status(200).json({ success: true, data: staff });
+        }
+        const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") } }).select("-password");
         res.status(200).json({ success: true, data: staff });
     } catch (error) {
         next(error);
@@ -147,6 +152,15 @@ const getAllStaff = async (req, res, next) => {
 const deleteStaff = async (req, res, next) => {
     try {
         const staffId = req.params.id;
+
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const index = mockDb.users.findIndex(u => u._id === staffId);
+            if (index === -1) return next(createHttpError(404, "User not found"));
+            mockDb.users.splice(index, 1);
+            return res.status(200).json({ success: true, message: "Staff removed successfully" });
+        }
+
         const user = await User.findByIdAndDelete(staffId);
         if (!user) return next(createHttpError(404, "User not found"));
         res.status(200).json({ success: true, message: "Staff removed successfully" });
@@ -161,6 +175,16 @@ const updateStaffPassword = async (req, res, next) => {
         const { password } = req.body;
         if (!password) return next(createHttpError(400, "Password is required"));
         
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const user = mockDb.users.find(u => u._id === staffId);
+            if (!user) return next(createHttpError(404, "User not found"));
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            user.password = hashedPassword;
+            return res.status(200).json({ success: true, message: "Password updated successfully" });
+        }
+
         const user = await User.findById(staffId);
         if (!user) return next(createHttpError(404, "User not found"));
         
