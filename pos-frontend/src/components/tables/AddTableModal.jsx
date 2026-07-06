@@ -50,10 +50,10 @@ const AddTableModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Table">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 mt-3 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
             Table Number
           </label>
-          <div className="flex items-center rounded-lg bg-[#1f1f1f] p-4">
+          <div className="flex items-center rounded-lg bg-background p-4">
             <input
               type="number"
               name="tableNo"
@@ -67,10 +67,10 @@ const AddTableModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 mt-3 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
             Number of Seats
           </label>
-          <div className="flex items-center rounded-lg bg-[#1f1f1f] p-4">
+          <div className="flex items-center rounded-lg bg-background p-4">
             <input
               type="number"
               name="seats"

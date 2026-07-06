@@ -1,153 +1,36 @@
-import React, { useState } from "react";
-import { GrRadialSelected } from "react-icons/gr";
-import { FaCartPlus } from "react-icons/fa";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/slices/cartSlice";
 import { selectMenuCategories } from "../../redux/slices/menuSlice";
-
+import CascadingMenu from "./CascadingMenu";
 
 const MenuContainer = () => {
   const categories = useSelector(selectMenuCategories);
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [itemCount, setItemCount] = useState(0);
-  const [itemId, setItemId] = useState();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    if (categories.length === 0) {
-      setSelectedCategoryId("");
-      return;
-    }
+  const handleAddToCart = (cartItem) => {
+    dispatch(addItems(cartItem));
+  };
 
-    const selectedCategoryExists = categories.some(
-      (category) => category.id === selectedCategoryId
+  if (categories.length === 0) {
+    return (
+      <div className="px-6 py-10">
+        <div className="rounded-2xl border border-dashed border-border bg-card/50 px-6 py-16 text-center">
+          <span className="text-5xl mb-4 block">🍽️</span>
+          <h2 className="text-xl font-bold text-foreground mb-1">No categories yet</h2>
+          <p className="text-sm text-muted-foreground">Add categories from the Catalog to get started.</p>
+        </div>
+      </div>
     );
-
-    if (!selectedCategoryExists) {
-      setSelectedCategoryId(categories[0].id);
-    }
-  }, [categories, selectedCategoryId]);
-
-  const selected =
-    categories.find((category) => category.id === selectedCategoryId) ||
-    categories[0];
-
-  const increment = (id) => {
-    setItemId(id);
-    if (itemCount >= 4) return;
-    setItemCount((prev) => prev + 1);
-  };
-
-  const decrement = (id) => {
-    setItemId(id);
-    if (itemCount <= 0) return;
-    setItemCount((prev) => prev - 1);
-  };
-
-  const handleAddToCart = (item) => {
-    if(itemCount === 0) return;
-
-    const {name, price} = item;
-    const newObj = { id: new Date(), name, pricePerQuantity: price, quantity: itemCount, price: price * itemCount };
-
-    dispatch(addItems(newObj));
-    setItemCount(0);
   }
 
-
   return (
-    <>
-      {categories.length === 0 ? (
-        <div className="px-10 py-8">
-          <div className="rounded-2xl border border-dashed border-[#383838] bg-[#1a1a1a] px-6 py-10 text-center">
-            <h2 className="text-xl font-semibold text-[#f5f5f5]">
-              No categories available
-            </h2>
-            <p className="mt-2 text-sm text-[#ababab]">
-              Add a category and some dishes from the dashboard to start taking
-              orders.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <>
-      <div className="grid grid-cols-4 gap-4 px-10 py-4 w-[100%]">
-        {categories.map((menu) => {
-          return (
-            <div
-              key={menu.id}
-              className="flex flex-col items-start justify-between p-4 rounded-lg h-[100px] cursor-pointer"
-              style={{ backgroundColor: menu.bgColor }}
-              onClick={() => {
-                setSelectedCategoryId(menu.id);
-                setItemId(0);
-                setItemCount(0);
-              }}
-            >
-              <div className="flex items-center justify-between w-full">
-                <h1 className="text-[#f5f5f5] text-lg font-semibold">
-                  {menu.icon} {menu.name}
-                </h1>
-                {selected.id === menu.id && (
-                  <GrRadialSelected className="text-white" size={20} />
-                )}
-              </div>
-              <p className="text-[#ababab] text-sm font-semibold">
-                {menu.items.length} Items
-              </p>
-            </div>
-          );
-        })}
-      </div>
-
-      <hr className="border-[#2a2a2a] border-t-2 mt-4" />
-
-      <div className="grid grid-cols-4 gap-4 px-10 py-4 w-[100%]">
-        {selected?.items.length > 0 ? selected.items.map((item) => {
-          return (
-            <div
-              key={item.id}
-              className="flex flex-col items-start justify-between p-4 rounded-lg h-[150px] cursor-pointer hover:bg-[#2a2a2a] bg-[#1a1a1a]"
-            >
-              <div className="flex items-start justify-between w-full">
-                <h1 className="text-[#f5f5f5] text-lg font-semibold">
-                  {item.name}
-                </h1>
-                <button onClick={() => handleAddToCart(item)} className="bg-[#2e4a40] text-[#02ca3a] p-2 rounded-lg"><FaCartPlus size={20} /></button>
-              </div>
-              <div className="flex items-center justify-between w-full">
-                <p className="text-[#f5f5f5] text-xl font-bold">
-                  PKR {item.price}
-                </p>
-                <div className="flex items-center justify-between bg-[#1f1f1f] px-4 py-3 rounded-lg gap-6 w-[50%]">
-                  <button
-                    onClick={() => decrement(item.id)}
-                    className="text-yellow-500 text-2xl"
-                  >
-                    &minus;
-                  </button>
-                  <span className="text-white">
-                    {itemId == item.id ? itemCount : "0"}
-                  </span>
-                  <button
-                    onClick={() => increment(item.id)}
-                    className="text-yellow-500 text-2xl"
-                  >
-                    &#43;
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        }) : (
-          <div className="col-span-4 rounded-xl bg-[#1a1a1a] px-6 py-10 text-center text-sm text-[#ababab]">
-            No dishes in this category yet.
-          </div>
-        )}
-      </div>
-        </>
-      )}
-    </>
+    <div className="flex-1 overflow-hidden">
+      <CascadingMenu 
+        categories={categories} 
+        onAdd={handleAddToCart} 
+      />
+    </div>
   );
 };
 

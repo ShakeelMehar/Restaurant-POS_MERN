@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { FiSearch, FiBell, FiLogOut } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
-import { FaBell } from "react-icons/fa";
 import logo from "../../assets/images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { IoLogOut } from "react-icons/io5";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../../https";
 import { removeUser } from "../../redux/slices/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MdDashboard, MdOutlineReorder } from "react-icons/md";
-import { FaHome as FaHomeSolid } from "react-icons/fa";
 import NotificationDropdown from "./NotificationDropdown";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 import GlobalSearchModal from "./GlobalSearchModal";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const userData = useSelector((state) => state.user);
@@ -24,7 +21,7 @@ const Header = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const isDashboardRoute = location.pathname === "/dashboard";
+  const activeTab = location.pathname;
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
@@ -33,124 +30,144 @@ const Header = () => {
       setIsLogoutModalOpen(false);
       navigate("/auth");
     },
-    onError: (error) => {
-      console.log(error);
-    },
+    onError: (error) => console.log(error),
   });
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
-  };
+  const navItems = [
+    { label: "Cashier POS", path: "/menu", match: ["/menu", "/"] },
+    { label: "Orders", path: "/orders", match: ["/orders"] },
+    ...(["Admin", "Super Admin"].includes(userData.role)
+      ? [{ label: "Admin", path: "/dashboard", match: ["/dashboard", "/catalog", "/staff", "/reports"] }]
+      : []),
+  ];
 
-  const quickActions =
-    userData.role === "Admin"
-      ? isDashboardRoute
-        ? [
-            {
-              key: "home",
-              icon: <FaHomeSolid className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/"),
-              label: "Home",
-            },
-            {
-              key: "orders",
-              icon: <MdOutlineReorder className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/orders"),
-              label: "Orders",
-            },
-          ]
-        : [
-            {
-              key: "dashboard",
-              icon: <MdDashboard className="text-[#f5f5f5] text-2xl" />,
-              onClick: () => navigate("/dashboard"),
-              label: "Dashboard",
-            },
-          ]
-      : [];
+  const isNavActive = (matches) => matches.includes(activeTab);
 
   return (
-    <header className="flex justify-between items-center py-4 px-8 bg-[#1a1a1a]">
-      {/* LOGO */}
-      <div onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
-        <img src={logo} className="h-8 w-8" alt="restro logo" />
-        <h1 className="text-lg font-semibold text-[#f5f5f5] tracking-wide">
+    <header className="sticky top-0 z-40 flex items-center justify-between gap-4 px-6 py-3 bg-card/90 backdrop-blur-md border-b border-border shadow-sm">
+      {/* ── LOGO ── */}
+      <div
+        onClick={() => navigate("/")}
+        className="flex items-center gap-2.5 cursor-pointer flex-shrink-0 group"
+      >
+        <div className="relative flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-amber-500 shadow-glow group-hover:shadow-lg transition-all duration-200">
+          <img src={logo} className="h-5 w-5 object-contain" alt="restro logo" />
+        </div>
+        <span className="text-[17px] font-extrabold tracking-tight text-foreground">
           Restro
-        </h1>
+        </span>
       </div>
 
-      {/* SEARCH */}
-      <div className="relative z-50">
-        <div className="flex items-center gap-4 bg-[#1f1f1f] rounded-[15px] px-5 py-2 w-[500px]">
-          <FaSearch className="text-[#f5f5f5]" />
+      {/* ── SEARCH ── */}
+      <div className="relative z-50 flex-1 max-w-[480px]">
+        <div className="flex items-center gap-3 bg-secondary/80 hover:bg-secondary border border-border hover:border-primary/30 rounded-full px-4 py-2.5 transition-all duration-200 cursor-text">
+          <FiSearch className="text-muted-foreground flex-shrink-0" size={15} />
           <input
             type="text"
-            placeholder="Search orders, products & categories"
+            placeholder="Search orders, products & categories…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchOpen(true)}
-            className="bg-[#1f1f1f] outline-none text-[#f5f5f5] w-full"
+            className="bg-transparent outline-none text-foreground placeholder:text-muted-foreground w-full text-sm"
           />
+          <kbd className="hidden sm:flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold text-muted-foreground border border-border bg-card">
+            ⌘K
+          </kbd>
         </div>
         {isSearchOpen && (
-          <GlobalSearchModal 
-            searchQuery={searchQuery} 
+          <GlobalSearchModal
+            searchQuery={searchQuery}
             onClose={() => {
               setIsSearchOpen(false);
               setSearchQuery("");
-            }} 
+            }}
           />
         )}
       </div>
 
-      {/* LOGGED USER DETAILS */}
-      <div className="flex items-center gap-4">
-        {quickActions.map((action) => (
+      {/* ── NAV TABS ── */}
+      <nav className="flex items-center gap-1.5">
+        <button
+          onClick={() => navigate("/menu")}
+          className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+            isNavActive(["/menu", "/"])
+              ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+              : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
+          }`}
+        >
+          Cashier POS
+        </button>
+        <button
+          onClick={() => navigate("/orders")}
+          className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+            isNavActive(["/orders"])
+              ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+              : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
+          }`}
+        >
+          Orders
+        </button>
+        {["Admin", "Super Admin"].includes(userData.role) && (
           <button
-            key={action.key}
-            onClick={action.onClick}
-            title={action.label}
-            className="rounded-[15px] bg-[#1f1f1f] p-3 cursor-pointer"
+            onClick={() => navigate("/dashboard")}
+            className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+              isNavActive(["/dashboard", "/catalog", "/staff", "/reports"])
+                ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
+            }`}
           >
-            {action.icon}
+            Admin
           </button>
-        ))}
+        )}
+      </nav>
+
+      {/* ── RIGHT ACTIONS ── */}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <ThemeToggle />
+
+        {/* Notification Bell */}
         <div className="relative">
           <button
-            onClick={() => setIsNotificationOpen((prev) => !prev)}
-            className="relative rounded-[15px] bg-[#1f1f1f] p-3 cursor-pointer"
+            onClick={() => setIsNotificationOpen((p) => !p)}
+            className="relative flex items-center justify-center h-9 w-9 rounded-xl bg-secondary hover:bg-muted border border-border hover:border-primary/30 transition-all duration-200"
             title="Notifications"
           >
-            <FaBell className="text-[#f5f5f5] text-2xl" />
-            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-[#F6B100]" />
+            <FiBell className="text-foreground" size={16} />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-accent border border-card" />
           </button>
           <NotificationDropdown
             isOpen={isNotificationOpen}
             onClose={() => setIsNotificationOpen(false)}
           />
         </div>
-        <div className="flex items-center gap-3 cursor-pointer">
-          <FaUserCircle className="text-[#f5f5f5] text-4xl" />
-          <div className="flex flex-col items-start">
-            <h1 className="text-md text-[#f5f5f5] font-semibold tracking-wide">
-              {userData.name || "TEST USER"}
-            </h1>
-            <p className="text-xs text-[#ababab] font-medium">
-              {userData.role || "Role"}
-            </p>
+
+        {/* User chip */}
+        <div className="flex items-center gap-2.5 pl-2 border-l border-border ml-1">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 text-foreground">
+            <FaUserCircle size={20} />
           </div>
-          <IoLogOut
+          <div className="flex-col items-start hidden sm:flex">
+            <span className="text-[13px] font-bold text-foreground leading-tight">
+              {userData.name || "User"}
+            </span>
+            <span className="text-[11px] text-muted-foreground font-medium leading-tight">
+              {userData.role || "Role"}
+            </span>
+          </div>
+          <button
             onClick={() => setIsLogoutModalOpen(true)}
-            className="text-[#f5f5f5] ml-2"
-            size={40}
-          />
+            title="Logout"
+            className="flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 ml-1"
+          >
+            <FiLogOut size={15} />
+          </button>
         </div>
       </div>
 
       <LogoutConfirmModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-        onConfirm={handleLogout}
+        onConfirm={() => logoutMutation.mutate()}
         isPending={logoutMutation.isPending}
       />
     </header>

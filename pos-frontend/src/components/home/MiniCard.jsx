@@ -1,19 +1,43 @@
-import React from 'react'
+import React from "react";
+import { FiTrendingUp } from "react-icons/fi";
 
-const MiniCard = ({title, icon, number, footerNum}) => {
+const MiniCard = ({ title, icon, number, footerNum }) => {
+  const isEarnings = title === "Total Earnings";
+
   return (
-    <div className='bg-[#1a1a1a] py-5 px-5 rounded-lg w-[50%]'>
-        <div className='flex items-start justify-between'>
-            <h1 className='text-[#f5f5f5] text-lg font-semibold tracking-wide'>{title}</h1>
-            <button className={`${title === "Total Earnings" ? "bg-[#02ca3a]" : "bg-[#f6b100]"} p-3 rounded-lg text-[#f5f5f5] text-2xl`}>{icon}</button>
-        </div>
-        <div>
-            <h1 className='text-[#f5f5f5] text-4xl font-bold mt-5'>{
-              title === "Total Earnings" ? `PKR ${number}` : number}</h1>
-            <h1 className='text-[#f5f5f5] text-lg mt-2'><span className='text-[#02ca3a]'>{footerNum}%</span> than yesterday</h1>
-        </div>
-    </div>
-  )
-}
+    <div className="relative flex-1 bg-card rounded-2xl border border-border p-5 overflow-hidden transition-all duration-200 hover:border-primary/30 hover:shadow-md group">
+      {/* Ambient glow */}
+      <div className={`absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${
+        isEarnings ? "bg-success/15" : "bg-primary/15"
+      }`} />
 
-export default MiniCard
+      {/* Header row */}
+      <div className="flex items-start justify-between mb-4 relative z-10">
+        <p className="text-sm font-bold text-muted-foreground">{title}</p>
+        <div className={`flex items-center justify-center h-10 w-10 rounded-xl text-lg ${
+          isEarnings
+            ? "bg-success/15 text-success border border-success/20"
+            : "bg-primary/15 text-primary border border-primary/20"
+        }`}>
+          {icon}
+        </div>
+      </div>
+
+      {/* Main metric */}
+      <div className="relative z-10">
+        <p className="text-3xl font-extrabold text-foreground tracking-tight">
+          {isEarnings ? `PKR ${number}` : number}
+        </p>
+        <div className="flex items-center gap-1.5 mt-2">
+          <div className="flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-2 py-0.5">
+            <FiTrendingUp size={12} className="text-success" />
+            <span className="text-xs font-bold text-success">{footerNum}%</span>
+          </div>
+          <span className="text-xs text-muted-foreground font-medium">vs yesterday</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MiniCard;

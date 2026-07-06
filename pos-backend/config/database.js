@@ -8,8 +8,7 @@ const connectDB = async () => {
         global.dbConnected = true;
     } catch (error) {
         console.log(`❌ Database connection failed: ${error.message}`);
-        console.log(`⚠️  Running backend in OFFLINE/MOCK mode!`);
-        global.dbConnected = false;
+        process.exit(1);
     }
 }
 

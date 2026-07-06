@@ -5,11 +5,20 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { Home, Auth, Orders, Tables, Menu, Dashboard, Catalog } from "./pages";
+import { lazy, Suspense } from "react";
+const Auth = lazy(() => import("./pages/Auth.jsx"));
+const Orders = lazy(() => import("./pages/Orders.jsx"));
+const Tables = lazy(() => import("./pages/Tables.jsx"));
+const Menu = lazy(() => import("./pages/Menu.jsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
+const Catalog = lazy(() => import("./pages/Catalog.jsx"));
+const Staff = lazy(() => import("./pages/Staff.jsx"));
+const Reports = lazy(() => import("./pages/Reports.jsx"));
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
+import AdminLayout from "./components/shared/AdminLayout";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -22,58 +31,58 @@ function Layout() {
   return (
     <>
       {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoutes>
-              <Home />
-            </ProtectedRoutes>
-          }
-        />
-        <Route path="/auth" element={isAuth ? <Navigate to="/" /> : <Auth />} />
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoutes>
-              <Orders />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/tables"
-          element={
-            <ProtectedRoutes>
-              <Tables />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/menu"
-          element={
-            <ProtectedRoutes>
-              <Menu />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoutes>
-              <Dashboard />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/catalog"
-          element={
-            <ProtectedRoutes>
-              <Catalog />
-            </ProtectedRoutes>
-          }
-        />
-        <Route path="*" element={<div>Not Found</div>} />
-      </Routes>
+      <Suspense fallback={<FullScreenLoader />}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoutes>
+                <Navigate to="/menu" replace />
+              </ProtectedRoutes>
+            }
+          />
+          <Route path="/auth" element={isAuth ? <Navigate to="/menu" /> : <Auth />} />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoutes>
+                <Orders />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/tables"
+            element={
+              <ProtectedRoutes>
+                <Tables />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/menu"
+            element={
+              <ProtectedRoutes>
+                <Menu />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            element={
+              <ProtectedRoutes>
+                <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                  <AdminLayout />
+                </RoleGuard>
+              </ProtectedRoutes>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="/staff" element={<Staff />} />
+            <Route path="/reports" element={<Reports />} />
+          </Route>
+          <Route path="*" element={<div>Not Found</div>} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
@@ -84,6 +93,14 @@ function ProtectedRoutes({ children }) {
     return <Navigate to="/auth" />;
   }
 
+  return children;
+}
+
+function RoleGuard({ allowedRoles, children }) {
+  const { role } = useSelector((state) => state.user);
+  if (!allowedRoles.includes(role)) {
+    return <Navigate to="/menu" replace />;
+  }
   return children;
 }
 

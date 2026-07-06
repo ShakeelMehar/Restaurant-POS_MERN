@@ -10,25 +10,7 @@ const addTable = async (req, res, next) => {
       return next(error);
     }
 
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const isTablePresent = mockDb.tables.find(t => t.tableNo === Number(tableNo));
 
-      if (isTablePresent) {
-        const error = createHttpError(400, "Table already exist!");
-        return next(error);
-      }
-
-      const newTable = {
-        _id: "mock-table-" + Date.now(),
-        tableNo: Number(tableNo),
-        seats: Number(seats),
-        status: "Available",
-        currentOrder: null
-      };
-      mockDb.tables.push(newTable);
-      return res.status(201).json({ success: true, message: "Table added!", data: newTable });
-    }
 
     const isTablePresent = await Table.findOne({ tableNo });
 
@@ -49,26 +31,7 @@ const addTable = async (req, res, next) => {
 
 const getTables = async (req, res, next) => {
   try {
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const populatedTables = mockDb.tables.map(table => {
-        let currentOrder = null;
-        if (table.currentOrder) {
-          const order = mockDb.orders.find(o => o._id === table.currentOrder);
-          if (order) {
-            currentOrder = {
-              _id: order._id,
-              customerDetails: order.customerDetails
-            };
-          }
-        }
-        return {
-          ...table,
-          currentOrder
-        };
-      });
-      return res.status(200).json({ success: true, data: populatedTables });
-    }
+
 
     const tables = await Table.find().populate({
       path: "currentOrder",
@@ -85,17 +48,7 @@ const updateTable = async (req, res, next) => {
     const { status, orderId } = req.body;
     const { id } = req.params;
 
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const table = mockDb.tables.find(t => t._id === id);
-      if (!table) {
-        const error = createHttpError(404, "Table not found!");
-        return next(error);
-      }
-      if (status !== undefined) table.status = status;
-      if (orderId !== undefined) table.currentOrder = orderId;
-      return res.status(200).json({ success: true, message: "Table updated!", data: table });
-    }
+
 
     if(!mongoose.Types.ObjectId.isValid(id)){
         const error = createHttpError(404, "Invalid id!");

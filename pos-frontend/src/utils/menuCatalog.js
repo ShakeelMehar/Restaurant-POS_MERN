@@ -1,6 +1,6 @@
 import { menus as seedMenus } from "../constants";
 
-export const MENU_STORAGE_KEY = "restro-menu-catalog-v1";
+export const MENU_STORAGE_KEY = "restro-menu-catalog-v4";
 
 const createSeedCatalog = () =>
   seedMenus.map((menu) => ({
@@ -11,8 +11,10 @@ const createSeedCatalog = () =>
     items: menu.items.map((item) => ({
       id: `dish-${menu.id}-${item.id}`,
       name: item.name,
+      description: item.description || "",
       price: Number(item.price),
       category: item.category || menu.name,
+      optionGroups: item.optionGroups || [],
     })),
   }));
 
@@ -33,8 +35,10 @@ const sanitizeCatalog = (catalog) =>
                     item.id ||
                     `dish-${categoryIndex}-${itemIndex}-${Date.now()}`,
                   name: item.name,
+                  description: item.description || "",
                   price: Number(item.price) || 0,
                   category: item.category || category.name,
+                  optionGroups: Array.isArray(item.optionGroups) ? item.optionGroups : [],
                 }))
             : [],
         }))

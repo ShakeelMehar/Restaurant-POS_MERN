@@ -8,6 +8,11 @@ export const register = (data) => axiosWrapper.post("/api/user/register", data);
 export const getUserData = () => axiosWrapper.get("/api/user");
 export const logout = () => axiosWrapper.post("/api/user/logout");
 
+// Staff Endpoints
+export const getAllStaff = () => axiosWrapper.get("/api/user/staff");
+export const deleteStaff = (id) => axiosWrapper.delete(`/api/user/staff/${id}`);
+export const resetStaffPassword = (id, password) => axiosWrapper.put(`/api/user/staff/${id}/password`, { password });
+
 // Table Endpoints
 export const addTable = (data) => axiosWrapper.post("/api/table/", data);
 export const getTables = () => axiosWrapper.get("/api/table");

@@ -14,20 +14,7 @@ const register = async (req, res, next) => {
             return next(error);
         }
 
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            const isUserPresent = mockDb.users.find(u => u.email === email);
-            if(isUserPresent){
-                const error = createHttpError(400, "User already exist!");
-                return next(error);
-            }
-            const newUser = {
-                _id: "mock-user-" + Date.now(),
-                name, phone, email, password, role
-            };
-            mockDb.users.push(newUser);
-            return res.status(201).json({success: true, message: "New user created!", data: newUser});
-        }
+
 
         const isUserPresent = await User.findOne({email});
         if(isUserPresent){
@@ -63,17 +50,9 @@ const login = async (req, res, next) => {
         let isUserPresent;
         let isMatch = false;
 
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            isUserPresent = mockDb.users.find(u => u.email === email);
-            if (isUserPresent) {
-                isMatch = await bcrypt.compare(password, isUserPresent.password);
-            }
-        } else {
-            isUserPresent = await User.findOne({email});
-            if (isUserPresent) {
-                isMatch = await bcrypt.compare(password, isUserPresent.password);
-            }
+        isUserPresent = await User.findOne({email});
+        if (isUserPresent) {
+            isMatch = await bcrypt.compare(password, isUserPresent.password);
         }
 
         if(!isUserPresent || !isMatch){
@@ -106,13 +85,7 @@ const login = async (req, res, next) => {
 const getUserData = async (req, res, next) => {
     try {
         
-        let user;
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            user = mockDb.users.find(u => u._id === req.user._id);
-        } else {
-            user = await User.findById(req.user._id);
-        }
+        let user = await User.findById(req.user._id);
         res.status(200).json({success: true, data: user});
 
     } catch (error) {
@@ -134,4 +107,47 @@ const logout = async (req, res, next) => {
 
 
 
-module.exports = { register, login, getUserData, logout }
+const getAllStaff = async (req, res, next) => {
+    try {
+
+        const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") } }).select("-password");
+        res.status(200).json({ success: true, data: staff });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteStaff = async (req, res, next) => {
+    try {
+        const staffId = req.params.id;
+
+
+
+        const user = await User.findByIdAndDelete(staffId);
+        if (!user) return next(createHttpError(404, "User not found"));
+        res.status(200).json({ success: true, message: "Staff removed successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updateStaffPassword = async (req, res, next) => {
+    try {
+        const staffId = req.params.id;
+        const { password } = req.body;
+        if (!password) return next(createHttpError(400, "Password is required"));
+        
+
+
+        const user = await User.findById(staffId);
+        if (!user) return next(createHttpError(404, "User not found"));
+        
+        user.password = password; // Will be hashed by pre-save hook
+        await user.save();
+        res.status(200).json({ success: true, message: "Password updated successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { register, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword }

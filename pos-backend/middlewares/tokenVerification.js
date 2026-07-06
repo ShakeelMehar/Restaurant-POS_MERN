@@ -16,13 +16,7 @@ const isVerifiedUser = async (req, res, next) => {
 
         const decodeToken = jwt.verify(accessToken, config.accessTokenSecret);
 
-        let user;
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            user = mockDb.users.find(u => u._id === decodeToken._id);
-        } else {
-            user = await User.findById(decodeToken._id);
-        }
+        const user = await User.findById(decodeToken._id);
 
         if(!user){
             const error = createHttpError(401, "User not exist!");

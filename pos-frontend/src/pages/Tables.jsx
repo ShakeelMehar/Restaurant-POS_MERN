@@ -1,40 +1,33 @@
 import React, { useEffect, useMemo, useState } from "react";
-import BottomNav from "../components/shared/BottomNav";
+import { useSelector } from "react-redux";
 import BackButton from "../components/shared/BackButton";
 import TableCard from "../components/tables/TableCard";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTables } from "../https";
 import { enqueueSnackbar } from "notistack";
 import AddTableModal from "../components/tables/AddTableModal";
+import { FiPlus } from "react-icons/fi";
 
 const Tables = () => {
   const [status, setStatus] = useState("all");
   const [isAddTableOpen, setIsAddTableOpen] = useState(false);
+  const { role } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    document.title = "POS | Tables";
-  }, []);
+  useEffect(() => { document.title = "POS | Tables"; }, []);
 
   const { data: resData, isError, isLoading } = useQuery({
     queryKey: ["tables"],
-    queryFn: async () => {
-      return await getTables();
-    },
+    queryFn: async () => await getTables(),
     placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
-    if (isError) {
-      enqueueSnackbar("Something went wrong!", { variant: "error" });
-    }
+    if (isError) enqueueSnackbar("Something went wrong!", { variant: "error" });
   }, [isError]);
 
   const tableList = resData?.data?.data ?? [];
   const filteredTables = useMemo(() => {
-    if (status === "booked") {
-      return tableList.filter((table) => table.status === "Booked");
-    }
-
+    if (status === "booked") return tableList.filter((t) => t.status === "Booked");
     return tableList;
   }, [status, tableList]);
 
@@ -42,116 +35,110 @@ const Tables = () => {
   const availableCount = tableList.filter((t) => t.status === "Available").length;
 
   return (
-    <section className="min-h-[calc(100vh-5rem)] bg-[#1a1a1a] pb-24">
+    <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Header */}
-      <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-4 px-6 py-4 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
           <BackButton />
-          <h1 className="text-[#f5f5f5] text-2xl font-bold tracking-wider">
-            Select Table
-          </h1>
+          <div>
+            <h1 className="text-xl font-extrabold text-foreground tracking-tight">Tables</h1>
+            <p className="text-xs text-muted-foreground font-medium">
+              {availableCount} available · {bookedCount} booked
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Status Legend */}
-          {tableList.length > 0 && (
-            <div className="flex items-center gap-4 mr-2">
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F6B100]" />
-                <span className="text-xs text-[#ababab]">
-                  Available: {availableCount}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#3aaf6f]" />
-                <span className="text-xs text-[#ababab]">
-                  Booked: {bookedCount}
-                </span>
-              </div>
-            </div>
-          )}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Filter tabs */}
+          {[
+            { id: "all",    label: "All" },
+            { id: "booked", label: "Booked" },
+          ].map(({ id, label }) => (
+            <button
+              key={id}
+              onClick={() => setStatus(id)}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
+                status === id
+                  ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                  : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
 
-          {/* Filter Buttons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setStatus("all")}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold text-[#ababab] sm:px-5 sm:text-lg ${
-                status === "all" ? "bg-[#383838]" : ""
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setStatus("booked")}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold text-[#ababab] sm:px-5 sm:text-lg ${
-                status === "booked" ? "bg-[#383838]" : ""
-              }`}
-            >
-              Booked
-            </button>
+          {/* Legend dots */}
+          <div className="hidden sm:flex items-center gap-4 mx-2">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-primary inline-block" />
+              <span className="text-xs text-muted-foreground font-medium">Available</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-success inline-block" />
+              <span className="text-xs text-muted-foreground font-medium">Booked</span>
+            </div>
           </div>
 
-          <button
-            onClick={() => setIsAddTableOpen(true)}
-            className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
-          >
-            Add Table
-          </button>
+          {["Admin", "Super Admin"].includes(role) && (
+            <button
+              onClick={() => setIsAddTableOpen(true)}
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-4 py-2 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all active:scale-95"
+            >
+              <FiPlus size={15} /> Add Table
+            </button>
+          )}
         </div>
       </div>
 
       {/* Table Grid */}
-      <div className="grid grid-cols-2 gap-3 px-4 py-4 sm:grid-cols-3 sm:px-6 md:grid-cols-4 lg:px-10 xl:grid-cols-5 2xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 px-6 py-5 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {isLoading && (
-          <p className="col-span-full text-center text-sm text-[#ababab]">
-            Loading tables...
-          </p>
+          <>
+            {[1,2,3,4,5,6].map((i) => (
+              <div key={i} className="h-32 bg-card rounded-2xl border border-border animate-pulse" />
+            ))}
+          </>
         )}
 
         {!isLoading && tableList.length === 0 && (
-          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#3b3b3b] bg-[#262626] px-6 py-12 text-center">
-            <h2 className="text-xl font-semibold text-[#f5f5f5]">
-              No tables available
-            </h2>
-            <p className="mt-2 max-w-md text-sm text-[#ababab]">
-              Add your first table to continue the order flow and assign guests
-              to a seat.
-            </p>
-            <button
-              onClick={() => setIsAddTableOpen(true)}
-              className="mt-6 rounded-lg bg-[#F6B100] px-5 py-3 font-semibold text-[#1f1f1f]"
-            >
-              Add First Table
-            </button>
+          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center gap-4">
+            <span className="text-5xl">🪑</span>
+            <div>
+              <h2 className="text-lg font-bold text-foreground">No tables yet</h2>
+              <p className="text-sm text-muted-foreground mt-1 max-w-xs">
+                Add your first table to start assigning guests and managing orders.
+              </p>
+            </div>
+            {["Admin", "Super Admin"].includes(role) && (
+              <button
+                onClick={() => setIsAddTableOpen(true)}
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-5 py-3 font-bold text-primary-foreground shadow-md shadow-primary/30 transition-all"
+              >
+                <FiPlus size={16} /> Add First Table
+              </button>
+            )}
           </div>
         )}
 
         {!isLoading && tableList.length > 0 && filteredTables.length === 0 && (
-          <p className="col-span-full text-center text-sm text-[#ababab]">
+          <p className="col-span-full text-center text-sm text-muted-foreground py-10">
             No booked tables right now.
           </p>
         )}
 
-        {filteredTables.map((table) => {
-          return (
-            <TableCard
-              key={table._id}
-              id={table._id}
-              name={table.tableNo}
-              status={table.status}
-              initials={table?.currentOrder?.customerDetails.name}
-              seats={table.seats}
-            />
-          );
-        })}
+        {filteredTables.map((table) => (
+          <TableCard
+            key={table._id}
+            id={table._id}
+            name={table.tableNo}
+            status={table.status}
+            initials={table?.currentOrder?.customerDetails?.name}
+            seats={table.seats}
+          />
+        ))}
       </div>
 
-      <AddTableModal
-        isOpen={isAddTableOpen}
-        onClose={() => setIsAddTableOpen(false)}
-      />
-
-      <BottomNav />
+      <AddTableModal isOpen={isAddTableOpen} onClose={() => setIsAddTableOpen(false)} />
     </section>
   );
 };

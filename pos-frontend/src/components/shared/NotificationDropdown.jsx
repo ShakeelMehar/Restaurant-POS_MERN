@@ -58,16 +58,16 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
   return (
     <div
       ref={panelRef}
-      className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[360px] rounded-2xl border border-[#2a2a2a] bg-[#1a1a1a] p-4 shadow-xl"
+      className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[360px] rounded-2xl border border-border bg-card p-4 shadow-xl"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-[#f5f5f5]">Notifications</h2>
+        <h2 className="text-lg font-semibold text-foreground">Notifications</h2>
         <button
           onClick={() => {
             onClose();
             navigate("/orders");
           }}
-          className="text-sm font-semibold text-[#025cca]"
+          className="text-sm font-semibold text-blue-600"
         >
           View orders
         </button>
@@ -82,21 +82,21 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
                 onClose();
                 navigate("/orders");
               }}
-              className="w-full rounded-xl bg-[#202020] px-4 py-3 text-left transition hover:bg-[#262626]"
+              className="w-full rounded-xl bg-popover px-4 py-3 text-left transition hover:bg-card"
             >
-              <p className="font-semibold text-[#f5f5f5]">
+              <p className="font-semibold text-foreground">
                 {notification.title}
               </p>
-              <p className="mt-1 text-sm text-[#ababab]">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {notification.description}
               </p>
-              <p className="mt-2 text-xs text-[#777]">{notification.time}</p>
+              <p className="mt-2 text-xs text-muted-foreground">{notification.time}</p>
             </button>
           ))
         ) : (
-          <div className="rounded-xl bg-[#202020] px-4 py-6 text-center">
-            <p className="font-semibold text-[#f5f5f5]">No notifications yet</p>
-            <p className="mt-2 text-sm text-[#ababab]">
+          <div className="rounded-xl bg-popover px-4 py-6 text-center">
+            <p className="font-semibold text-foreground">No notifications yet</p>
+            <p className="mt-2 text-sm text-muted-foreground">
               Recent order activity will appear here.
             </p>
           </div>
