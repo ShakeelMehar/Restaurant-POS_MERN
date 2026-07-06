@@ -5,6 +5,7 @@ import {
   addOrder, createOrderRazorpay, updateTable,
   updateOrderById, verifyPaymentRazorpay,
 } from "../../https/index";
+import { db } from "../../utils/db";
 import { enqueueSnackbar } from "notistack";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { removeAllItems } from "../../redux/slices/cartSlice";
@@ -72,7 +73,10 @@ const Bill = () => {
   const handlePlaceOrder = async () => {
     if (cartData.length === 0) { enqueueSnackbar("Add at least one item.", { variant: "warning" }); return; }
     if (!paymentMethod) { enqueueSnackbar("Select a payment method.", { variant: "warning" }); return; }
+    if (!navigator.onLine && paymentMethod !== "Cash") { enqueueSnackbar("Only Cash is supported in offline mode.", { variant: "error" }); return; }
+    
     if (isEditingOrder) {
+      if (!navigator.onLine) { enqueueSnackbar("Cannot edit existing orders offline.", { variant: "error" }); return; }
       updateExistingOrderMutation.mutate({ orderId: customerData.editingOrderId, reqData: buildOrderData() });
       return;
     }
@@ -101,7 +105,35 @@ const Bill = () => {
     }
   };
 
-  const orderMutation = useMutation({ mutationFn: (d) => addOrder(d), onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: true }) });
+  const orderMutation = useMutation({ 
+    mutationFn: async (d) => {
+      const queueOffline = async () => {
+        const localOrder = { ...d, _id: `local-${Date.now()}` };
+        await db.ordersQueue.add({
+          payload: d,
+          status: 'pending',
+          createdAt: new Date().toISOString(),
+        });
+        return { data: { data: localOrder } };
+      };
+
+      if (!navigator.onLine) {
+        return queueOffline();
+      }
+      
+      try {
+        return await addOrder(d);
+      } catch (error) {
+        // If it's a network error (no response from server), queue it instead of failing
+        if (!error.response || error.code === 'ERR_NETWORK') {
+          return queueOffline();
+        }
+        throw error;
+      }
+    }, 
+    onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: true }),
+    networkMode: 'always'
+  });
   const updateExistingOrderMutation = useMutation({ mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData), onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: false }), onError: (e) => enqueueSnackbar(e?.response?.data?.message || "Update failed", { variant: "error" }) });
   const tableUpdateMutation = useMutation({ mutationFn: ({ tableData }) => updateTable(tableData), onSuccess: (_, vars) => { queryClient.invalidateQueries({ queryKey: ["tables"] }); dispatch(removeCustomer()); dispatch(removeAllItems()); if (vars.redirectToOrders) navigate("/orders"); } });
 

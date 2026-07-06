@@ -32,16 +32,22 @@ export const formatDate = (date) => {
 };
 
 export const formatDateAndTime = (date) => {
-  const dateAndTime = new Date(date).toLocaleString("en-US", {
-    month: "long",
-    day: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-    timeZone: "Asia/Kolkata"
-  })
-
-  return dateAndTime;
-}
+  if (!date) return "N/A";
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "N/A";
+    const dateAndTime = d.toLocaleString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata"
+    });
+    return dateAndTime;
+  } catch (error) {
+    return "N/A";
+  }
+};

@@ -2,13 +2,16 @@ import { createSlice, nanoid, createSelector } from "@reduxjs/toolkit";
 import { getTotalDishCount, loadMenuCatalog } from "../../utils/menuCatalog";
 
 const initialState = {
-  categories: loadMenuCatalog(),
+  categories: [],
 };
 
 const menuSlice = createSlice({
   name: "menu",
   initialState,
   reducers: {
+    setCategories: (state, action) => {
+      state.categories = action.payload;
+    },
     addCategory: (state, action) => {
       const { name, bgColor, icon } = action.payload;
 
@@ -58,5 +61,5 @@ export const selectAllDishes = createSelector(
     )
 );
 
-export const { addCategory, addDish } = menuSlice.actions;
+export const { setCategories, addCategory, addDish } = menuSlice.actions;
 export default menuSlice.reducer;

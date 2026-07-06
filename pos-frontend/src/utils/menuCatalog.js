@@ -1,6 +1,5 @@
 import { menus as seedMenus } from "../constants";
-
-export const MENU_STORAGE_KEY = "restro-menu-catalog-v4";
+import { db } from "./db";
 
 const createSeedCatalog = () =>
   seedMenus.map((menu) => ({
@@ -44,31 +43,33 @@ const sanitizeCatalog = (catalog) =>
         }))
     : [];
 
-export const loadMenuCatalog = () => {
+export const loadMenuCatalog = async () => {
   if (typeof window === "undefined") {
     return createSeedCatalog();
   }
-
   try {
-    const savedCatalog = window.localStorage.getItem(MENU_STORAGE_KEY);
-    if (!savedCatalog) {
-      return createSeedCatalog();
+    const storedMenu = await db.menu.toArray();
+    if (storedMenu && storedMenu.length > 0) {
+      const parsedCatalog = storedMenu.map(item => item.data);
+      const sanitizedCatalog = sanitizeCatalog(parsedCatalog);
+      return sanitizedCatalog.length > 0 ? sanitizedCatalog : createSeedCatalog();
     }
-
-    const parsedCatalog = JSON.parse(savedCatalog);
-    const sanitizedCatalog = sanitizeCatalog(parsedCatalog);
-    return sanitizedCatalog.length > 0 ? sanitizedCatalog : createSeedCatalog();
+    return createSeedCatalog();
   } catch (error) {
+    console.error("Dexie load error:", error);
     return createSeedCatalog();
   }
 };
 
-export const saveMenuCatalog = (catalog) => {
-  if (typeof window === "undefined") {
-    return;
+export const saveMenuCatalog = async (catalog) => {
+  if (typeof window === "undefined") return;
+  try {
+    await db.menu.clear();
+    const bulkAdd = catalog.map(cat => ({ id: cat.id, data: cat }));
+    await db.menu.bulkAdd(bulkAdd);
+  } catch (error) {
+    console.error("Dexie save error:", error);
   }
-
-  window.localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(catalog));
 };
 
 export const getTotalDishCount = (catalog) =>

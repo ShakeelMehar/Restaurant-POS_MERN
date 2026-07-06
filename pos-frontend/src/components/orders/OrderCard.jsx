@@ -11,12 +11,12 @@ const OrderCard = ({ order, onManage }) => {
     >
       <div className="flex items-center gap-3">
         <div className="rounded-lg bg-primary text-primary-foreground p-3 text-lg font-bold">
-          {getAvatarName(order.customerDetails.name)}
+          {getAvatarName(order?.customerDetails?.name || "Unknown")}
         </div>
         <div className="flex items-center justify-between w-[100%]">
           <div className="flex flex-col items-start gap-1">
             <h1 className="text-foreground text-base font-semibold tracking-wide">
-              {order.customerDetails.name}
+              {order?.customerDetails?.name || "Unknown"}
             </h1>
             <p className="text-muted-foreground text-sm">#{Math.floor(new Date(order.orderDate).getTime())} / Dine in</p>
             <p className="text-muted-foreground text-sm">Table <FaLongArrowAltRight className="text-muted-foreground ml-2 inline" /> {order.table?.tableNo || "N/A"}</p>

@@ -1,3 +1,5 @@
+import { useInitializeData } from "./hooks/useInitializeData";
+import { useOfflineSync } from "./hooks/useOfflineSync";
 import {
   BrowserRouter as Router,
   Routes,
@@ -106,6 +108,8 @@ function RoleGuard({ allowedRoles, children }) {
 }
 
 function App() {
+  useInitializeData();
+  useOfflineSync();
   return (
     <ErrorBoundary>
       <Router>
