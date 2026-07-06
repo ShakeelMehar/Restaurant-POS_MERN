@@ -1,34 +1,44 @@
 import React, { useEffect } from "react";
-
 import Greetings from "../components/home/Greetings";
-import { BsCashCoin } from "react-icons/bs";
-import { GrInProgress } from "react-icons/gr";
+import { FiDollarSign, FiClock } from "react-icons/fi";
 import MiniCard from "../components/home/MiniCard";
 import RecentOrders from "../components/home/RecentOrders";
 import PopularDishes from "../components/home/PopularDishes";
 
 const Dashboard = () => {
-
-    useEffect(() => {
-      document.title = "POS | Admin Dashboard"
-    }, [])
+  useEffect(() => {
+    document.title = "POS | Admin Dashboard";
+  }, []);
 
   return (
-    <section className="min-h-[calc(100vh-5rem)] bg-background pb-24 xl:flex xl:gap-3">
-      {/* Left Div */}
+    <section className="min-h-[calc(100vh-4rem)] bg-background pb-24 xl:flex xl:gap-0">
+      {/* ── LEFT COLUMN ── */}
       <div className="flex-[3] min-w-0">
         <Greetings />
-        <div className="flex items-center w-full gap-3 px-8 mt-8">
-          <MiniCard title="Total Earnings" icon={<BsCashCoin />} number={512} footerNum={1.6} />
-          <MiniCard title="In Progress" icon={<GrInProgress />} number={16} footerNum={3.6} />
+
+        {/* Stats Row */}
+        <div className="flex items-stretch gap-4 px-6 mt-5">
+          <MiniCard
+            title="Total Earnings"
+            icon={<FiDollarSign />}
+            number={512}
+            footerNum={1.6}
+          />
+          <MiniCard
+            title="In Progress"
+            icon={<FiClock />}
+            number={16}
+            footerNum={3.6}
+          />
         </div>
+
         <RecentOrders />
       </div>
-      {/* Right Div */}
-      <div className="flex-[2] min-w-0">
+
+      {/* ── RIGHT COLUMN ── */}
+      <div className="xl:w-[320px] xl:flex-shrink-0 xl:border-l border-border min-w-0">
         <PopularDishes />
       </div>
-
     </section>
   );
 };

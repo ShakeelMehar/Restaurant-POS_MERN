@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAllDishes } from "../../redux/slices/menuSlice";
+import { FiExternalLink } from "react-icons/fi";
 
 const PopularDishes = () => {
   const navigate = useNavigate();
@@ -10,51 +11,65 @@ const PopularDishes = () => {
 
   return (
     <div className="mt-6 pr-6">
-      <div className="bg-card w-full rounded-lg">
-        <div className="flex justify-between items-center px-6 py-4">
-          <h1 className="text-foreground text-lg font-semibold tracking-wide">
-            Popular Dishes
-          </h1>
+      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-border">
+          <h2 className="text-[15px] font-extrabold text-foreground">Popular Dishes</h2>
           <button
             onClick={() => navigate("/catalog?tab=dishes")}
-            className="text-blue-600 text-sm font-semibold"
+            className="flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
           >
-            View all
+            View all <FiExternalLink size={12} />
           </button>
         </div>
 
-        <div className="overflow-y-scroll h-[680px] scrollbar-hide">
+        {/* Dish List */}
+        <div className="overflow-y-auto h-[calc(100vh-320px)] max-h-[700px] hide-scrollbar py-3 px-4 space-y-2">
           {popularDishes.length > 0 ? (
-            popularDishes.map((dish, index) => {
-              return (
-                <div
-                  key={dish.id}
-                  className="mx-6 mt-4 flex items-center gap-4 rounded-[15px] bg-background px-6 py-4"
-                >
-                  <h1 className="mr-4 text-xl font-bold text-foreground">
-                    {index + 1 < 10 ? `0${index + 1}` : index + 1}
-                  </h1>
-                  <div
-                    className="flex h-[50px] w-[50px] items-center justify-center rounded-full text-xl text-white"
-                    style={{ backgroundColor: dish.bgColor }}
-                  >
-                    {dish.icon}
-                  </div>
-                  <div>
-                    <h1 className="font-semibold tracking-wide text-foreground">
-                      {dish.name}
-                    </h1>
-                    <p className="mt-1 text-sm font-semibold text-foreground">
-                      <span className="text-muted-foreground">Category: </span>
-                      {dish.categoryName}
-                    </p>
-                  </div>
+            popularDishes.map((dish, index) => (
+              <div
+                key={dish.id}
+                className="flex items-center gap-4 bg-secondary/50 hover:bg-secondary rounded-xl px-4 py-3.5 transition-all duration-200 group border border-transparent hover:border-border"
+              >
+                {/* Rank badge */}
+                <div className={`flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-lg text-xs font-extrabold ${
+                  index === 0
+                    ? "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
+                    : index === 1
+                    ? "bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-sm"
+                    : index === 2
+                    ? "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-sm"
+                    : "bg-muted text-muted-foreground"
+                }`}>
+                  {String(index + 1).padStart(2, "0")}
                 </div>
-              );
-            })
+
+                {/* Dish icon */}
+                <div
+                  className="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-lg border-2 border-white/20 shadow-sm"
+                  style={{ backgroundColor: dish.bgColor || "#374151" }}
+                >
+                  {dish.icon}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-foreground truncate">{dish.name}</p>
+                  <p className="text-xs text-muted-foreground font-medium mt-0.5 truncate">
+                    {dish.categoryName}
+                  </p>
+                </div>
+
+                {/* Price */}
+                <p className="text-sm font-extrabold text-primary flex-shrink-0">
+                  PKR {dish.price}
+                </p>
+              </div>
+            ))
           ) : (
-            <div className="mx-6 mt-4 rounded-[15px] bg-background px-6 py-8 text-center text-sm text-muted-foreground">
-              No dishes available yet.
+            <div className="flex flex-col items-center justify-center h-40 gap-3 text-center">
+              <span className="text-4xl">🫙</span>
+              <p className="text-sm font-semibold text-muted-foreground">No dishes available yet.</p>
             </div>
           )}
         </div>

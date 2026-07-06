@@ -1,30 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { FiPlus, FiMinus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItems, removeAllItems } from "../../redux/slices/cartSlice";
 import TabGroup from "../shared/TabGroup";
 
 const CartInfo = () => {
   const cartData = useSelector((state) => state.cart);
-  const scrolLRef = useRef();
+  const scrollRef = useRef();
   const dispatch = useDispatch();
-
-  // Local state for the toggle
   const [orderType, setOrderType] = useState("Dine In");
 
   useEffect(() => {
-    if(scrolLRef.current){
-      scrolLRef.current.scrollTo({
-        top: scrolLRef.current.scrollHeight,
-        behavior: "smooth"
-      })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
     }
-  },[cartData]);
+  }, [cartData]);
 
-  const handleIncrement = (item) => {
+  const handleIncrement = (item) =>
     dispatch(addItems({ ...item, quantity: 1, price: item.pricePerQuantity }));
-  }
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
@@ -32,92 +26,100 @@ const CartInfo = () => {
     } else {
       dispatch(removeItem(item.id));
     }
-  }
+  };
 
   return (
-    <div className="px-6 py-4 bg-background rounded-t-xl h-full">
+    <div className="px-5 py-5 h-full flex flex-col bg-background">
+      {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h1 className="text-2xl text-foreground font-bold tracking-wide">
-            Current Order
-          </h1>
-          {cartData.length > 0 && <p className="text-muted-foreground font-medium text-sm mt-1">Order #{Math.floor(Math.random() * 10000)}</p>}
+          <h2 className="text-xl font-extrabold text-foreground tracking-tight">Current Order</h2>
+          {cartData.length > 0 && (
+            <p className="text-xs text-muted-foreground mt-0.5 font-medium">
+              {cartData.length} {cartData.length === 1 ? "item" : "items"} added
+            </p>
+          )}
         </div>
-        <button 
-          onClick={() => dispatch(removeAllItems())} 
-          className="p-2 text-red-400 hover:text-red-500 transition-colors bg-secondary rounded-md shadow-sm border border-red-500/20 hover:border-red-500/40"
+        <button
+          onClick={() => dispatch(removeAllItems())}
           title="Clear Order"
+          className="flex items-center justify-center h-8 w-8 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:border-red-500/40 transition-all duration-200"
         >
-          <RiDeleteBin2Fill size={20} />
+          <RiDeleteBin2Fill size={15} />
         </button>
       </div>
 
-      <div className="mb-6">
+      {/* Order Type Tabs */}
+      <div className="mb-5">
         <TabGroup
           tabs={[
-            { id: "Dine In", label: "Dine In" },
+            { id: "Dine In",  label: "Dine In" },
             { id: "Takeaway", label: "Takeaway" },
-            { id: "Delivery", label: "Delivery" }
+            { id: "Delivery", label: "Delivery" },
           ]}
           activeTab={orderType}
           onTabChange={setOrderType}
-          fullWidth={true}
+          fullWidth
         />
       </div>
 
-      <div className="overflow-y-scroll scrollbar-hide h-[450px]" ref={scrolLRef} >
+      {/* Cart Items */}
+      <div className="flex-1 overflow-y-auto hide-scrollbar space-y-2.5 min-h-0" ref={scrollRef}>
         {cartData.length === 0 ? (
-          <p className="text-muted-foreground text-sm flex justify-center items-center h-full italic">Your cart is empty.</p>
-        ) : cartData.map((item) => {
-          
-          // Try to extract variant details gracefully if it's structured like "Chicken Biryani (Half)"
-          let itemName = item.name;
-          let variantName = "Regular";
-          if (item.name.includes("(")) {
-            const parts = item.name.split("(");
-            itemName = parts[0].trim();
-            variantName = parts[1].replace(")", "").trim();
-          }
+          <div className="flex flex-col items-center justify-center h-full gap-3 py-10">
+            <span className="text-5xl">🛒</span>
+            <p className="text-sm font-semibold text-muted-foreground">Your cart is empty</p>
+            <p className="text-xs text-muted-foreground/70">Add items from the menu to get started</p>
+          </div>
+        ) : (
+          cartData.map((item) => {
+            let itemName = item.name;
+            let variantName = "Regular";
+            if (item.name.includes("(")) {
+              const parts = item.name.split("(");
+              itemName = parts[0].trim();
+              variantName = parts[1].replace(")", "").trim();
+            }
 
-          return (
-            <div key={item.id} className="bg-card rounded-2xl px-4 py-4 mb-3 shadow-[0_2px_10px_rgba(0,0,0,0.2)] border border-border flex items-center justify-between hover:border-border transition-colors">
-              
-              <div className="flex items-center gap-4">
-                {/* Image Placeholder */}
-                <div className="h-16 w-16 bg-secondary rounded-xl flex items-center justify-center border border-border">
-                  <span className="text-2xl">🍲</span>
+            return (
+              <div
+                key={item.id}
+                className="flex items-center gap-3 bg-card rounded-2xl px-4 py-3.5 border border-border hover:border-primary/20 transition-all duration-200 shadow-sm"
+              >
+                {/* Emoji avatar */}
+                <div className="flex-shrink-0 h-12 w-12 bg-secondary rounded-xl flex items-center justify-center border border-border text-xl">
+                  🍲
                 </div>
-                
-                {/* Text Content */}
-                <div className="flex flex-col justify-center">
-                  <h1 className="text-foreground font-bold text-[16px] leading-tight mb-0.5">
-                    {itemName}
-                  </h1>
-                  <p className="text-muted-foreground text-xs font-medium mb-1">Variant: {variantName}</p>
-                  <p className="text-foreground text-sm font-extrabold">Rs. {item.pricePerQuantity}</p>
+
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-foreground font-bold text-sm leading-tight truncate">{itemName}</p>
+                  <p className="text-muted-foreground text-xs mt-0.5">{variantName}</p>
+                  <p className="text-primary text-sm font-extrabold mt-1">Rs. {item.pricePerQuantity}</p>
+                </div>
+
+                {/* Qty stepper */}
+                <div className="flex flex-col items-center bg-secondary rounded-full border border-border overflow-hidden flex-shrink-0">
+                  <button
+                    onClick={() => handleIncrement(item)}
+                    className="px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <FiPlus size={11} />
+                  </button>
+                  <span className="text-foreground font-extrabold text-[13px] px-1 leading-none py-0.5 min-w-[20px] text-center">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => handleDecrement(item)}
+                    className="px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <FiMinus size={11} />
+                  </button>
                 </div>
               </div>
-
-              {/* Vertical Counter Pill */}
-              <div className="flex flex-col items-center bg-secondary rounded-full border border-border overflow-hidden shadow-inner">
-                <button 
-                  onClick={() => handleIncrement(item)}
-                  className="px-3 py-2 text-muted-foreground hover:bg-secondary text-foreground hover:text-foreground transition-colors"
-                >
-                  <FaPlus size={10} />
-                </button>
-                <span className="text-foreground font-bold text-sm py-1">{item.quantity}</span>
-                <button 
-                  onClick={() => handleDecrement(item)}
-                  className="px-3 py-2 text-muted-foreground hover:bg-secondary text-foreground hover:text-foreground transition-colors"
-                >
-                  <FaMinus size={10} />
-                </button>
-              </div>
-
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );

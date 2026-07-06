@@ -1,48 +1,45 @@
-import { FaCheckDouble, FaLongArrowAltRight } from "react-icons/fa";
-import { FaCircle } from "react-icons/fa";
+import { FiArrowRight } from "react-icons/fi";
 import { getAvatarName } from "../../utils/index";
+
+const statusBadge = (status) => {
+  if (status === "Ready")
+    return "bg-success/10 text-success border border-success/25";
+  if (status === "Completed")
+    return "bg-muted text-muted-foreground border border-border";
+  return "bg-amber-500/10 text-amber-600 border border-amber-500/25";
+};
 
 const OrderList = ({ order, onManage }) => {
   return (
     <button
       type="button"
       onClick={() => onManage(order)}
-      className="mb-3 flex w-full items-center gap-5 rounded-xl px-2 py-3 text-left transition hover:bg-popover"
+      className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 hover:bg-secondary/70 border border-transparent hover:border-border group"
     >
-      <div className="rounded-lg bg-primary text-primary-foreground p-3 text-xl font-bold">
+      {/* Avatar */}
+      <div className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 text-foreground text-sm font-extrabold">
         {getAvatarName(order.customerDetails?.name)}
       </div>
-      <div className="flex items-center justify-between w-[100%]">
-        <div className="flex flex-col items-start gap-1">
-          <h1 className="text-foreground text-lg font-semibold tracking-wide">
-            {order.customerDetails?.name || "Customer"}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {(order.items || []).length} Items
-          </p>
-        </div>
 
-        <h1 className="text-primary font-semibold border border-primary rounded-lg p-1">
-          Table <FaLongArrowAltRight className="text-muted-foreground ml-2 inline" />{" "}
-          {order.table?.tableNo || "N/A"}
-        </h1>
-
-        <div className="flex flex-col items-end gap-2">
-          {order.orderStatus === "Ready" ? (
-            <>
-              <p className="text-green-600 bg-success/20 px-2 py-1 rounded-lg">
-                <FaCheckDouble className="inline mr-2" /> {order.orderStatus}
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-yellow-600 bg-yellow-500/20 px-2 py-1 rounded-lg">
-                <FaCircle className="inline mr-2" /> {order.orderStatus}
-              </p>
-            </>
-          )}
-        </div>
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-bold text-foreground truncate">
+          {order.customerDetails?.name || "Customer"}
+        </p>
+        <p className="text-xs text-muted-foreground font-medium mt-0.5">
+          {(order.items || []).length} items
+        </p>
       </div>
+
+      {/* Table */}
+      <div className="flex items-center gap-1 text-xs font-bold text-muted-foreground bg-secondary rounded-lg px-2.5 py-1.5 border border-border flex-shrink-0">
+        T<FiArrowRight size={10} className="inline" />{order.table?.tableNo ?? "N/A"}
+      </div>
+
+      {/* Status */}
+      <span className={`flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full ${statusBadge(order.orderStatus)}`}>
+        {order.orderStatus}
+      </span>
     </button>
   );
 };
