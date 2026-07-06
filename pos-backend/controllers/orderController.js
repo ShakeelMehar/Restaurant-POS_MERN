@@ -4,20 +4,7 @@ const { default: mongoose } = require("mongoose");
 
 const addOrder = async (req, res, next) => {
   try {
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const order = {
-        _id: "mock-order-" + Date.now(),
-        ...req.body,
-        orderDate: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-      mockDb.orders.push(order);
-      return res
-        .status(201)
-        .json({ success: true, message: "Order created!", data: order });
-    }
+
 
     const order = new Order(req.body);
     await order.save();
@@ -33,15 +20,7 @@ const getOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const order = mockDb.orders.find(o => o._id === id);
-      if (!order) {
-        const error = createHttpError(404, "Order not found!");
-        return next(error);
-      }
-      return res.status(200).json({ success: true, data: order });
-    }
+
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       const error = createHttpError(404, "Invalid id!");
@@ -62,20 +41,7 @@ const getOrderById = async (req, res, next) => {
 
 const getOrders = async (req, res, next) => {
   try {
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const populatedOrders = mockDb.orders.map(order => {
-        let tableObj = null;
-        if (order.table) {
-          tableObj = mockDb.tables.find(t => t._id === order.table);
-        }
-        return {
-          ...order,
-          table: tableObj
-        };
-      });
-      return res.status(200).json({ data: populatedOrders });
-    }
+
 
     const orders = await Order.find().populate("table");
     res.status(200).json({ data: orders });
@@ -97,27 +63,7 @@ const updateOrder = async (req, res, next) => {
     } = req.body;
     const { id } = req.params;
 
-    if (global.dbConnected === false) {
-      const mockDb = require("../utils/mockDb");
-      const order = mockDb.orders.find(o => o._id === id);
-      if (!order) {
-        const error = createHttpError(404, "Order not found!");
-        return next(error);
-      }
 
-      if (orderStatus !== undefined) order.orderStatus = orderStatus;
-      if (customerDetails !== undefined) order.customerDetails = customerDetails;
-      if (bills !== undefined) order.bills = bills;
-      if (items !== undefined) order.items = items;
-      if (paymentMethod !== undefined) order.paymentMethod = paymentMethod;
-      if (paymentData !== undefined) order.paymentData = paymentData;
-      if (table !== undefined) order.table = table;
-
-      order.updatedAt = new Date();
-      return res
-        .status(200)
-        .json({ success: true, message: "Order updated", data: order });
-    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       const error = createHttpError(404, "Invalid id!");

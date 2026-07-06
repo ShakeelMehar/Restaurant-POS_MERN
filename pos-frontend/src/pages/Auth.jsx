@@ -50,7 +50,7 @@ const Auth = () => {
               experience.
             </h1>
             <blockquote className="text-base xl:text-lg text-white/70 border-l-2 border-primary/60 pl-5 italic leading-relaxed max-w-sm">
-              "Serve customers the best food with prompt and friendly service in a welcoming atmosphere."
+              &quot;Serve customers the best food with prompt and friendly service in a welcoming atmosphere.&quot;
             </blockquote>
           </div>
 

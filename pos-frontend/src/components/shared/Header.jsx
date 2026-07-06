@@ -36,7 +36,7 @@ const Header = () => {
   const navItems = [
     { label: "Cashier POS", path: "/menu", match: ["/menu", "/"] },
     { label: "Orders", path: "/orders", match: ["/orders"] },
-    ...([["Admin", "Super Admin"].includes(userData.role)]
+    ...(["Admin", "Super Admin"].includes(userData.role)
       ? [{ label: "Admin", path: "/dashboard", match: ["/dashboard", "/catalog", "/staff", "/reports"] }]
       : []),
   ];

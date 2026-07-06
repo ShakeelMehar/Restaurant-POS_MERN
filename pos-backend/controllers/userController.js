@@ -14,21 +14,7 @@ const register = async (req, res, next) => {
             return next(error);
         }
 
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            const isUserPresent = mockDb.users.find(u => u.email === email);
-            if(isUserPresent){
-                const error = createHttpError(400, "User already exist!");
-                return next(error);
-            }
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const newUser = {
-                _id: "mock-user-" + Date.now(),
-                name, phone, email, password: hashedPassword, role
-            };
-            mockDb.users.push(newUser);
-            return res.status(201).json({success: true, message: "New user created!", data: newUser});
-        }
+
 
         const isUserPresent = await User.findOne({email});
         if(isUserPresent){
@@ -64,17 +50,9 @@ const login = async (req, res, next) => {
         let isUserPresent;
         let isMatch = false;
 
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            isUserPresent = mockDb.users.find(u => u.email === email);
-            if (isUserPresent) {
-                isMatch = await bcrypt.compare(password, isUserPresent.password);
-            }
-        } else {
-            isUserPresent = await User.findOne({email});
-            if (isUserPresent) {
-                isMatch = await bcrypt.compare(password, isUserPresent.password);
-            }
+        isUserPresent = await User.findOne({email});
+        if (isUserPresent) {
+            isMatch = await bcrypt.compare(password, isUserPresent.password);
         }
 
         if(!isUserPresent || !isMatch){
@@ -107,13 +85,7 @@ const login = async (req, res, next) => {
 const getUserData = async (req, res, next) => {
     try {
         
-        let user;
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            user = mockDb.users.find(u => u._id === req.user._id);
-        } else {
-            user = await User.findById(req.user._id);
-        }
+        let user = await User.findById(req.user._id);
         res.status(200).json({success: true, data: user});
 
     } catch (error) {
@@ -137,11 +109,7 @@ const logout = async (req, res, next) => {
 
 const getAllStaff = async (req, res, next) => {
     try {
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            const staff = mockDb.users.filter(u => u.role && u.role.toLowerCase() === "cashier");
-            return res.status(200).json({ success: true, data: staff });
-        }
+
         const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") } }).select("-password");
         res.status(200).json({ success: true, data: staff });
     } catch (error) {
@@ -153,13 +121,7 @@ const deleteStaff = async (req, res, next) => {
     try {
         const staffId = req.params.id;
 
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            const index = mockDb.users.findIndex(u => u._id === staffId);
-            if (index === -1) return next(createHttpError(404, "User not found"));
-            mockDb.users.splice(index, 1);
-            return res.status(200).json({ success: true, message: "Staff removed successfully" });
-        }
+
 
         const user = await User.findByIdAndDelete(staffId);
         if (!user) return next(createHttpError(404, "User not found"));
@@ -175,15 +137,7 @@ const updateStaffPassword = async (req, res, next) => {
         const { password } = req.body;
         if (!password) return next(createHttpError(400, "Password is required"));
         
-        if (global.dbConnected === false) {
-            const mockDb = require("../utils/mockDb");
-            const user = mockDb.users.find(u => u._id === staffId);
-            if (!user) return next(createHttpError(404, "User not found"));
-            
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user.password = hashedPassword;
-            return res.status(200).json({ success: true, message: "Password updated successfully" });
-        }
+
 
         const user = await User.findById(staffId);
         if (!user) return next(createHttpError(404, "User not found"));
