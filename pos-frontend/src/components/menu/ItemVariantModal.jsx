@@ -84,17 +84,17 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4">
-      <div className="bg-base w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="bg-background w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex justify-between items-start p-6 border-b border-[#2a2a2a]">
+        <div className="flex justify-between items-start p-6 border-b border-border">
           <div>
-            <h2 className="text-2xl font-bold text-text-primary">{item.name}</h2>
-            {item.description && <p className="text-text-secondary mt-1">{item.description}</p>}
+            <h2 className="text-2xl font-bold text-foreground">{item.name}</h2>
+            {item.description && <p className="text-muted-foreground mt-1">{item.description}</p>}
           </div>
           <button 
             onClick={onClose}
-            className="p-2 bg-[#1a1a1a] hover:bg-[#2a2a2a] text-[#ababab] hover:text-[#f5f5f5] rounded-full transition-colors"
+            className="p-2 bg-card hover:bg-secondary text-muted-foreground hover:text-foreground rounded-full transition-colors"
           >
             <FaTimes />
           </button>
@@ -106,8 +106,8 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
             item.optionGroups.map(group => (
               <div key={group.id} className="mb-8 last:mb-0">
                 <div className="flex items-center gap-4 mb-4">
-                  <h3 className="text-text-primary font-bold text-lg">{group.name}</h3>
-                  {group.required && <span className="bg-[#1f1f1f] text-primary border border-[#383838] text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider">Required</span>}
+                  <h3 className="text-foreground font-bold text-lg">{group.name}</h3>
+                  {group.required && <span className="bg-background text-foreground border border-border text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider">Required</span>}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {group.options.map(opt => {
@@ -118,8 +118,8 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
                         onClick={() => handleSelectionChange(group.id, opt.id)}
                         className={`p-3 rounded-xl border text-sm font-semibold transition-all ${
                             isSelected 
-                              ? 'border-primary bg-[#1f1f1f] text-primary shadow-sm' 
-                              : 'border-[#2a2a2a] bg-[#1a1a1a] text-[#ababab] hover:border-[#383838] hover:text-[#f5f5f5]'
+                              ? 'border-primary bg-background text-foreground shadow-sm' 
+                              : 'border-border bg-card text-muted-foreground hover:border-border hover:text-foreground'
                         }`}
                       >
                         <div className="mb-1">{opt.name}</div>
@@ -136,26 +136,26 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
             ))
           ) : (
             <div className="flex items-center justify-center h-32">
-               <p className="text-[#ababab] italic">No additional variants for this item.</p>
+               <p className="text-muted-foreground italic">No additional variants for this item.</p>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-[#2a2a2a] bg-[#1a1a1a] rounded-b-2xl">
+        <div className="p-6 border-t border-border bg-card rounded-b-2xl">
           <div className="flex flex-col sm:flex-row items-center gap-4">
             
             {/* Quantity Controls */}
-            <div className="flex items-center bg-[#2a2a2a] text-[#f5f5f5] rounded-xl font-bold text-xl h-14 border border-[#383838] w-full sm:w-auto px-2">
-              <button onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))} className="px-5 hover:text-primary transition-colors">-</button>
+            <div className="flex items-center bg-secondary text-foreground rounded-xl font-bold text-xl h-14 border border-border w-full sm:w-auto px-2">
+              <button onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))} className="px-5 hover:text-foreground transition-colors">-</button>
               <span className="px-4 min-w-[50px] text-center">{itemQuantity}</span>
-              <button onClick={() => setItemQuantity(itemQuantity + 1)} className="px-5 hover:text-primary transition-colors">+</button>
+              <button onClick={() => setItemQuantity(itemQuantity + 1)} className="px-5 hover:text-foreground transition-colors">+</button>
             </div>
             
             {/* Add Button */}
             <button 
               onClick={handleAddToCart}
-              className="flex-1 w-full bg-primary hover:brightness-110 text-[#1a1a1a] font-bold py-3 px-6 rounded-xl flex justify-between items-center transition-all h-14 text-lg shadow-[0_0_15px_rgba(246,177,0,0.2)]"
+              className="flex-1 w-full bg-primary hover:brightness-110 text-white font-bold py-3 px-6 rounded-xl flex justify-between items-center transition-all h-14 text-lg shadow-[0_0_15px_rgba(246,177,0,0.2)]"
             >
               <span className="flex items-center gap-2">
                 <FaShoppingCart size={18} /> Add to Order

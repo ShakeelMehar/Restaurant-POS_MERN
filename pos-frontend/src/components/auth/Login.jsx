@@ -58,7 +58,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="name@restaurant.com"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -79,7 +79,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -88,7 +88,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="w-full bg-gradient-to-r from-[#c6893f] to-[#a56c2d] hover:from-[#d19752] hover:to-[#b87c38] text-white font-bold rounded-xl py-4 mt-2 transition-all shadow-[0_0_20px_rgba(198,137,63,0.3)] hover:shadow-[0_0_25px_rgba(198,137,63,0.5)] active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full bg-gradient-to-r from-[#c6893f] to-[#a56c2d] hover:from-[#d19752] hover:to-[#b87c38] text-white font-bold rounded-xl py-4 mt-2 transition-all shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/50 active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {loginMutation.isPending ? "Authenticating..." : "Sign Into POS"}
           {!loginMutation.isPending && (

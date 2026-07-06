@@ -10,14 +10,14 @@ const PopularDishes = () => {
 
   return (
     <div className="mt-6 pr-6">
-      <div className="bg-[#1a1a1a] w-full rounded-lg">
+      <div className="bg-card w-full rounded-lg">
         <div className="flex justify-between items-center px-6 py-4">
-          <h1 className="text-[#f5f5f5] text-lg font-semibold tracking-wide">
+          <h1 className="text-foreground text-lg font-semibold tracking-wide">
             Popular Dishes
           </h1>
           <button
             onClick={() => navigate("/catalog?tab=dishes")}
-            className="text-[#025cca] text-sm font-semibold"
+            className="text-blue-600 text-sm font-semibold"
           >
             View all
           </button>
@@ -29,9 +29,9 @@ const PopularDishes = () => {
               return (
                 <div
                   key={dish.id}
-                  className="mx-6 mt-4 flex items-center gap-4 rounded-[15px] bg-[#1f1f1f] px-6 py-4"
+                  className="mx-6 mt-4 flex items-center gap-4 rounded-[15px] bg-background px-6 py-4"
                 >
-                  <h1 className="mr-4 text-xl font-bold text-[#f5f5f5]">
+                  <h1 className="mr-4 text-xl font-bold text-foreground">
                     {index + 1 < 10 ? `0${index + 1}` : index + 1}
                   </h1>
                   <div
@@ -41,11 +41,11 @@ const PopularDishes = () => {
                     {dish.icon}
                   </div>
                   <div>
-                    <h1 className="font-semibold tracking-wide text-[#f5f5f5]">
+                    <h1 className="font-semibold tracking-wide text-foreground">
                       {dish.name}
                     </h1>
-                    <p className="mt-1 text-sm font-semibold text-[#f5f5f5]">
-                      <span className="text-[#ababab]">Category: </span>
+                    <p className="mt-1 text-sm font-semibold text-foreground">
+                      <span className="text-muted-foreground">Category: </span>
                       {dish.categoryName}
                     </p>
                   </div>
@@ -53,7 +53,7 @@ const PopularDishes = () => {
               );
             })
           ) : (
-            <div className="mx-6 mt-4 rounded-[15px] bg-[#1f1f1f] px-6 py-8 text-center text-sm text-[#ababab]">
+            <div className="mx-6 mt-4 rounded-[15px] bg-background px-6 py-8 text-center text-sm text-muted-foreground">
               No dishes available yet.
             </div>
           )}

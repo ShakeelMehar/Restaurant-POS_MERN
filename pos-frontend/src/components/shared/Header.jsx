@@ -14,6 +14,7 @@ import { FaHome as FaHomeSolid } from "react-icons/fa";
 import NotificationDropdown from "./NotificationDropdown";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 import GlobalSearchModal from "./GlobalSearchModal";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const userData = useSelector((state) => state.user);
@@ -45,26 +46,26 @@ const Header = () => {
   const activeTab = location.pathname;
 
   return (
-    <header className="flex justify-between items-center py-4 px-8 bg-[#1a1a1a]">
+    <header className="flex justify-between items-center py-4 px-8 bg-card">
       {/* LOGO */}
       <div onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
         <img src={logo} className="h-8 w-8" alt="restro logo" />
-        <h1 className="text-lg font-semibold text-[#f5f5f5] tracking-wide">
+        <h1 className="text-lg font-semibold text-foreground tracking-wide">
           Restro
         </h1>
       </div>
 
       {/* SEARCH */}
       <div className="relative z-50">
-        <div className="flex items-center gap-4 bg-[#1f1f1f] rounded-[15px] px-5 py-2 w-[500px]">
-          <FaSearch className="text-[#f5f5f5]" />
+        <div className="flex items-center gap-4 bg-background rounded-[15px] px-5 py-2 w-[500px]">
+          <FaSearch className="text-foreground" />
           <input
             type="text"
             placeholder="Search orders, products & categories"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchOpen(true)}
-            className="bg-[#1f1f1f] outline-none text-[#f5f5f5] w-full"
+            className="bg-background outline-none text-foreground w-full"
           />
         </div>
         {isSearchOpen && (
@@ -84,8 +85,8 @@ const Header = () => {
           onClick={() => navigate("/menu")}
           className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
             activeTab === "/menu" || activeTab === "/"
-              ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
-              : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+              ? "bg-primary text-white shadow-lg shadow-primary/40"
+              : "bg-background text-muted-foreground hover:text-foreground border border-border"
           }`}
         >
           Cashier POS
@@ -94,8 +95,8 @@ const Header = () => {
           onClick={() => navigate("/orders")}
           className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
             activeTab === "/orders"
-              ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
-              : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+              ? "bg-primary text-white shadow-lg shadow-primary/40"
+              : "bg-background text-muted-foreground hover:text-foreground border border-border"
           }`}
         >
           Orders
@@ -105,8 +106,8 @@ const Header = () => {
             onClick={() => navigate("/dashboard")}
             className={`px-6 py-2.5 rounded-full font-bold transition-all text-sm whitespace-nowrap ${
               ["/dashboard", "/catalog", "/staff", "/reports"].includes(activeTab)
-                ? "bg-primary text-[#1a1a1a] shadow-[0_0_15px_rgba(246,177,0,0.4)]"
-                : "bg-base text-[#ababab] hover:text-[#f5f5f5] border border-[#2a2a2a]"
+                ? "bg-primary text-white shadow-lg shadow-primary/40"
+                : "bg-background text-muted-foreground hover:text-foreground border border-border"
             }`}
           >
             Admin Dashboard
@@ -116,14 +117,15 @@ const Header = () => {
 
       {/* LOGGED USER DETAILS */}
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         <div className="relative">
           <button
             onClick={() => setIsNotificationOpen((prev) => !prev)}
-            className="relative rounded-[15px] bg-[#1f1f1f] p-3 cursor-pointer"
+            className="relative rounded-[15px] bg-background p-3 cursor-pointer"
             title="Notifications"
           >
-            <FaBell className="text-[#f5f5f5] text-2xl" />
-            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-[#F6B100]" />
+            <FaBell className="text-foreground text-2xl" />
+            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-primary-yellow" />
           </button>
           <NotificationDropdown
             isOpen={isNotificationOpen}
@@ -131,18 +133,18 @@ const Header = () => {
           />
         </div>
         <div className="flex items-center gap-3 cursor-pointer">
-          <FaUserCircle className="text-[#f5f5f5] text-4xl" />
+          <FaUserCircle className="text-foreground text-4xl" />
           <div className="flex flex-col items-start">
-            <h1 className="text-md text-[#f5f5f5] font-semibold tracking-wide">
+            <h1 className="text-md text-foreground font-semibold tracking-wide">
               {userData.name || "TEST USER"}
             </h1>
-            <p className="text-xs text-[#ababab] font-medium">
+            <p className="text-xs text-muted-foreground font-medium">
               {userData.role || "Role"}
             </p>
           </div>
           <IoLogOut
             onClick={() => setIsLogoutModalOpen(true)}
-            className="text-[#f5f5f5] ml-2"
+            className="text-foreground ml-2"
             size={40}
           />
         </div>

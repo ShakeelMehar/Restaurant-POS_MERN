@@ -39,13 +39,13 @@ const RecentOrders = () => {
   console.log(resData.data.data);
 
   return (
-    <div className="container mx-auto bg-[#262626] p-4 rounded-lg">
-      <h2 className="text-[#f5f5f5] text-xl font-semibold mb-4">
+    <div className="container mx-auto bg-card p-4 rounded-lg">
+      <h2 className="text-foreground text-xl font-semibold mb-4">
         Recent Orders
       </h2>
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-[#f5f5f5]">
-          <thead className="bg-[#333] text-[#ababab]">
+        <table className="w-full text-left text-foreground">
+          <thead className="bg-secondary text-muted-foreground">
             <tr>
               <th className="p-3">Order ID</th>
               <th className="p-3">Customer</th>
@@ -61,13 +61,13 @@ const RecentOrders = () => {
             {resData?.data.data.map((order, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-600 hover:bg-[#333]"
+                className="border-b border-border hover:bg-secondary/50"
               >
                 <td className="p-4">#{Math.floor(new Date(order.orderDate).getTime())}</td>
                 <td className="p-4">{order.customerDetails.name}</td>
                 <td className="p-4">
                   <select
-                    className={`bg-[#1a1a1a] text-[#f5f5f5] border border-gray-500 p-2 rounded-lg focus:outline-none ${
+                    className={`bg-card text-foreground border border-gray-500 p-2 rounded-lg focus:outline-none ${
                       order.orderStatus === "Ready"
                         ? "text-green-500"
                         : "text-yellow-500"

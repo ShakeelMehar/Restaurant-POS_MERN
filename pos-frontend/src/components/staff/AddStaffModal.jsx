@@ -49,10 +49,10 @@ const AddStaffModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Staff Member">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Full Name
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="text"
               name="name"
@@ -66,10 +66,10 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Email Address
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="email"
               name="email"
@@ -83,10 +83,10 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Phone Number
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="text"
               name="phone"
@@ -100,10 +100,10 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Temporary Password
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="password"
               name="password"
@@ -117,15 +117,15 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Role
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <select
               name="role"
               value={formData.role}
               onChange={handleInputChange}
-              className="w-full bg-[#1f1f1f] text-white focus:outline-none"
+              className="w-full bg-background text-white focus:outline-none"
             >
               <option value="Cashier">Cashier</option>
               <option value="Admin">Admin</option>

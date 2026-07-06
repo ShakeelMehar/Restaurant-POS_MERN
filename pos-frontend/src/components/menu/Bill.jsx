@@ -239,22 +239,22 @@ const Bill = () => {
   return (
     <>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">
+        <p className="text-xs text-muted-foreground font-medium mt-2">
           Items({cartData.length})
         </p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">
+        <h1 className="text-foreground text-md font-bold">
           PKR {total.toFixed(2)}
         </h1>
       </div>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">Tax(5.25%)</p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">PKR {tax.toFixed(2)}</h1>
+        <p className="text-xs text-muted-foreground font-medium mt-2">Tax(5.25%)</p>
+        <h1 className="text-foreground text-md font-bold">PKR {tax.toFixed(2)}</h1>
       </div>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">
+        <p className="text-xs text-muted-foreground font-medium mt-2">
           Total With Tax
         </p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">
+        <h1 className="text-foreground text-md font-bold">
           PKR {totalPriceWithTax.toFixed(2)}
         </h1>
       </div>
@@ -264,13 +264,13 @@ const Bill = () => {
         <div className="flex items-center gap-3 w-full">
           <button 
             onClick={() => dispatch(removeAllItems())}
-            className="flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#383838] px-4 py-3 w-full rounded-lg text-[#f5f5f5] font-semibold transition-all">
-            <FaPlus className="text-[#ababab]" /> New Order
+            className="flex items-center justify-center gap-2 bg-secondary hover:bg-secondary text-foreground px-4 py-3 w-full rounded-lg text-foreground font-semibold transition-all">
+            <FaPlus className="text-muted-foreground" /> New Order
           </button>
           <button 
             onClick={() => window.print()}
-            className="flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#383838] px-4 py-3 w-full rounded-lg text-[#f5f5f5] font-semibold transition-all">
-            <FaPrint className="text-[#ababab]" /> Print Order
+            className="flex items-center justify-center gap-2 bg-secondary hover:bg-secondary text-foreground px-4 py-3 w-full rounded-lg text-foreground font-semibold transition-all">
+            <FaPrint className="text-muted-foreground" /> Print Order
           </button>
         </div>
         <button
@@ -294,37 +294,37 @@ const Bill = () => {
       {/* Checkout Dialog Modal */}
       {showCheckoutModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="bg-[#1f1f1f] w-[500px] rounded-2xl p-6 shadow-2xl">
-            <h2 className="text-2xl font-bold text-[#f5f5f5] mb-6 border-b border-[#2a2a2a] pb-4">Checkout Review</h2>
+          <div className="bg-background w-[500px] rounded-2xl p-6 shadow-2xl">
+            <h2 className="text-2xl font-bold text-foreground mb-6 border-b border-border pb-4">Checkout Review</h2>
             
             {/* Order Summary */}
-            <div className="mb-6 bg-[#1a1a1a] rounded-lg p-4">
-              <div className="flex justify-between text-[#ababab] mb-2">
+            <div className="mb-6 bg-card rounded-lg p-4">
+              <div className="flex justify-between text-muted-foreground mb-2">
                 <span>Total Items:</span>
-                <span className="text-[#f5f5f5] font-semibold">{cartData.length}</span>
+                <span className="text-foreground font-semibold">{cartData.length}</span>
               </div>
-              <div className="flex justify-between text-[#ababab] mb-2">
+              <div className="flex justify-between text-muted-foreground mb-2">
                 <span>Subtotal:</span>
-                <span className="text-[#f5f5f5] font-semibold">PKR {total.toFixed(2)}</span>
+                <span className="text-foreground font-semibold">PKR {total.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-[#ababab] mb-2">
+              <div className="flex justify-between text-muted-foreground mb-2">
                 <span>Tax (5.25%):</span>
-                <span className="text-[#f5f5f5] font-semibold">PKR {tax.toFixed(2)}</span>
+                <span className="text-foreground font-semibold">PKR {tax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-xl font-bold mt-4 border-t border-[#2a2a2a] pt-4 text-[#f5f5f5]">
+              <div className="flex justify-between text-xl font-bold mt-4 border-t border-border pt-4 text-foreground">
                 <span>Total:</span>
-                <span className="text-primary">PKR {totalPriceWithTax.toFixed(2)}</span>
+                <span className="text-foreground">PKR {totalPriceWithTax.toFixed(2)}</span>
               </div>
             </div>
 
             {/* Payment Methods */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-[#f5f5f5] mb-3">Payment Method</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-3">Payment Method</h3>
               <div className="flex gap-3">
                 <button
                   onClick={() => setPaymentMethod("Cash")}
                   className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
-                    paymentMethod === "Cash" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                    paymentMethod === "Cash" ? "bg-secondary text-foreground border-primary text-foreground" : "border-border text-muted-foreground hover:border-border"
                   }`}
                 >
                   <FaMoneyBillWave size={24} />
@@ -333,7 +333,7 @@ const Bill = () => {
                 <button
                   onClick={() => setPaymentMethod("Card")}
                   className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
-                    paymentMethod === "Card" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                    paymentMethod === "Card" ? "bg-secondary text-foreground border-primary text-foreground" : "border-border text-muted-foreground hover:border-border"
                   }`}
                 >
                   <FaCreditCard size={24} />
@@ -342,7 +342,7 @@ const Bill = () => {
                 <button
                   onClick={() => setPaymentMethod("Online")}
                   className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-lg font-semibold border-2 transition-all ${
-                    paymentMethod === "Online" ? "bg-[#383838] border-primary text-[#f5f5f5]" : "border-[#2a2a2a] text-[#ababab] hover:border-[#383838]"
+                    paymentMethod === "Online" ? "bg-secondary text-foreground border-primary text-foreground" : "border-border text-muted-foreground hover:border-border"
                   }`}
                 >
                   <FaGlobe size={24} />
@@ -355,7 +355,7 @@ const Bill = () => {
             <div className="flex gap-3 mt-8">
               <button 
                 onClick={() => setShowCheckoutModal(false)}
-                className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#2a2a2a] hover:bg-[#383838] rounded-lg text-[#f5f5f5] font-bold transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-4 bg-secondary hover:bg-secondary text-foreground rounded-lg text-foreground font-bold transition-all"
               >
                 <FaTimes /> Cancel
               </button>
@@ -369,7 +369,7 @@ const Bill = () => {
                   handlePlaceOrder();
                 }}
                 disabled={!paymentMethod}
-                className="flex-[2] flex items-center justify-center gap-2 py-4 bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-[#1f1f1f] font-bold text-xl transition-all shadow-lg"
+                className="flex-[2] flex items-center justify-center gap-2 py-4 bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white font-bold text-xl transition-all shadow-lg"
               >
                 <FaCheckCircle /> Cash Out
               </button>

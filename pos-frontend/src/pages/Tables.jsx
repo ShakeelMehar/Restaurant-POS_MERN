@@ -44,12 +44,12 @@ const Tables = () => {
   const availableCount = tableList.filter((t) => t.status === "Available").length;
 
   return (
-    <section className="min-h-[calc(100vh-5rem)] bg-[#1a1a1a] pb-24">
+    <section className="min-h-[calc(100vh-5rem)] bg-card pb-24">
       {/* Header */}
       <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
         <div className="flex items-center gap-4">
           <BackButton />
-          <h1 className="text-[#f5f5f5] text-2xl font-bold tracking-wider">
+          <h1 className="text-foreground text-2xl font-bold tracking-wider">
             Select Table
           </h1>
         </div>
@@ -59,14 +59,14 @@ const Tables = () => {
           {tableList.length > 0 && (
             <div className="flex items-center gap-4 mr-2">
               <div className="flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#F6B100]" />
-                <span className="text-xs text-[#ababab]">
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary-yellow" />
+                <span className="text-xs text-muted-foreground">
                   Available: {availableCount}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#3aaf6f]" />
-                <span className="text-xs text-[#ababab]">
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-success" />
+                <span className="text-xs text-muted-foreground">
                   Booked: {bookedCount}
                 </span>
               </div>
@@ -77,16 +77,16 @@ const Tables = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setStatus("all")}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold text-[#ababab] sm:px-5 sm:text-lg ${
-                status === "all" ? "bg-[#383838]" : ""
+              className={`rounded-lg px-4 py-2 text-sm font-semibold text-muted-foreground sm:px-5 sm:text-lg ${
+                status === "all" ? "bg-secondary text-foreground" : ""
               }`}
             >
               All
             </button>
             <button
               onClick={() => setStatus("booked")}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold text-[#ababab] sm:px-5 sm:text-lg ${
-                status === "booked" ? "bg-[#383838]" : ""
+              className={`rounded-lg px-4 py-2 text-sm font-semibold text-muted-foreground sm:px-5 sm:text-lg ${
+                status === "booked" ? "bg-secondary text-foreground" : ""
               }`}
             >
               Booked
@@ -96,7 +96,7 @@ const Tables = () => {
           {["Admin", "Super Admin"].includes(role) && (
             <button
               onClick={() => setIsAddTableOpen(true)}
-              className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
+              className="rounded-lg bg-primary-yellow px-4 py-2 text-sm font-semibold text-white sm:text-base"
             >
               Add Table
             </button>
@@ -107,24 +107,24 @@ const Tables = () => {
       {/* Table Grid */}
       <div className="grid grid-cols-2 gap-3 px-4 py-4 sm:grid-cols-3 sm:px-6 md:grid-cols-4 lg:px-10 xl:grid-cols-5 2xl:grid-cols-6">
         {isLoading && (
-          <p className="col-span-full text-center text-sm text-[#ababab]">
+          <p className="col-span-full text-center text-sm text-muted-foreground">
             Loading tables...
           </p>
         )}
 
         {!isLoading && tableList.length === 0 && (
-          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#3b3b3b] bg-[#262626] px-6 py-12 text-center">
-            <h2 className="text-xl font-semibold text-[#f5f5f5]">
+          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-12 text-center">
+            <h2 className="text-xl font-semibold text-foreground">
               No tables available
             </h2>
-            <p className="mt-2 max-w-md text-sm text-[#ababab]">
+            <p className="mt-2 max-w-md text-sm text-muted-foreground">
               Add your first table to continue the order flow and assign guests
               to a seat.
             </p>
             {["Admin", "Super Admin"].includes(role) && (
               <button
                 onClick={() => setIsAddTableOpen(true)}
-                className="mt-6 rounded-lg bg-[#F6B100] px-5 py-3 font-semibold text-[#1f1f1f]"
+                className="mt-6 rounded-lg bg-primary-yellow px-5 py-3 font-semibold text-white"
               >
                 Add First Table
               </button>
@@ -133,7 +133,7 @@ const Tables = () => {
         )}
 
         {!isLoading && tableList.length > 0 && filteredTables.length === 0 && (
-          <p className="col-span-full text-center text-sm text-[#ababab]">
+          <p className="col-span-full text-center text-sm text-muted-foreground">
             No booked tables right now.
           </p>
         )}

@@ -35,17 +35,17 @@ const CartInfo = () => {
   }
 
   return (
-    <div className="px-6 py-4 bg-base rounded-t-xl h-full">
+    <div className="px-6 py-4 bg-background rounded-t-xl h-full">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h1 className="text-2xl text-[#f5f5f5] font-bold tracking-wide">
+          <h1 className="text-2xl text-foreground font-bold tracking-wide">
             Current Order
           </h1>
-          {cartData.length > 0 && <p className="text-[#ababab] font-medium text-sm mt-1">Order #{Math.floor(Math.random() * 10000)}</p>}
+          {cartData.length > 0 && <p className="text-muted-foreground font-medium text-sm mt-1">Order #{Math.floor(Math.random() * 10000)}</p>}
         </div>
         <button 
           onClick={() => dispatch(removeAllItems())} 
-          className="p-2 text-red-400 hover:text-red-500 transition-colors bg-[#2a2a2a] rounded-md shadow-sm border border-red-500/20 hover:border-red-500/40"
+          className="p-2 text-red-400 hover:text-red-500 transition-colors bg-secondary rounded-md shadow-sm border border-red-500/20 hover:border-red-500/40"
           title="Clear Order"
         >
           <RiDeleteBin2Fill size={20} />
@@ -67,7 +67,7 @@ const CartInfo = () => {
 
       <div className="overflow-y-scroll scrollbar-hide h-[450px]" ref={scrolLRef} >
         {cartData.length === 0 ? (
-          <p className="text-[#ababab] text-sm flex justify-center items-center h-full italic">Your cart is empty.</p>
+          <p className="text-muted-foreground text-sm flex justify-center items-center h-full italic">Your cart is empty.</p>
         ) : cartData.map((item) => {
           
           // Try to extract variant details gracefully if it's structured like "Chicken Biryani (Half)"
@@ -80,36 +80,36 @@ const CartInfo = () => {
           }
 
           return (
-            <div key={item.id} className="bg-[#1a1a1a] rounded-2xl px-4 py-4 mb-3 shadow-[0_2px_10px_rgba(0,0,0,0.2)] border border-[#2a2a2a] flex items-center justify-between hover:border-[#383838] transition-colors">
+            <div key={item.id} className="bg-card rounded-2xl px-4 py-4 mb-3 shadow-[0_2px_10px_rgba(0,0,0,0.2)] border border-border flex items-center justify-between hover:border-border transition-colors">
               
               <div className="flex items-center gap-4">
                 {/* Image Placeholder */}
-                <div className="h-16 w-16 bg-[#2a2a2a] rounded-xl flex items-center justify-center border border-[#383838]">
+                <div className="h-16 w-16 bg-secondary rounded-xl flex items-center justify-center border border-border">
                   <span className="text-2xl">🍲</span>
                 </div>
                 
                 {/* Text Content */}
                 <div className="flex flex-col justify-center">
-                  <h1 className="text-[#f5f5f5] font-bold text-[16px] leading-tight mb-0.5">
+                  <h1 className="text-foreground font-bold text-[16px] leading-tight mb-0.5">
                     {itemName}
                   </h1>
-                  <p className="text-[#ababab] text-xs font-medium mb-1">Variant: {variantName}</p>
-                  <p className="text-primary text-sm font-extrabold">Rs. {item.pricePerQuantity}</p>
+                  <p className="text-muted-foreground text-xs font-medium mb-1">Variant: {variantName}</p>
+                  <p className="text-foreground text-sm font-extrabold">Rs. {item.pricePerQuantity}</p>
                 </div>
               </div>
 
               {/* Vertical Counter Pill */}
-              <div className="flex flex-col items-center bg-[#2a2a2a] rounded-full border border-[#383838] overflow-hidden shadow-inner">
+              <div className="flex flex-col items-center bg-secondary rounded-full border border-border overflow-hidden shadow-inner">
                 <button 
                   onClick={() => handleIncrement(item)}
-                  className="px-3 py-2 text-[#ababab] hover:bg-[#383838] hover:text-[#f5f5f5] transition-colors"
+                  className="px-3 py-2 text-muted-foreground hover:bg-secondary text-foreground hover:text-foreground transition-colors"
                 >
                   <FaPlus size={10} />
                 </button>
-                <span className="text-[#f5f5f5] font-bold text-sm py-1">{item.quantity}</span>
+                <span className="text-foreground font-bold text-sm py-1">{item.quantity}</span>
                 <button 
                   onClick={() => handleDecrement(item)}
-                  className="px-3 py-2 text-[#ababab] hover:bg-[#383838] hover:text-[#f5f5f5] transition-colors"
+                  className="px-3 py-2 text-muted-foreground hover:bg-secondary text-foreground hover:text-foreground transition-colors"
                 >
                   <FaMinus size={10} />
                 </button>

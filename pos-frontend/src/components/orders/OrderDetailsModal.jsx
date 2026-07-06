@@ -85,34 +85,34 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Manage Order">
       <div className="space-y-5">
-        <div className="flex items-start justify-between gap-4 rounded-xl bg-[#202020] p-4">
+        <div className="flex items-start justify-between gap-4 rounded-xl bg-popover p-4">
           <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-[#f6b100] px-4 py-3 text-xl font-bold text-[#1f1f1f]">
+            <div className="rounded-xl bg-primary text-primary-foreground px-4 py-3 text-xl font-bold text-white">
               {getAvatarName(order.customerDetails?.name) || "CN"}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-[#f5f5f5]">
+              <h3 className="text-lg font-semibold text-foreground">
                 {order.customerDetails?.name || "Customer"}
               </h3>
-            <p className="text-sm text-[#ababab]">
+            <p className="text-sm text-muted-foreground">
                 Table {order.table?.tableNo || "N/A"} | Guests{" "}
                 {order.customerDetails?.guests || 0}
               </p>
-              <p className="mt-1 text-xs text-[#777]">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {formatDateAndTime(order.orderDate || order.createdAt)}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm text-[#ababab]">Total</p>
-            <p className="text-xl font-bold text-[#f5f5f5]">
+            <p className="text-sm text-muted-foreground">Total</p>
+            <p className="text-xl font-bold text-foreground">
               PKR {order.bills?.totalWithTax?.toFixed(2) || "0.00"}
             </p>
           </div>
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#ababab]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Update Status
           </p>
           <div className="grid grid-cols-3 gap-3">
@@ -123,8 +123,8 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                 disabled={orderUpdateMutation.isPending}
                 className={`rounded-lg px-4 py-3 text-sm font-semibold transition ${
                   order.orderStatus === status
-                    ? "bg-[#F6B100] text-[#1f1f1f]"
-                    : "bg-[#1f1f1f] text-[#f5f5f5] hover:bg-[#2a2a2a]"
+                    ? "bg-primary-yellow text-white"
+                    : "bg-background text-foreground hover:bg-secondary"
                 } disabled:cursor-not-allowed disabled:opacity-70`}
               >
                 {status}
@@ -135,10 +135,10 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
 
         <div>
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#ababab]">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Order Items
             </p>
-            <p className="text-sm text-[#ababab]">
+            <p className="text-sm text-muted-foreground">
               {(order.items || []).length} items
             </p>
           </div>
@@ -146,16 +146,16 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
             {(order.items || []).map((item, index) => (
               <div
                 key={item.id || `${item.name}-${index}`}
-                className="rounded-xl bg-[#202020] px-4 py-3"
+                className="rounded-xl bg-popover px-4 py-3"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-[#f5f5f5]">{item.name}</p>
-                    <p className="mt-1 text-sm text-[#ababab]">
+                    <p className="font-semibold text-foreground">{item.name}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
                       Qty {item.quantity} | PKR {item.pricePerQuantity} each
                     </p>
                   </div>
-                  <p className="font-semibold text-[#F6B100]">
+                  <p className="font-semibold text-primary-yellow">
                     PKR {item.price}
                   </p>
                 </div>
@@ -167,13 +167,13 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="w-full rounded-lg bg-[#1f1f1f] px-4 py-3 font-semibold text-[#f5f5f5]"
+            className="w-full rounded-lg bg-background px-4 py-3 font-semibold text-foreground"
           >
             Close
           </button>
           <button
             onClick={handleEditOrder}
-            className="w-full rounded-lg bg-[#F6B100] px-4 py-3 font-semibold text-[#1f1f1f]"
+            className="w-full rounded-lg bg-primary-yellow px-4 py-3 font-semibold text-white"
           >
             Modify In Menu
           </button>

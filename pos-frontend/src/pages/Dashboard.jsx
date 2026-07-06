@@ -14,7 +14,7 @@ const Dashboard = () => {
     }, [])
 
   return (
-    <section className="min-h-[calc(100vh-5rem)] bg-[#1f1f1f] pb-24 xl:flex xl:gap-3">
+    <section className="min-h-[calc(100vh-5rem)] bg-background pb-24 xl:flex xl:gap-3">
       {/* Left Div */}
       <div className="flex-[3] min-w-0">
         <Greetings />

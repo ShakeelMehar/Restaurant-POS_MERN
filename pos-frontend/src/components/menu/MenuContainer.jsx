@@ -52,8 +52,8 @@ const MenuContainer = () => {
     <>
       {categories.length === 0 ? (
         <div className="px-6 py-8 w-full">
-          <div className="rounded-2xl border border-dashed border-[#383838] bg-base px-6 py-10 text-center">
-            <h2 className="text-xl font-semibold text-text-primary">No categories available</h2>
+          <div className="rounded-2xl border border-dashed border-border bg-background px-6 py-10 text-center">
+            <h2 className="text-xl font-semibold text-foreground">No categories available</h2>
           </div>
         </div>
       ) : (
@@ -66,8 +66,8 @@ const MenuContainer = () => {
                 onClick={() => setSelectedCategoryId(c.id)}
                 className={`px-6 py-2.5 rounded-full font-bold whitespace-nowrap transition-all border ${
                   selectedCategoryId === c.id
-                    ? "bg-primary text-[#1a1a1a] border-primary shadow-[0_0_15px_rgba(246,177,0,0.4)]"
-                    : "bg-[#1a1a1a] text-[#ababab] hover:text-[#f5f5f5] border-[#2a2a2a]"
+                    ? "bg-primary text-white border-primary shadow-lg shadow-primary/40"
+                    : "bg-card text-muted-foreground hover:text-foreground border-border"
                 }`}
               >
                 {c.icon} {c.name}
@@ -75,7 +75,7 @@ const MenuContainer = () => {
             ))}
           </div>
 
-          <hr className="border-[#2a2a2a] border-t mt-1 mb-4 mx-6" />
+          <hr className="border-border border-t mt-1 mb-4 mx-6" />
 
           {/* Sub-Category Items (Card Grid) */}
           <div className="px-6 py-2 w-full h-[calc(100vh-230px)] overflow-y-auto hide-scrollbar pb-32">
@@ -85,25 +85,25 @@ const MenuContainer = () => {
                   <div 
                     key={item.id} 
                     onClick={() => handleCardClick(item)}
-                    className="bg-[#1a1a1a] rounded-2xl border border-[#2a2a2a] overflow-hidden transition-all hover:border-[#c6893f] hover:shadow-lg cursor-pointer flex flex-col h-full group"
+                    className="bg-card rounded-2xl border border-border overflow-hidden transition-all hover:border-accent hover:shadow-lg cursor-pointer flex flex-col h-full group"
                   >
                     {/* Image Area - Using a sleek placeholder */}
-                    <div className="h-32 bg-[#2a2a2a] flex items-center justify-center relative overflow-hidden">
+                    <div className="h-32 bg-background flex items-center justify-center relative overflow-hidden">
                        <span className="text-5xl group-hover:scale-110 transition-transform duration-300">🍲</span>
                        {/* Gradient overlay for premium feel */}
-                       <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] to-transparent opacity-80"></div>
+                       <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-50 dark:opacity-80"></div>
                     </div>
                     
                     {/* Content Area */}
                     <div className="p-4 flex flex-col flex-grow">
                       <div className="flex-grow">
-                        <h1 className="text-[#f5f5f5] text-lg font-bold leading-tight mb-1">{item.name}</h1>
-                        <p className="text-[#ababab] text-xs line-clamp-2">{item.description}</p>
+                        <h1 className="text-foreground text-lg font-bold leading-tight mb-1">{item.name}</h1>
+                        <p className="text-muted-foreground text-xs line-clamp-2">{item.description}</p>
                       </div>
                       
-                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#2a2a2a]">
-                        <p className="text-primary text-lg font-extrabold tracking-wide">PKR {item.price}</p>
-                        <div className="h-8 w-8 rounded-full bg-[#2a2a2a] group-hover:bg-primary group-hover:text-[#1a1a1a] text-[#ababab] flex items-center justify-center transition-colors">
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                        <p className="text-primary-yellow text-lg font-extrabold tracking-wide">PKR {item.price}</p>
+                        <div className="h-8 w-8 rounded-full bg-background border border-border group-hover:bg-primary group-hover:text-white text-muted-foreground flex items-center justify-center transition-colors">
                           <FaPlus size={14} />
                         </div>
                       </div>
@@ -111,7 +111,7 @@ const MenuContainer = () => {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full rounded-2xl bg-[#1a1a1a] px-6 py-10 text-center text-sm text-[#ababab] border border-[#2a2a2a]">
+                <div className="col-span-full rounded-2xl bg-card px-6 py-10 text-center text-sm text-muted-foreground border border-border">
                   No dishes in this category yet.
                 </div>
               )}

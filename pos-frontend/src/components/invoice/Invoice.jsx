@@ -15,7 +15,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
                 <style>
                   body { font-family: Arial, sans-serif; padding: 20px; }
                   .receipt-container { width: 300px; border: 1px solid #ddd; padding: 10px; }
-                  h2 { text-align: center; }
+                  h2 { text-whitelign: center; }
                 </style>
               </head>
               <body>

@@ -68,7 +68,7 @@ const Register = ({setIsRegister}) => {
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. John Doe"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -90,7 +90,7 @@ const Register = ({setIsRegister}) => {
               value={formData.email}
               onChange={handleChange}
               placeholder="name@restaurant.com"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -112,7 +112,7 @@ const Register = ({setIsRegister}) => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="+92 300 1234567"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -134,7 +134,7 @@ const Register = ({setIsRegister}) => {
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#c6893f] focus:ring-1 focus:ring-[#c6893f] transition-all shadow-inner"
+              className="w-full bg-card border border-border text-white rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
               required
             />
           </div>
@@ -153,8 +153,8 @@ const Register = ({setIsRegister}) => {
                   onClick={() => handleRoleSelection(role)}
                   className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-all ${
                     formData.role === role 
-                      ? "bg-[#c6893f] border-[#c6893f] text-white shadow-[0_0_15px_rgba(198,137,63,0.3)]" 
-                      : "bg-[#1a1a1a] border-[#333] text-gray-400 hover:border-[#c6893f] hover:text-white"
+                      ? "bg-accent border-accent text-white shadow-[0_0_15px_rgba(198,137,63,0.3)]" 
+                      : "bg-card border-border text-gray-400 hover:border-accent hover:text-white"
                   }`}
                 >
                   {role}
@@ -167,7 +167,7 @@ const Register = ({setIsRegister}) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="w-full bg-gradient-to-r from-[#c6893f] to-[#a56c2d] hover:from-[#d19752] hover:to-[#b87c38] text-white font-bold rounded-xl py-4 mt-4 transition-all shadow-[0_0_20px_rgba(198,137,63,0.3)] hover:shadow-[0_0_25px_rgba(198,137,63,0.5)] active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full bg-gradient-to-r from-[#c6893f] to-[#a56c2d] hover:from-[#d19752] hover:to-[#b87c38] text-white font-bold rounded-xl py-4 mt-4 transition-all shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/50 active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {registerMutation.isPending ? "Registering..." : "Create Account"}
           {!registerMutation.isPending && (

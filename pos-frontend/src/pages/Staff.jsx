@@ -35,15 +35,15 @@ const Staff = () => {
     const staffList = resData?.data?.data || [];
 
     return (
-        <section className="min-h-[calc(100vh-5rem)] bg-[#1f1f1f] pb-24">
+        <section className="min-h-[calc(100vh-5rem)] bg-background pb-24">
             <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
                 <div className="flex items-center gap-4">
                     <BackButton />
                     <div>
-                        <h1 className="text-2xl font-bold tracking-wider text-[#f5f5f5]">
+                        <h1 className="text-2xl font-bold tracking-wider text-foreground">
                             Staff Management
                         </h1>
-                        <p className="text-sm text-[#ababab]">
+                        <p className="text-sm text-muted-foreground">
                             Manage cashier accounts.
                         </p>
                     </div>
@@ -51,7 +51,7 @@ const Staff = () => {
 
                 <button
                     onClick={() => setIsAddStaffModalOpen(true)}
-                    className="rounded-lg bg-[#F6B100] px-4 py-2 text-sm font-semibold text-[#1f1f1f] sm:text-base"
+                    className="rounded-lg bg-primary-yellow px-4 py-2 text-sm font-semibold text-white sm:text-base"
                 >
                     Add Cashier
                 </button>
@@ -60,24 +60,24 @@ const Staff = () => {
             <div className="px-4 py-4 sm:px-6 lg:px-10">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {isLoading ? (
-                        <p className="text-[#ababab]">Loading staff...</p>
+                        <p className="text-muted-foreground">Loading staff...</p>
                     ) : staffList.length === 0 ? (
-                        <p className="text-[#ababab]">No staff members found.</p>
+                        <p className="text-muted-foreground">No staff members found.</p>
                     ) : (
                         staffList.map((member) => (
-                            <div key={member._id} className="rounded-2xl border border-[#2a2a2a] bg-[#202020] p-5">
+                            <div key={member._id} className="rounded-2xl border border-border bg-popover p-5">
                                 <div className="flex justify-between items-start">
-                                    <h2 className="text-xl font-semibold text-[#f5f5f5]">{member.name}</h2>
-                                    <span className="rounded bg-[#383838] px-2 py-0.5 text-xs text-[#ababab]">
+                                    <h2 className="text-xl font-semibold text-foreground">{member.name}</h2>
+                                    <span className="rounded bg-secondary text-foreground px-2 py-0.5 text-xs text-muted-foreground">
                                         {member.role}
                                     </span>
                                 </div>
-                                <p className="mt-1 text-sm text-[#ababab]">{member.email}</p>
-                                <p className="text-sm text-[#ababab]">{member.phone}</p>
+                                <p className="mt-1 text-sm text-muted-foreground">{member.email}</p>
+                                <p className="text-sm text-muted-foreground">{member.phone}</p>
                                 <div className="mt-4 flex gap-2">
                                     <button 
                                         onClick={() => setResetModalData({ isOpen: true, staffId: member._id, staffName: member.name })}
-                                        className="rounded bg-[#2e4a40] px-3 py-1 text-xs font-semibold text-[#02ca3a]"
+                                        className="rounded bg-success/20 px-3 py-1 text-xs font-semibold text-success"
                                     >
                                         Reset Password
                                     </button>
@@ -88,7 +88,7 @@ const Staff = () => {
                                             }
                                         }}
                                         disabled={deleteMutation.isPending}
-                                        className="rounded bg-[#4a2e2e] px-3 py-1 text-xs font-semibold text-[#ca0202] disabled:opacity-50"
+                                        className="rounded bg-red-500/20 px-3 py-1 text-xs font-semibold text-red-500 disabled:opacity-50"
                                     >
                                         {deleteMutation.isPending ? "Removing..." : "Remove"}
                                     </button>

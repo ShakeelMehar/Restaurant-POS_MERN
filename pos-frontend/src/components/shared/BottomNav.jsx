@@ -43,11 +43,11 @@ const BottomNav = () => {
 
     const navButtonClass = (path) =>
         `flex min-w-0 flex-col items-center justify-center gap-1 rounded-[18px] py-2 text-[11px] font-bold sm:flex-row sm:gap-2 sm:text-sm ${
-            isActive(path) ? "bg-[#343434] text-[#f5f5f5]" : "text-[#ababab]"
+            isActive(path) ? "bg-secondary text-foreground" : "text-muted-foreground"
         }`;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 grid h-16 grid-cols-4 items-center gap-2 bg-[#262626] px-2 py-2">
+        <div className="fixed bottom-0 left-0 right-0 grid h-16 grid-cols-4 items-center gap-2 bg-card px-2 py-2">
             <button onClick={() => navigate("/")} className={navButtonClass("/")}>
                 <FaHome size={18} /> <p>Home</p>
             </button>
@@ -68,7 +68,7 @@ const BottomNav = () => {
             <button
                 disabled={isActive("/menu")}
                 onClick={() => navigate("/menu")}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-[#F6B100] p-4 text-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-70">
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-primary-yellow p-4 text-foreground disabled:cursor-not-allowed disabled:opacity-70">
                 <BiSolidDish size={40} />
             </button>
 
@@ -77,7 +77,7 @@ const BottomNav = () => {
                     {["Admin", "Super Admin"].includes(userData.role) && (
                         <button
                             onClick={handleDashboardNavigation}
-                            className="w-full rounded-lg bg-[#1f1f1f] px-4 py-3 text-left font-semibold text-[#f5f5f5]">
+                            className="w-full rounded-lg bg-background px-4 py-3 text-left font-semibold text-foreground">
                             Open Dashboard
                         </button>
                     )}
@@ -86,7 +86,7 @@ const BottomNav = () => {
                             closeMoreModal();
                             setIsLogoutModalOpen(true);
                         }}
-                        className="w-full rounded-lg bg-[#1f1f1f] px-4 py-3 text-left font-semibold text-[#f5f5f5]">
+                        className="w-full rounded-lg bg-background px-4 py-3 text-left font-semibold text-foreground">
                         Logout
                     </button>
                 </div>

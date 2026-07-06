@@ -47,24 +47,24 @@ const RecentOrders = () => {
 
     return (
         <div className="px-8 mt-6">
-            <div className="bg-[#1a1a1a] w-full h-[450px] rounded-lg">
+            <div className="bg-card w-full h-[450px] rounded-lg">
                 <div className="flex justify-between items-center px-6 py-4">
-                    <h1 className="text-[#f5f5f5] text-lg font-semibold tracking-wide">
+                    <h1 className="text-foreground text-lg font-semibold tracking-wide">
                         Recent Orders
                     </h1>
-                    <a href="/orders" className="text-[#025cca] text-sm font-semibold">
+                    <a href="/orders" className="text-blue-600 text-sm font-semibold">
                         View all
                     </a>
                 </div>
 
-                <div className="flex items-center gap-4 bg-[#1f1f1f] rounded-[15px] px-6 py-4 mx-6">
-                    <FaSearch className="text-[#f5f5f5]" />
+                <div className="flex items-center gap-4 bg-background rounded-[15px] px-6 py-4 mx-6">
+                    <FaSearch className="text-foreground" />
                     <input
                         type="text"
                         placeholder="Search recent orders"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-[#1f1f1f] outline-none text-[#f5f5f5]"
+                        className="bg-background outline-none text-foreground"
                     />
                 </div>
 

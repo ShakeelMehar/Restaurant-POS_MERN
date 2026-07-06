@@ -4,13 +4,78 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Light Mode Variables */
+  --background: 210 40% 98%;      /* #F8F9FA */
+  --foreground: 140 18% 3%;       /* #070A08 */
+
+  --card: 0 0% 100%;              /* #FFFFFF */
+  --card-foreground: 140 18% 3%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 140 18% 3%;
+
+  --primary: 13 98% 62%;          /* #FD6941 */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 14% 96%;       /* #f3f4f6 */
+  --secondary-foreground: 220 9% 46%; /* #6b7280 */
+
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+
+  --border: 220 13% 91%;          /* #e5e7eb */
+  --input: 220 13% 91%;
+  --ring: 13 98% 62%;
+
+  --accent: 38 92% 50%;           /* #F59E0B */
+  --accent-foreground: 0 0% 100%;
+
+  --success: 137 66% 52%;         /* #36D161 */
+  --success-foreground: 0 0% 100%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Dark Mode Variables */
+  --background: 0 0% 7%;          /* #121212 */
+  --foreground: 0 0% 100%;        /* #ffffff */
+
+  --card: 0 0% 12%;               /* #1e1e1e */
+  --card-foreground: 0 0% 100%;
+
+  --popover: 0 0% 15%;            /* #252525 */
+  --popover-foreground: 0 0% 100%;
+
+  --primary: 13 98% 62%;          /* #FD6941 */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 16%;          /* #2a2a2a */
+  --secondary-foreground: 0 0% 67%; /* #ababab */
+
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 67%;
+
+  --border: 0 0% 20%;             /* #333333 */
+  --input: 0 0% 20%;
+  --ring: 13 98% 62%;
+
+  --accent: 38 92% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --success: 137 66% 52%;
+  --success-foreground: 0 0% 100%;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   overflow-x: hidden;
-  background-color: #1f1f1f;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 #root {
   min-height: 100vh;
 }
@@ -23,11 +88,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #1f1f1f; /* White background with some transparency */
+  background-color: hsl(var(--background));
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Ensure it's on top of other content */
+  z-index: 9999;
 }
 
 .spinner {
