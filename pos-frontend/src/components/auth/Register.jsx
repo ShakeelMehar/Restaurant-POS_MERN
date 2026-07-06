@@ -33,7 +33,11 @@ const Register = ({ setIsRegister }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    registerMutation.mutate(formData);
+    const payload = {
+      ...formData,
+      phone: formData.phone.replace(/\D/g, "")
+    };
+    registerMutation.mutate(payload);
   };
 
   const registerMutation = useMutation({
