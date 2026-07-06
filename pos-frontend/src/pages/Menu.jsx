@@ -18,7 +18,7 @@ const Menu = () => {
     const isEditingOrder = Boolean(customerData.editingOrderId);
 
     return (
-        <section className="min-h-[calc(100vh-4rem)] bg-background  xl:flex xl:gap-0">
+        <section className="h-[calc(100vh-4rem)] overflow-hidden bg-background xl:flex xl:gap-0">
             {/* ── LEFT: Menu ── */}
             <div className="flex-[3] min-w-0 flex flex-col">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/50">

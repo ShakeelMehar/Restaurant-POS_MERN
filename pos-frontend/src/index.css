@@ -89,17 +89,17 @@
 
   /* Brand */
   --primary:          217 91% 60%;      /* blue #60A5FA */
-  --primary-foreground: 220 20% 5%;
+  --primary-foreground: 0 0% 100%;
   --primary-glow:     217 91% 60%;
 
   --accent:           199 89% 48%;      /* sky #0EA5E9 */
   --accent-foreground: 0 0% 100%;
 
   --success:          158 64% 52%;      /* emerald */
-  --success-foreground: 220 20% 5%;
+  --success-foreground: 0 0% 100%;
 
   --warning:          217 91% 60%;
-  --warning-foreground: 220 20% 5%;
+  --warning-foreground: 0 0% 100%;
 
   --destructive:      0 65% 55%;
   --destructive-foreground: 0 0% 100%;

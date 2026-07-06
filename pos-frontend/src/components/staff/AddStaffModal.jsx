@@ -67,7 +67,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="e.g. Ali Khan"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -84,7 +84,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="name@restaurant.com"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -101,7 +101,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="03XX-XXXXXXX"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -118,7 +118,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               value={formData.password}
               onChange={handleInputChange}
               placeholder="••••••••"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -133,7 +133,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               name="role"
               value={formData.role}
               onChange={handleInputChange}
-              className="w-full bg-background text-white focus:outline-none"
+              className="w-full bg-background text-foreground focus:outline-none"
             >
               <option value="Cashier">Cashier</option>
               <option value="Admin">Admin</option>
@@ -144,7 +144,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900 disabled:opacity-50"
+          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground disabled:opacity-50"
         >
           {registerMutation.isPending ? "Creating..." : "Add Staff"}
         </button>

@@ -53,7 +53,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
               value={categoryData.name}
               onChange={handleInputChange}
               placeholder="Starters"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -70,7 +70,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
               value={categoryData.icon}
               onChange={handleInputChange}
               placeholder="+"
-              className="w-full bg-transparent text-white focus:outline-none"
+              className="w-full bg-transparent text-foreground focus:outline-none"
               maxLength={4}
             />
           </div>
@@ -94,7 +94,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
 
         <button
           type="submit"
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900"
+          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground"
         >
           Add Category
         </button>

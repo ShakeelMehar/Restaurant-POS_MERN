@@ -44,7 +44,8 @@ const Header = () => {
   const isNavActive = (matches) => matches.includes(activeTab);
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between gap-2 px-4 py-2 bg-card/90 backdrop-blur-md border-b border-border shadow-sm">
+    <>
+      <header className="sticky top-0 z-40 flex items-center justify-between gap-2 px-4 py-2 bg-card/90 backdrop-blur-md border-b border-border shadow-sm">
       {/* ── LOGO ── */}
       <div
         onClick={() => navigate("/")}
@@ -164,13 +165,14 @@ const Header = () => {
         </div>
       </div>
 
+    </header>
       <LogoutConfirmModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={() => logoutMutation.mutate()}
         isPending={logoutMutation.isPending}
       />
-    </header>
+    </>
   );
 };
 

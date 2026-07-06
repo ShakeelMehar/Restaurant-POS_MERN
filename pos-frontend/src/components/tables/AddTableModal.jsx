@@ -60,7 +60,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
               min="1"
               value={tableData.tableNo}
               onChange={handleInputChange}
-              className="flex-1 bg-transparent text-white focus:outline-none"
+              className="flex-1 bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -78,7 +78,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
               max="8"
               value={tableData.seats}
               onChange={handleInputChange}
-              className="flex-1 bg-transparent text-white focus:outline-none"
+              className="flex-1 bg-transparent text-foreground focus:outline-none"
               required
             />
           </div>
@@ -87,7 +87,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={tableMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-70"
         >
           {tableMutation.isPending ? "Adding Table..." : "Add Table"}
         </button>

@@ -76,7 +76,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
           </p>
           <button
             onClick={handleClose}
-            className="w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900"
+            className="w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground"
           >
             Close
           </button>
@@ -92,7 +92,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
                 name="categoryId"
                 value={dishData.categoryId}
                 onChange={handleInputChange}
-                className="w-full bg-transparent text-white focus:outline-none"
+                className="w-full bg-transparent text-foreground focus:outline-none"
                 required
               >
                 {categories.map((category) => (
@@ -119,7 +119,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
                 value={dishData.name}
                 onChange={handleInputChange}
                 placeholder="Chicken Handi"
-                className="w-full bg-transparent text-white focus:outline-none"
+                className="w-full bg-transparent text-foreground focus:outline-none"
                 required
               />
             </div>
@@ -137,7 +137,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
                 value={dishData.price}
                 onChange={handleInputChange}
                 placeholder="450"
-                className="w-full bg-transparent text-white focus:outline-none"
+                className="w-full bg-transparent text-foreground focus:outline-none"
                 required
               />
             </div>
@@ -154,14 +154,14 @@ const AddDishModal = ({ isOpen, onClose }) => {
                 value={dishData.category}
                 onChange={handleInputChange}
                 placeholder="Vegetarian"
-                className="w-full bg-transparent text-white focus:outline-none"
+                className="w-full bg-transparent text-foreground focus:outline-none"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900"
+            className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground"
           >
             Add Dish
           </button>
