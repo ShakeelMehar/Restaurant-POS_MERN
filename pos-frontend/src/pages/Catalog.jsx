@@ -25,18 +25,18 @@ const Catalog = () => {
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Page Header */}
-      <div className="flex flex-col gap-4 px-6 py-4 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2 px-4 py-2 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-xl font-extrabold text-foreground tracking-tight">Menu Catalog</h1>
+            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Menu Catalog</h1>
             <p className="text-xs text-muted-foreground font-medium">
               {categories.length} categories · {totalDishCount} dishes
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <TabGroup
             tabs={[
               { id: "categories", label: `Categories (${categories.length})` },
@@ -48,13 +48,13 @@ const Catalog = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsCategoryModalOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-200 active:scale-95"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-blue-500 px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-200 active:scale-95"
             >
               <FiPlus size={15} /> Add Category
             </button>
             <button
               onClick={() => setIsDishModalOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-secondary border border-border px-5 py-2.5 text-sm font-bold text-foreground hover:bg-muted hover:border-primary/30 transition-all duration-200"
+              className="flex items-center gap-2 rounded-xl bg-secondary border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted hover:border-primary/30 transition-all duration-200"
             >
               <FiGrid size={15} className="text-muted-foreground" /> Add Dish
             </button>
@@ -64,19 +64,19 @@ const Catalog = () => {
 
       {/* Content */}
       {activeTab === "categories" ? (
-        <div className="grid grid-cols-1 gap-5 px-6 py-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 px-4 py-3 sm:grid-cols-2 xl:grid-cols-3">
           {categories.map((category) => (
-            <div key={category.id} className="bg-card rounded-2xl border border-border hover:border-primary/30 transition-all duration-200 hover:shadow-md p-5 group">
-              <div className="flex items-center justify-between gap-4 mb-5">
-                <div className="flex items-center gap-4">
+            <div key={category.id} className="bg-card rounded-2xl border border-border hover:border-primary/30 transition-all duration-200 hover:shadow-md p-4 group">
+              <div className="flex items-center justify-between gap-2 mb-5">
+                <div className="flex items-center gap-2">
                   <div
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl text-2xl text-white shadow-sm"
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl text-xl text-white shadow-sm"
                     style={{ backgroundColor: category.bgColor || "#374151" }}
                   >
                     {category.icon}
                   </div>
                   <div>
-                    <h2 className="text-base font-extrabold text-foreground">{category.name}</h2>
+                    <h2 className="text-sm font-extrabold text-foreground">{category.name}</h2>
                     <p className="text-xs text-muted-foreground font-medium mt-0.5">
                       {category.items.length} {category.items.length === 1 ? "dish" : "dishes"}
                     </p>
@@ -92,7 +92,7 @@ const Catalog = () => {
 
               <div className="space-y-2">
                 {category.items.slice(0, 4).map((dish) => (
-                  <div key={dish.id} className="flex items-center justify-between rounded-xl bg-secondary/70 hover:bg-secondary px-4 py-2.5 transition-all">
+                  <div key={dish.id} className="flex items-center justify-between rounded-xl bg-secondary/70 hover:bg-secondary px-3 py-2.5 transition-all">
                     <div>
                       <p className="text-sm font-bold text-foreground">{dish.name}</p>
                     </div>
@@ -100,7 +100,7 @@ const Catalog = () => {
                   </div>
                 ))}
                 {category.items.length === 0 && (
-                  <div className="rounded-xl bg-secondary/50 border border-dashed border-border px-4 py-4 text-center">
+                  <div className="rounded-xl bg-secondary/50 border border-dashed border-border px-3 py-2 text-center">
                     <p className="text-xs font-semibold text-muted-foreground">No dishes yet</p>
                   </div>
                 )}
@@ -109,10 +109,10 @@ const Catalog = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 px-6 py-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-2 px-4 py-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {allDishes.map((dish) => (
-            <div key={dish.id} className="bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all duration-200 p-5 group">
-              <div className="flex items-start justify-between gap-3 mb-4">
+            <div key={dish.id} className="bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all duration-200 p-4 group">
+              <div className="flex items-start justify-between gap-2 mb-4">
                 <div className="flex-1 min-w-0">
                   <h2 className="text-[15px] font-extrabold text-foreground truncate">{dish.name}</h2>
                   <div className="inline-flex items-center mt-1.5 px-2 py-0.5 rounded-full bg-secondary border border-border">
@@ -120,7 +120,7 @@ const Catalog = () => {
                   </div>
                 </div>
                 <div
-                  className="flex-shrink-0 flex h-11 w-11 items-center justify-center rounded-xl text-xl text-white shadow-sm"
+                  className="flex-shrink-0 flex h-11 w-11 items-center justify-center rounded-xl text-lg text-white shadow-sm"
                   style={{ backgroundColor: dish.bgColor || "#374151" }}
                 >
                   {dish.icon}

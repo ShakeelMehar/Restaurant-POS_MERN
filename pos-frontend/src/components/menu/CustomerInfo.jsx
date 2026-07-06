@@ -11,7 +11,7 @@ const CustomerInfo = () => {
   const isEditingOrder = Boolean(customerData.editingOrderId);
 
   return (
-    <div className="flex items-center justify-between px-4 py-3">
+    <div className="flex items-center justify-between px-3 py-2">
       <div className="flex flex-col items-start">
         <h1 className="text-md text-foreground font-semibold tracking-wide">
           {customerData.customerName || "Customer Name"}
@@ -23,7 +23,7 @@ const CustomerInfo = () => {
           {displayDate}
         </p>
       </div>
-      <button className="bg-primary text-primary-foreground p-3 text-xl font-bold rounded-lg">
+      <button className="bg-primary text-primary-foreground p-3 text-lg font-bold rounded-lg">
         {getAvatarName(customerData.customerName) || "CN"}
       </button>
     </div>

@@ -41,10 +41,10 @@ const Metrics = () => {
   ];
 
   return (
-    <div className="container mx-auto py-2 px-6 md:px-4">
+    <div className="container mx-auto py-2 px-4 md:px-3">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="font-semibold text-foreground text-xl">
+          <h2 className="font-semibold text-foreground text-lg">
             Overall Performance
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -52,7 +52,7 @@ const Metrics = () => {
             Distinctio, obcaecati?
           </p>
         </div>
-        <button className="flex items-center gap-1 px-4 py-2 rounded-md text-foreground bg-card">
+        <button className="flex items-center gap-1 px-3 py-2 rounded-md text-foreground bg-card">
           Last 1 Month
           <svg
             className="w-3 h-3"
@@ -65,12 +65,12 @@ const Metrics = () => {
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-4 gap-4">
+      <div className="mt-6 grid grid-cols-4 gap-2">
         {metricsData.map((metric, index) => {
           return (
             <div
               key={index}
-              className="shadow-sm rounded-lg p-4"
+              className="shadow-sm rounded-lg p-3"
               style={{ backgroundColor: metric.color }}
             >
               <div className="flex justify-between items-center">
@@ -98,7 +98,7 @@ const Metrics = () => {
                   </p>
                 </div>
               </div>
-              <p className="mt-1 font-semibold text-2xl text-foreground">
+              <p className="mt-1 font-semibold text-xl text-foreground">
                 {metric.value}
               </p>
             </div>
@@ -108,7 +108,7 @@ const Metrics = () => {
 
       <div className="flex flex-col justify-between mt-12">
         <div>
-          <h2 className="font-semibold text-foreground text-xl">
+          <h2 className="font-semibold text-foreground text-lg">
             Item Details
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -117,12 +117,12 @@ const Metrics = () => {
           </p>
         </div>
 
-        <div className="mt-6 grid grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-4 gap-2">
 
             {
                 itemsData.map((item, index) => {
                     return (
-                        <div key={index} className="shadow-sm rounded-lg p-4" style={{ backgroundColor: item.color }}>
+                        <div key={index} className="shadow-sm rounded-lg p-3" style={{ backgroundColor: item.color }}>
                         <div className="flex justify-between items-center">
                           <p className="font-medium text-xs text-foreground">{item.title}</p>
                           <div className="flex items-center gap-1">
@@ -132,7 +132,7 @@ const Metrics = () => {
                             <p className="font-medium text-xs text-foreground">{item.percentage}</p>
                           </div>
                         </div>
-                        <p className="mt-1 font-semibold text-2xl text-foreground">{item.value}</p>
+                        <p className="mt-1 font-semibold text-xl text-foreground">{item.value}</p>
                       </div>
                     )
                 })

@@ -85,13 +85,13 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Manage Order">
       <div className="space-y-5">
-        <div className="flex items-start justify-between gap-4 rounded-xl bg-popover p-4">
-          <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-primary text-primary-foreground px-4 py-3 text-xl font-bold text-white">
+        <div className="flex items-start justify-between gap-2 rounded-xl bg-popover p-3">
+          <div className="flex items-center gap-2">
+            <div className="rounded-xl bg-primary text-primary-foreground px-3 py-2 text-lg font-bold text-white">
               {getAvatarName(order.customerDetails?.name) || "CN"}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-base font-semibold text-foreground">
                 {order.customerDetails?.name || "Customer"}
               </h3>
             <p className="text-sm text-muted-foreground">
@@ -105,7 +105,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
           </div>
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Total</p>
-            <p className="text-xl font-bold text-foreground">
+            <p className="text-lg font-bold text-foreground">
               PKR {order.bills?.totalWithTax?.toFixed(2) || "0.00"}
             </p>
           </div>
@@ -115,15 +115,15 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
           <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Update Status
           </p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {statusOptions.map((status) => (
               <button
                 key={status}
                 onClick={() => handleStatusChange(status)}
                 disabled={orderUpdateMutation.isPending}
-                className={`rounded-lg px-4 py-3 text-sm font-semibold transition ${
+                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
                   order.orderStatus === status
-                    ? "bg-primary-yellow text-white"
+                    ? "bg-primary-blue text-white"
                     : "bg-background text-foreground hover:bg-secondary"
                 } disabled:cursor-not-allowed disabled:opacity-70`}
               >
@@ -146,7 +146,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
             {(order.items || []).map((item, index) => (
               <div
                 key={item.id || `${item.name}-${index}`}
-                className="rounded-xl bg-popover px-4 py-3"
+                className="rounded-xl bg-popover px-3 py-2"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -155,7 +155,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                       Qty {item.quantity} | PKR {item.pricePerQuantity} each
                     </p>
                   </div>
-                  <p className="font-semibold text-primary-yellow">
+                  <p className="font-semibold text-primary-blue">
                     PKR {item.price}
                   </p>
                 </div>
@@ -164,16 +164,16 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button
             onClick={onClose}
-            className="w-full rounded-lg bg-background px-4 py-3 font-semibold text-foreground"
+            className="w-full rounded-lg bg-background px-3 py-2 font-semibold text-foreground"
           >
             Close
           </button>
           <button
             onClick={handleEditOrder}
-            className="w-full rounded-lg bg-primary-yellow px-4 py-3 font-semibold text-white"
+            className="w-full rounded-lg bg-primary-blue px-3 py-2 font-semibold text-white"
           >
             Modify In Menu
           </button>

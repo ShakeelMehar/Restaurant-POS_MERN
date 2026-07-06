@@ -23,18 +23,18 @@ const Reports = () => {
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Header */}
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-card/50">
+      <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-card/50">
         <BackButton />
         <div>
-          <h1 className="text-xl font-extrabold text-foreground tracking-tight">Sales Reports</h1>
+          <h1 className="text-lg font-extrabold text-foreground tracking-tight">Sales Reports</h1>
           <p className="text-xs text-muted-foreground font-medium">View sales and performance metrics</p>
         </div>
       </div>
 
-      <div className="px-6 py-5 space-y-6">
+      <div className="px-4 py-3 space-y-6">
         {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all p-6 col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all p-4 col-span-1">
             <div className="flex items-start justify-between mb-4">
               <p className="text-sm font-bold text-muted-foreground">Total Sales</p>
               <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/15 text-primary border border-primary/20">
@@ -49,9 +49,9 @@ const Reports = () => {
         </div>
 
         {/* Breakdown cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {/* Payment Methods */}
-          <div className="bg-card rounded-2xl border border-border p-6">
+          <div className="bg-card rounded-2xl border border-border p-4">
             <h2 className="text-[15px] font-extrabold text-foreground mb-4">By Payment Method</h2>
             <div className="space-y-3">
               {reportData.paymentMethods.map((pm) => {
@@ -70,7 +70,7 @@ const Reports = () => {
                     </div>
                     <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-primary to-amber-400 rounded-full"
+                        className="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -82,12 +82,12 @@ const Reports = () => {
           </div>
 
           {/* By Cashier */}
-          <div className="bg-card rounded-2xl border border-border p-6">
+          <div className="bg-card rounded-2xl border border-border p-4">
             <h2 className="text-[15px] font-extrabold text-foreground mb-4">By Cashier</h2>
             <div className="space-y-3">
               {reportData.cashierSales.map((cs) => (
                 <div key={cs._id} className="flex items-center justify-between p-3 bg-secondary rounded-xl border border-border">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 font-extrabold text-sm text-foreground">
                       {cs.name?.charAt(0) || <FiUser />}
                     </div>

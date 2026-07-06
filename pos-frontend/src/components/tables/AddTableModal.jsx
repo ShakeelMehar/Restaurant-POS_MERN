@@ -53,7 +53,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
           <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
             Table Number
           </label>
-          <div className="flex items-center rounded-lg bg-background p-4">
+          <div className="flex items-center rounded-lg bg-background p-3">
             <input
               type="number"
               name="tableNo"
@@ -70,7 +70,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
           <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
             Number of Seats
           </label>
-          <div className="flex items-center rounded-lg bg-background p-4">
+          <div className="flex items-center rounded-lg bg-background p-3">
             <input
               type="number"
               name="seats"
@@ -87,7 +87,7 @@ const AddTableModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={tableMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-3 text-lg font-bold text-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {tableMutation.isPending ? "Adding Table..." : "Add Table"}
         </button>

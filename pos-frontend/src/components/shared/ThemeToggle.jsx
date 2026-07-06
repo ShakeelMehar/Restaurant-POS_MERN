@@ -17,7 +17,7 @@ const ThemeToggle = () => {
         className={`absolute flex items-center justify-center h-7 w-7 rounded-full shadow-md transition-all duration-300 ${
           isDark
             ? 'translate-x-[2px] bg-secondary border border-border'
-            : 'translate-x-[34px] bg-gradient-to-br from-amber-400 to-amber-500 border-0'
+            : 'translate-x-[34px] bg-gradient-to-br from-blue-400 to-sky-500 border-0'
         }`}
       >
         {isDark ? (

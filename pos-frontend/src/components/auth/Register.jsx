@@ -93,7 +93,7 @@ const Register = ({ setIsRegister }) => {
                 onClick={() => handleRoleSelection(role)}
                 className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-2 transition-all duration-200 ${
                   formData.role === role
-                    ? "bg-gradient-to-r from-primary to-amber-500 border-transparent text-primary-foreground shadow-md shadow-primary/30"
+                    ? "bg-gradient-to-r from-primary to-blue-500 border-transparent text-primary-foreground shadow-md shadow-primary/30"
                     : "bg-secondary border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
                 }`}
               >
@@ -107,7 +107,7 @@ const Register = ({ setIsRegister }) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-amber-500 hover:from-amber-500 hover:to-primary text-primary-foreground font-bold rounded-xl py-3.5 mt-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary text-primary-foreground font-bold rounded-xl py-2.5 mt-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {registerMutation.isPending ? (
             <><FiLoader size={18} className="animate-spin" /> Creating Account…</>

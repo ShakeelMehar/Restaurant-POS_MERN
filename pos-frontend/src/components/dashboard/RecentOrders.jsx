@@ -39,8 +39,8 @@ const RecentOrders = () => {
   console.log(resData.data.data);
 
   return (
-    <div className="container mx-auto bg-card p-4 rounded-lg">
-      <h2 className="text-foreground text-xl font-semibold mb-4">
+    <div className="container mx-auto bg-card p-3 rounded-lg">
+      <h2 className="text-foreground text-lg font-semibold mb-4">
         Recent Orders
       </h2>
       <div className="overflow-x-auto">
@@ -63,9 +63,9 @@ const RecentOrders = () => {
                 key={index}
                 className="border-b border-border hover:bg-secondary/50"
               >
-                <td className="p-4">#{Math.floor(new Date(order.orderDate).getTime())}</td>
-                <td className="p-4">{order.customerDetails.name}</td>
-                <td className="p-4">
+                <td className="p-3">#{Math.floor(new Date(order.orderDate).getTime())}</td>
+                <td className="p-3">{order.customerDetails.name}</td>
+                <td className="p-3">
                   <select
                     className={`bg-card text-foreground border border-gray-500 p-2 rounded-lg focus:outline-none ${
                       order.orderStatus === "Ready"
@@ -83,11 +83,11 @@ const RecentOrders = () => {
                     </option>
                   </select>
                 </td>
-                <td className="p-4">{formatDateAndTime(order.orderDate)}</td>
-                <td className="p-4">{order.items.length} Items</td>
-                <td className="p-4">Table - {order.table.tableNo}</td>
-                <td className="p-4">PKR {order.bills.totalWithTax}</td>
-                <td className="p-4">
+                <td className="p-3">{formatDateAndTime(order.orderDate)}</td>
+                <td className="p-3">{order.items.length} Items</td>
+                <td className="p-3">Table - {order.table.tableNo}</td>
+                <td className="p-3">PKR {order.bills.totalWithTax}</td>
+                <td className="p-3">
                   {order.paymentMethod}
                 </td>
               </tr>

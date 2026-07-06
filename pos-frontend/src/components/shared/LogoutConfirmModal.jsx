@@ -14,18 +14,18 @@ const LogoutConfirmModal = ({
           You will be signed out of the current session. Continue?
         </p>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button
             onClick={onClose}
             disabled={isPending}
-            className="w-full rounded-lg bg-background px-4 py-3 font-semibold text-foreground disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-lg bg-background px-3 py-2 font-semibold text-foreground disabled:cursor-not-allowed disabled:opacity-70"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isPending}
-            className="w-full rounded-lg bg-primary-yellow px-4 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-lg bg-primary-blue px-3 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? "Logging Out..." : "Logout"}
           </button>

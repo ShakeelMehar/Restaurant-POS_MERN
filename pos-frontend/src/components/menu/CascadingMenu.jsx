@@ -109,16 +109,16 @@ const CascadingMenu = ({ categories, onAdd }) => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* ROW 1: TOP CATEGORIES (Fixed Height) */}
-      <div className="px-6 py-4 flex gap-3 overflow-x-auto hide-scrollbar flex-shrink-0 border-b border-border bg-background z-10">
+      <div className="px-4 py-2 flex gap-2 overflow-x-auto hide-scrollbar flex-shrink-0 border-b border-border bg-background z-10">
         {categories.map((c) => {
           const isActive = selectedCategoryId === c.id;
           return (
             <button
               key={c.id}
               onClick={() => handleCategoryClick(c.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap flex-shrink-0 transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap flex-shrink-0 transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                  ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
                   : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-card/80"
               }`}
             >
@@ -134,8 +134,8 @@ const CascadingMenu = ({ categories, onAdd }) => {
         
         {/* ROW 2: ITEMS GRID (Scrollable, takes 100% or 50% space) */}
         {selectedCategory && (
-          <div className="px-6 pt-4 pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div className="px-4 pt-4 pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
               {selectedCategory.items?.length > 0 ? (
                 selectedCategory.items.map((item) => {
                   const isSelected = selectedItemId === item.id;
@@ -143,7 +143,7 @@ const CascadingMenu = ({ categories, onAdd }) => {
                     <div
                       key={item.id}
                       onClick={() => handleItemClick(item)}
-                      className={`group bg-card rounded-xl border cursor-pointer transition-all duration-200 flex flex-col justify-between p-4 min-h-[100px] ${
+                      className={`group bg-card rounded-xl border cursor-pointer transition-all duration-200 flex flex-col justify-between p-3 min-h-[100px] ${
                         isSelected 
                           ? "border-primary shadow-md ring-1 ring-primary/30 bg-primary/5" 
                           : "border-border hover:border-primary/40 hover:shadow-sm"
@@ -168,7 +168,7 @@ const CascadingMenu = ({ categories, onAdd }) => {
                   );
                 })
               ) : (
-                <div className="col-span-full rounded-xl bg-card border border-dashed border-border px-6 py-8 text-center">
+                <div className="col-span-full rounded-xl bg-card border border-dashed border-border px-4 py-8 text-center">
                   <span className="text-3xl mb-2 block">🫙</span>
                   <p className="text-sm font-semibold text-muted-foreground">No dishes in this category yet.</p>
                 </div>
@@ -179,12 +179,12 @@ const CascadingMenu = ({ categories, onAdd }) => {
 
         {/* ROW 3: MODIFIERS & VARIANTS (Scrollable, takes 50% space when active) */}
         {selectedItem && (
-          <div className="px-6 flex flex-col border-t-2 border-primary/20 bg-card/10 h-1/2 flex-shrink-0 transition-all duration-200 ease-in-out">
-            <div className="flex-1 overflow-y-auto hide-scrollbar py-4">
-              <div className="bg-card/60 border border-border rounded-xl p-4 shadow-sm h-full flex flex-col">
+          <div className="px-4 flex flex-col border-t-2 border-primary/20 bg-card/10 h-1/2 flex-shrink-0 transition-all duration-200 ease-in-out">
+            <div className="flex-1 overflow-y-auto hide-scrollbar py-2">
+              <div className="bg-card/60 border border-border rounded-xl p-3 shadow-sm h-full flex flex-col">
                 <div className="flex-1 overflow-y-auto hide-scrollbar">
                   {selectedItem.optionGroups?.length > 0 ? (
-                    <div className="flex flex-col gap-4 mb-4">
+                    <div className="flex flex-col gap-2 mb-4">
                       {selectedItem.optionGroups.map(group => (
                         <div key={group.id}>
                           <div className="flex items-center gap-2 mb-2">
@@ -223,9 +223,9 @@ const CascadingMenu = ({ categories, onAdd }) => {
                 </div>
 
                 {/* Action Bar (Fixed at bottom of Row 3) */}
-                <div className="flex flex-col sm:flex-row items-center gap-3 bg-background p-3 rounded-xl border border-border mt-auto flex-shrink-0 shadow-sm">
+                <div className="flex flex-col sm:flex-row items-center gap-2 bg-background p-3 rounded-xl border border-border mt-auto flex-shrink-0 shadow-sm">
                   {/* Quantity Controls */}
-                  <div className="flex items-center bg-secondary text-foreground rounded-lg font-bold text-base h-10 border border-border w-full sm:w-auto px-1">
+                  <div className="flex items-center bg-secondary text-foreground rounded-lg font-bold text-sm h-10 border border-border w-full sm:w-auto px-1">
                     <button onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))} className="h-full px-3 hover:text-foreground transition-colors flex items-center justify-center">
                       <FiMinus size={14} />
                     </button>
@@ -238,7 +238,7 @@ const CascadingMenu = ({ categories, onAdd }) => {
                   {/* Add Button */}
                   <button 
                     onClick={handleAddToCart}
-                    className="flex-1 w-full bg-gradient-to-r from-primary to-amber-500 hover:from-primary/90 hover:to-amber-500/90 text-primary-foreground font-bold py-2 px-5 rounded-lg flex justify-between items-center transition-all h-10 text-sm shadow-md"
+                    className="flex-1 w-full bg-gradient-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-500/90 text-primary-foreground font-bold py-2 px-4 rounded-lg flex justify-between items-center transition-all h-10 text-sm shadow-md"
                   >
                     <span className="flex items-center gap-2">
                       <FiShoppingCart size={15} /> Add to Order

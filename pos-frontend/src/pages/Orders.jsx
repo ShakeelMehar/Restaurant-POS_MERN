@@ -52,11 +52,11 @@ const Orders = () => {
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Page header */}
-      <div className="flex flex-col gap-4 px-6 py-4 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2 px-4 py-2 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-xl font-extrabold text-foreground tracking-tight">Orders</h1>
+            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Orders</h1>
             <p className="text-xs text-muted-foreground font-medium">{allOrders.length} total orders</p>
           </div>
         </div>
@@ -70,9 +70,9 @@ const Orders = () => {
               <button
                 key={id}
                 onClick={() => setStatus(id)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
-                    ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                    ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
                     : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
                 }`}
               >
@@ -89,15 +89,15 @@ const Orders = () => {
       </div>
 
       {/* Orders grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 px-6 py-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 px-4 py-3">
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order) => (
             <OrderCard key={order._id} order={order} onManage={setSelectedOrder} />
           ))
         ) : (
-          <div className="col-span-3 flex flex-col items-center justify-center py-20 gap-4 text-center">
+          <div className="col-span-3 flex flex-col items-center justify-center py-20 gap-2 text-center">
             <span className="text-6xl">📋</span>
-            <h3 className="text-lg font-bold text-foreground">No orders found</h3>
+            <h3 className="text-base font-bold text-foreground">No orders found</h3>
             <p className="text-sm text-muted-foreground">Try a different filter or check back later.</p>
           </div>
         )}

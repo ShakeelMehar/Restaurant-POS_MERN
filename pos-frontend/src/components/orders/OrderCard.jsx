@@ -7,15 +7,15 @@ const OrderCard = ({ order, onManage }) => {
   return (
     <button
       onClick={() => onManage(order)}
-      className="mb-4 w-full rounded-lg bg-card p-4 text-left transition hover:bg-secondary/80"
+      className="mb-4 w-full rounded-lg bg-card p-3 text-left transition hover:bg-secondary/80"
     >
-      <div className="flex items-center gap-5">
-        <div className="rounded-lg bg-primary text-primary-foreground p-3 text-xl font-bold">
+      <div className="flex items-center gap-3">
+        <div className="rounded-lg bg-primary text-primary-foreground p-3 text-lg font-bold">
           {getAvatarName(order.customerDetails.name)}
         </div>
         <div className="flex items-center justify-between w-[100%]">
           <div className="flex flex-col items-start gap-1">
-            <h1 className="text-foreground text-lg font-semibold tracking-wide">
+            <h1 className="text-foreground text-base font-semibold tracking-wide">
               {order.customerDetails.name}
             </h1>
             <p className="text-muted-foreground text-sm">#{Math.floor(new Date(order.orderDate).getTime())} / Dine in</p>
@@ -52,10 +52,10 @@ const OrderCard = ({ order, onManage }) => {
       </div>
       <hr className="w-full mt-4 border-t-1 border-gray-500" />
       <div className="flex items-center justify-between mt-4">
-        <h1 className="text-foreground text-lg font-semibold">Total</h1>
-        <div className="flex items-center gap-4">
+        <h1 className="text-foreground text-base font-semibold">Total</h1>
+        <div className="flex items-center gap-2">
           <p className="text-sm font-medium text-muted-foreground">Manage</p>
-          <p className="text-foreground text-lg font-semibold">
+          <p className="text-foreground text-base font-semibold">
             PKR {order.bills?.totalWithTax?.toFixed(2) || "0.00"}
           </p>
         </div>

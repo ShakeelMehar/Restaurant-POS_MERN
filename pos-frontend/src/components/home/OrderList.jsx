@@ -6,7 +6,7 @@ const statusBadge = (status) => {
     return "bg-success/10 text-success border border-success/25";
   if (status === "Completed")
     return "bg-muted text-muted-foreground border border-border";
-  return "bg-amber-500/10 text-amber-600 border border-amber-500/25";
+  return "bg-blue-500/10 text-blue-600 border border-blue-500/25";
 };
 
 const OrderList = ({ order, onManage }) => {
@@ -14,7 +14,7 @@ const OrderList = ({ order, onManage }) => {
     <button
       type="button"
       onClick={() => onManage(order)}
-      className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 hover:bg-secondary/70 border border-transparent hover:border-border group"
+      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left transition-all duration-200 hover:bg-secondary/70 border border-transparent hover:border-border group"
     >
       {/* Avatar */}
       <div className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 text-foreground text-sm font-extrabold">

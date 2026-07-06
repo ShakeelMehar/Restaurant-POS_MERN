@@ -37,11 +37,11 @@ const Tables = () => {
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Header */}
-      <div className="flex flex-col gap-4 px-6 py-4 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2 px-4 py-2 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-xl font-extrabold text-foreground tracking-tight">Tables</h1>
+            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Tables</h1>
             <p className="text-xs text-muted-foreground font-medium">
               {availableCount} available · {bookedCount} booked
             </p>
@@ -57,9 +57,9 @@ const Tables = () => {
             <button
               key={id}
               onClick={() => setStatus(id)}
-              className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
+              className={`px-3 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                 status === id
-                  ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                  ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
                   : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
               }`}
             >
@@ -68,7 +68,7 @@ const Tables = () => {
           ))}
 
           {/* Legend dots */}
-          <div className="hidden sm:flex items-center gap-4 mx-2">
+          <div className="hidden sm:flex items-center gap-2 mx-2">
             <div className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-primary inline-block" />
               <span className="text-xs text-muted-foreground font-medium">Available</span>
@@ -82,7 +82,7 @@ const Tables = () => {
           {["Admin", "Super Admin"].includes(role) && (
             <button
               onClick={() => setIsAddTableOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-4 py-2 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all active:scale-95"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-blue-500 px-3 py-2 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all active:scale-95"
             >
               <FiPlus size={15} /> Add Table
             </button>
@@ -91,7 +91,7 @@ const Tables = () => {
       </div>
 
       {/* Table Grid */}
-      <div className="grid grid-cols-2 gap-3 px-6 py-5 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 px-4 py-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {isLoading && (
           <>
             {[1,2,3,4,5,6].map((i) => (
@@ -101,10 +101,10 @@ const Tables = () => {
         )}
 
         {!isLoading && tableList.length === 0 && (
-          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center gap-4">
+          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-4 py-16 text-center gap-2">
             <span className="text-5xl">🪑</span>
             <div>
-              <h2 className="text-lg font-bold text-foreground">No tables yet</h2>
+              <h2 className="text-base font-bold text-foreground">No tables yet</h2>
               <p className="text-sm text-muted-foreground mt-1 max-w-xs">
                 Add your first table to start assigning guests and managing orders.
               </p>
@@ -112,7 +112,7 @@ const Tables = () => {
             {["Admin", "Super Admin"].includes(role) && (
               <button
                 onClick={() => setIsAddTableOpen(true)}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-5 py-3 font-bold text-primary-foreground shadow-md shadow-primary/30 transition-all"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-blue-500 px-4 py-2 font-bold text-primary-foreground shadow-md shadow-primary/30 transition-all"
               >
                 <FiPlus size={16} /> Add First Table
               </button>

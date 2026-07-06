@@ -43,7 +43,7 @@ const ResetPasswordModal = ({ isOpen, onClose, staffId, staffName }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             New Password
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="password"
               value={password}
@@ -58,7 +58,7 @@ const ResetPasswordModal = ({ isOpen, onClose, staffId, staffName }) => {
         <button
           type="submit"
           disabled={resetMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-3 text-lg font-bold text-gray-900 disabled:opacity-50"
+          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900 disabled:opacity-50"
         >
           {resetMutation.isPending ? "Resetting..." : "Confirm Reset"}
         </button>

@@ -9,7 +9,7 @@ import { FiUserPlus, FiMail, FiPhone, FiKey, FiTrash2, FiUser } from "react-icon
 
 const roleColors = {
   "Cashier":     "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  "Admin":       "bg-amber-500/10 text-amber-600 border-amber-500/20",
+  "Admin":       "bg-blue-500/10 text-blue-600 border-blue-500/20",
   "Super Admin": "bg-purple-500/10 text-purple-500 border-purple-500/20",
 };
 
@@ -41,11 +41,11 @@ const Staff = () => {
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
       {/* Page Header */}
-      <div className="flex flex-col gap-4 px-6 py-4 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2 px-4 py-2 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-xl font-extrabold text-foreground tracking-tight">Staff Management</h1>
+            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Staff Management</h1>
             <p className="text-xs text-muted-foreground font-medium">
               {staffList.length} {staffList.length === 1 ? "member" : "members"} · Manage cashier accounts
             </p>
@@ -53,36 +53,36 @@ const Staff = () => {
         </div>
         <button
           onClick={() => setIsAddStaffModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-200 active:scale-95"
+          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-blue-500 px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-200 active:scale-95"
         >
           <FiUserPlus size={16} /> Add Cashier
         </button>
       </div>
 
       {/* Staff Grid */}
-      <div className="px-6 py-5">
+      <div className="px-4 py-3">
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-48 bg-card rounded-2xl border border-border animate-pulse" />
             ))}
           </div>
         ) : staffList.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
+          <div className="flex flex-col items-center justify-center py-24 gap-2 text-center">
             <div className="flex items-center justify-center h-20 w-20 rounded-full bg-secondary border border-border">
               <FiUser size={36} className="text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">No staff members</h3>
+            <h3 className="text-base font-bold text-foreground">No staff members</h3>
             <p className="text-sm text-muted-foreground">Add your first cashier to get started.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {staffList.map((member) => (
-              <div key={member._id} className="bg-card rounded-2xl border border-border hover:border-primary/20 hover:shadow-md transition-all duration-200 p-5 group">
+              <div key={member._id} className="bg-card rounded-2xl border border-border hover:border-primary/20 hover:shadow-md transition-all duration-200 p-4 group">
                 {/* Avatar + role */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 text-foreground font-extrabold text-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 text-foreground font-extrabold text-base">
                       {member.name?.charAt(0)?.toUpperCase() || "?"}
                     </div>
                     <div>

@@ -17,7 +17,7 @@ const Dashboard = () => {
         <Greetings />
 
         {/* Stats Row */}
-        <div className="flex items-stretch gap-4 px-6 mt-5">
+        <div className="flex items-stretch gap-2 px-4 mt-5">
           <MiniCard
             title="Total Earnings"
             icon={<FiDollarSign />}

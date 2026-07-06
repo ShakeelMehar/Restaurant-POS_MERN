@@ -13,7 +13,7 @@ const PopularDishes = () => {
     <div className="mt-6 pr-6">
       <div className="bg-card rounded-2xl border border-border overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-border">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-border">
           <h2 className="text-[15px] font-extrabold text-foreground">Popular Dishes</h2>
           <button
             onClick={() => navigate("/catalog?tab=dishes")}
@@ -24,21 +24,21 @@ const PopularDishes = () => {
         </div>
 
         {/* Dish List */}
-        <div className="overflow-y-auto h-[calc(100vh-320px)] max-h-[700px] hide-scrollbar py-3 px-4 space-y-2">
+        <div className="overflow-y-auto h-[calc(100vh-320px)] max-h-[700px] hide-scrollbar py-2 px-3 space-y-2">
           {popularDishes.length > 0 ? (
             popularDishes.map((dish, index) => (
               <div
                 key={dish.id}
-                className="flex items-center gap-4 bg-secondary/50 hover:bg-secondary rounded-xl px-4 py-3.5 transition-all duration-200 group border border-transparent hover:border-border"
+                className="flex items-center gap-2 bg-secondary/50 hover:bg-secondary rounded-xl px-3 py-2.5 transition-all duration-200 group border border-transparent hover:border-border"
               >
                 {/* Rank badge */}
                 <div className={`flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-lg text-xs font-extrabold ${
                   index === 0
-                    ? "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
+                    ? "bg-gradient-to-br from-blue-400 to-blue-600 text-white shadow-sm"
                     : index === 1
                     ? "bg-gradient-to-br from-slate-300 to-slate-500 text-white shadow-sm"
                     : index === 2
-                    ? "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-sm"
+                    ? "bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-sm"
                     : "bg-muted text-muted-foreground"
                 }`}>
                   {String(index + 1).padStart(2, "0")}
@@ -46,7 +46,7 @@ const PopularDishes = () => {
 
                 {/* Dish icon */}
                 <div
-                  className="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-lg border-2 border-white/20 shadow-sm"
+                  className="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-base border-2 border-white/20 shadow-sm"
                   style={{ backgroundColor: dish.bgColor || "#374151" }}
                 >
                   {dish.icon}
@@ -67,7 +67,7 @@ const PopularDishes = () => {
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center h-40 gap-3 text-center">
+            <div className="flex flex-col items-center justify-center h-40 gap-2 text-center">
               <span className="text-4xl">🫙</span>
               <p className="text-sm font-semibold text-muted-foreground">No dishes available yet.</p>
             </div>

@@ -33,10 +33,10 @@ const RecentOrders = () => {
   });
 
   return (
-    <div className="px-6 mt-6">
+    <div className="px-4 mt-6">
       <div className="bg-card rounded-2xl border border-border overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-border">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-border">
           <h2 className="text-[15px] font-extrabold text-foreground">Recent Orders</h2>
           <a
             href="/orders"
@@ -47,7 +47,7 @@ const RecentOrders = () => {
         </div>
 
         {/* Search */}
-        <div className="flex items-center gap-3 bg-secondary/60 border-b border-border px-5 py-3">
+        <div className="flex items-center gap-2 bg-secondary/60 border-b border-border px-4 py-2">
           <FiSearch size={14} className="text-muted-foreground flex-shrink-0" />
           <input
             type="text"
@@ -65,7 +65,7 @@ const RecentOrders = () => {
               <OrderList key={order._id} order={order} onManage={setSelectedOrder} />
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center h-full gap-3 py-8 text-center">
+            <div className="flex flex-col items-center justify-center h-full gap-2 py-8 text-center">
               <span className="text-4xl">📭</span>
               <p className="text-sm font-semibold text-muted-foreground">No orders found</p>
             </div>

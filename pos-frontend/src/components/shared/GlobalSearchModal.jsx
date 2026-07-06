@@ -52,7 +52,7 @@ const GlobalSearchModal = ({ searchQuery, onClose }) => {
       <div className="fixed inset-0 z-40" onClick={onClose}></div>
       <div className="absolute top-[120%] left-0 w-[500px] bg-card rounded-xl shadow-2xl z-50 border border-border overflow-hidden">
         {/* TABS */}
-        <div className="flex items-center gap-6 px-4 py-3 bg-background border-b border-border">
+        <div className="flex items-center gap-4 px-3 py-2 bg-background border-b border-border">
           {["all", "orders", "products", "categories"].map((tab) => (
             <button
               key={tab}
@@ -67,11 +67,11 @@ const GlobalSearchModal = ({ searchQuery, onClose }) => {
         </div>
 
         {/* RESULTS */}
-        <div className="max-h-[400px] overflow-y-auto p-4 scrollbar-hide">
+        <div className="max-h-[400px] overflow-y-auto p-3 scrollbar-hide">
           {!searchQuery ? (
             <p className="text-muted-foreground text-center text-sm">Start typing to search...</p>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               {/* ORDERS */}
               {(activeTab === "all" || activeTab === "orders") && matchedOrders.length > 0 && (
                 <div>

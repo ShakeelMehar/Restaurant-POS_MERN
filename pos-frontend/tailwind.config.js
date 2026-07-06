@@ -41,7 +41,7 @@ export default {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        'primary-yellow': 'hsl(var(--primary))',
+        'primary-blue': 'hsl(var(--primary))',
         active: '#4338ca',
       },
       borderRadius: {
@@ -91,9 +91,9 @@ export default {
           'to':   { opacity: '1', transform: 'scale(1)' },
         },
         'pulse-ring': {
-          '0%':   { boxShadow: '0 0 0 0 rgba(245,158,11,0.5)' },
-          '70%':  { boxShadow: '0 0 0 10px rgba(245,158,11,0)' },
-          '100%': { boxShadow: '0 0 0 0 rgba(245,158,11,0)' },
+          '0%':   { boxShadow: '0 0 0 0 rgba(37,99,235,0.5)' },
+          '70%':  { boxShadow: '0 0 0 10px rgba(37,99,235,0)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(37,99,235,0)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },

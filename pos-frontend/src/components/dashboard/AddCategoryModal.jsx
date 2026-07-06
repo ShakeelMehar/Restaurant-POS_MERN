@@ -46,7 +46,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Category Name
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="text"
               name="name"
@@ -63,7 +63,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Icon
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="text"
               name="icon"
@@ -80,7 +80,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Card Color
           </label>
-          <div className="flex items-center gap-4 rounded-lg bg-background p-4">
+          <div className="flex items-center gap-2 rounded-lg bg-background p-3">
             <input
               type="color"
               name="bgColor"
@@ -94,7 +94,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
 
         <button
           type="submit"
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-3 text-lg font-bold text-gray-900"
+          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900"
         >
           Add Category
         </button>

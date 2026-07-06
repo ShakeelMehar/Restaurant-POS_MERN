@@ -29,11 +29,11 @@ const CartInfo = () => {
   };
 
   return (
-    <div className="px-5 py-5 h-full flex flex-col bg-background">
+    <div className="px-4 py-3 h-full flex flex-col bg-background">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-xl font-extrabold text-foreground tracking-tight">Current Order</h2>
+          <h2 className="text-lg font-extrabold text-foreground tracking-tight">Current Order</h2>
           {cartData.length > 0 && (
             <p className="text-xs text-muted-foreground mt-0.5 font-medium">
               {cartData.length} {cartData.length === 1 ? "item" : "items"} added
@@ -66,7 +66,7 @@ const CartInfo = () => {
       {/* Cart Items */}
       <div className="flex-1 overflow-y-auto hide-scrollbar space-y-2.5 min-h-0" ref={scrollRef}>
         {cartData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full gap-3 py-10">
+          <div className="flex flex-col items-center justify-center h-full gap-2 py-10">
             <span className="text-5xl">🛒</span>
             <p className="text-sm font-semibold text-muted-foreground">Your cart is empty</p>
             <p className="text-xs text-muted-foreground/70">Add items from the menu to get started</p>
@@ -84,10 +84,10 @@ const CartInfo = () => {
             return (
               <div
                 key={item.id}
-                className="flex items-center gap-3 bg-card rounded-2xl px-4 py-3.5 border border-border hover:border-primary/20 transition-all duration-200 shadow-sm"
+                className="flex items-center gap-2 bg-card rounded-2xl px-3 py-2.5 border border-border hover:border-primary/20 transition-all duration-200 shadow-sm"
               >
                 {/* Emoji avatar */}
-                <div className="flex-shrink-0 h-12 w-12 bg-secondary rounded-xl flex items-center justify-center border border-border text-xl">
+                <div className="flex-shrink-0 h-12 w-12 bg-secondary rounded-xl flex items-center justify-center border border-border text-lg">
                   🍲
                 </div>
 

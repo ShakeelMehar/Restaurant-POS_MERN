@@ -22,7 +22,7 @@ const TableCard = ({ id, name, status, initials, seats }) => {
   return (
     <div
       onClick={handleClick}
-      className={`group relative flex flex-col items-center rounded-2xl bg-card p-5 transition-all duration-300 ${
+      className={`group relative flex flex-col items-center rounded-2xl bg-card p-4 transition-all duration-300 ${
         status === "Booked"
           ? "cursor-default"
           : "cursor-pointer hover:bg-secondary/80 hover:shadow-lg hover:shadow-yellow-900/20"
@@ -37,7 +37,7 @@ const TableCard = ({ id, name, status, initials, seats }) => {
           className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wider uppercase ${
             status === "Booked"
               ? "bg-success/20 text-success"
-              : "bg-primary-yellow/20 text-primary-yellow"
+              : "bg-primary-blue/20 text-primary-blue"
           }`}
         >
           {status}

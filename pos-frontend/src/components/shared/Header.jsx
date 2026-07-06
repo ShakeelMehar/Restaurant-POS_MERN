@@ -44,13 +44,13 @@ const Header = () => {
   const isNavActive = (matches) => matches.includes(activeTab);
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between gap-4 px-6 py-3 bg-card/90 backdrop-blur-md border-b border-border shadow-sm">
+    <header className="sticky top-0 z-40 flex items-center justify-between gap-2 px-4 py-2 bg-card/90 backdrop-blur-md border-b border-border shadow-sm">
       {/* ── LOGO ── */}
       <div
         onClick={() => navigate("/")}
         className="flex items-center gap-2.5 cursor-pointer flex-shrink-0 group"
       >
-        <div className="relative flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-amber-500 shadow-glow group-hover:shadow-lg transition-all duration-200">
+        <div className="relative flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-blue-500 shadow-glow group-hover:shadow-lg transition-all duration-200">
           <img src={logo} className="h-5 w-5 object-contain" alt="restro logo" />
         </div>
         <span className="text-[17px] font-extrabold tracking-tight text-foreground">
@@ -60,7 +60,7 @@ const Header = () => {
 
       {/* ── SEARCH ── */}
       <div className="relative z-50 flex-1 max-w-[480px]">
-        <div className="flex items-center gap-3 bg-secondary/80 hover:bg-secondary border border-border hover:border-primary/30 rounded-full px-4 py-2.5 transition-all duration-200 cursor-text">
+        <div className="flex items-center gap-2 bg-secondary/80 hover:bg-secondary border border-border hover:border-primary/30 rounded-full px-3 py-2.5 transition-all duration-200 cursor-text">
           <FiSearch className="text-muted-foreground flex-shrink-0" size={15} />
           <input
             type="text"
@@ -89,9 +89,9 @@ const Header = () => {
       <nav className="flex items-center gap-1.5">
         <button
           onClick={() => navigate("/menu")}
-          className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
             isNavActive(["/menu", "/"])
-              ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+              ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
               : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
           }`}
         >
@@ -99,9 +99,9 @@ const Header = () => {
         </button>
         <button
           onClick={() => navigate("/orders")}
-          className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
             isNavActive(["/orders"])
-              ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+              ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
               : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
           }`}
         >
@@ -110,9 +110,9 @@ const Header = () => {
         {["Admin", "Super Admin"].includes(userData.role) && (
           <button
             onClick={() => navigate("/dashboard")}
-            className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap ${
               isNavActive(["/dashboard", "/catalog", "/staff", "/reports"])
-                ? "bg-gradient-to-r from-primary to-amber-500 text-primary-foreground shadow-md shadow-primary/30"
+                ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
                 : "text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent hover:border-border"
             }`}
           >
@@ -144,7 +144,7 @@ const Header = () => {
         {/* User chip */}
         <div className="flex items-center gap-2.5 pl-2 border-l border-border ml-1">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 text-foreground">
-            <FaUserCircle size={20} />
+            <FaUserCircle size={16} />
           </div>
           <div className="flex-col items-start hidden sm:flex">
             <span className="text-[13px] font-bold text-foreground leading-tight">

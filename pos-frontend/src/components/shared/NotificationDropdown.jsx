@@ -58,10 +58,10 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
   return (
     <div
       ref={panelRef}
-      className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[360px] rounded-2xl border border-border bg-card p-4 shadow-xl"
+      className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[360px] rounded-2xl border border-border bg-card p-3 shadow-xl"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Notifications</h2>
+        <h2 className="text-base font-semibold text-foreground">Notifications</h2>
         <button
           onClick={() => {
             onClose();
@@ -82,7 +82,7 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
                 onClose();
                 navigate("/orders");
               }}
-              className="w-full rounded-xl bg-popover px-4 py-3 text-left transition hover:bg-card"
+              className="w-full rounded-xl bg-popover px-3 py-2 text-left transition hover:bg-card"
             >
               <p className="font-semibold text-foreground">
                 {notification.title}
@@ -94,7 +94,7 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
             </button>
           ))
         ) : (
-          <div className="rounded-xl bg-popover px-4 py-6 text-center">
+          <div className="rounded-xl bg-popover px-3 py-4 text-center">
             <p className="font-semibold text-foreground">No notifications yet</p>
             <p className="mt-2 text-sm text-muted-foreground">
               Recent order activity will appear here.

@@ -67,7 +67,7 @@ const BottomNav = () => {
           <button
             disabled={isActive("/menu")}
             onClick={() => navigate("/menu")}
-            className="relative flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-gradient-to-br from-primary to-amber-500 shadow-lg shadow-primary/40 text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-glow active:scale-95 animate-pulse-ring"
+            className="relative flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-gradient-to-br from-primary to-blue-500 shadow-lg shadow-primary/40 text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-glow active:scale-95 animate-pulse-ring"
           >
             <BiSolidDish size={28} />
           </button>
@@ -87,7 +87,7 @@ const BottomNav = () => {
           {["Admin", "Super Admin"].includes(userData.role) && (
             <button
               onClick={() => { setIsMoreModalOpen(false); navigate("/dashboard"); }}
-              className="w-full flex items-center gap-3 rounded-xl bg-secondary hover:bg-muted border border-border px-4 py-3.5 text-left font-semibold text-foreground transition-all hover:border-primary/30"
+              className="w-full flex items-center gap-2 rounded-xl bg-secondary hover:bg-muted border border-border px-3 py-2.5 text-left font-semibold text-foreground transition-all hover:border-primary/30"
             >
               <FiGrid size={18} className="text-primary" />
               Open Dashboard
@@ -95,7 +95,7 @@ const BottomNav = () => {
           )}
           <button
             onClick={() => { setIsMoreModalOpen(false); setIsLogoutModalOpen(true); }}
-            className="w-full flex items-center gap-3 rounded-xl bg-secondary hover:bg-destructive/10 border border-border hover:border-destructive/30 px-4 py-3.5 text-left font-semibold text-foreground transition-all"
+            className="w-full flex items-center gap-2 rounded-xl bg-secondary hover:bg-destructive/10 border border-border hover:border-destructive/30 px-3 py-2.5 text-left font-semibold text-foreground transition-all"
           >
             <FiMoreHorizontal size={18} className="text-muted-foreground" />
             Logout

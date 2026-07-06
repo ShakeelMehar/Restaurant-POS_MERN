@@ -21,9 +21,9 @@ const Menu = () => {
         <section className="min-h-[calc(100vh-4rem)] bg-background  xl:flex xl:gap-0">
             {/* ── LEFT: Menu ── */}
             <div className="flex-[3] min-w-0 flex flex-col">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-card/50">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-xl font-extrabold text-foreground tracking-tight">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/50">
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-lg font-extrabold text-foreground tracking-tight">
                             {isEditingOrder ? "✏️ Modify Order" : "🍽️ Menu"}
                         </h1>
                         {isEditingOrder && (
@@ -33,7 +33,7 @@ const Menu = () => {
                     {["Admin", "Super Admin"].includes(role) && (
                         <button
                             onClick={() => navigate("/catalog?tab=categories")}
-                            className="flex items-center gap-2 rounded-xl bg-secondary hover:bg-muted border border-border px-4 py-2 text-sm font-bold text-foreground transition-all duration-200 hover:border-primary/30">
+                            className="flex items-center gap-2 rounded-xl bg-secondary hover:bg-muted border border-border px-3 py-2 text-sm font-bold text-foreground transition-all duration-200 hover:border-primary/30">
                             <FiBookOpen size={14} />
                             Browse Catalog
                         </button>

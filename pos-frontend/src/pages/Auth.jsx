@@ -29,14 +29,14 @@ const Auth = () => {
         
         {/* Branding Content */}
         <div className="relative z-10 flex flex-col items-center justify-center p-12 text-center h-full">
-            <div className="flex items-center justify-center h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-amber-500 shadow-glow mb-8 animate-slide-up">
+            <div className="flex items-center justify-center h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-blue-500 shadow-glow mb-8 animate-slide-up">
               <img src={logo} alt="Logo" className="h-16 w-16 object-contain" />
             </div>
             <h1 className="text-4xl xl:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6 animate-slide-up" style={{ animationDelay: '100ms' }}>
               AL HAFIZ <br />
               <span className="text-primary">YAKHNI PULAO</span>
             </h1>
-            <p className="text-lg text-gray-300 max-w-md animate-slide-up" style={{ animationDelay: '200ms' }}>
+            <p className="text-base text-gray-300 max-w-md animate-slide-up" style={{ animationDelay: '200ms' }}>
               Experience the authentic taste of traditional Yakhni Pulao. 
               Our POS system ensures quick, seamless, and efficient service.
             </p>
@@ -51,17 +51,17 @@ const Auth = () => {
         <div className="absolute bottom-[-10%] left-[-5%] h-[400px] w-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none lg:hidden" />
 
         {/* Scrollable Container */}
-        <div className="flex-1 overflow-y-auto flex flex-col p-6 sm:p-12 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto flex flex-col p-4 sm:p-12 scrollbar-hide">
           <div className="w-full max-w-[420px] mx-auto my-auto relative z-10 py-10 animate-slide-up">
             
             {/* Logo and Branding for Mobile */}
-            <div className="flex lg:hidden flex-col items-center gap-4 mb-10">
-              <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-amber-500 shadow-glow">
+            <div className="flex lg:hidden flex-col items-center gap-2 mb-10">
+              <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-blue-500 shadow-glow">
                 <img src={logo} alt="Logo" className="h-10 w-10 object-contain" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight text-center leading-tight">
+              <h1 className="text-xl sm:text-3xl font-extrabold text-foreground tracking-tight text-center leading-tight">
                 AL HAFIZ <br />
-                <span className="text-gradient-gold">YAKHNI PULAO</span>
+                <span className="text-gradient-primary">YAKHNI PULAO</span>
               </h1>
             </div>
 

@@ -60,7 +60,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Full Name
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="text"
               name="name"
@@ -77,7 +77,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Email Address
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="email"
               name="email"
@@ -94,7 +94,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Phone Number
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="text"
               name="phone"
@@ -111,7 +111,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Temporary Password
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <input
               type="password"
               name="password"
@@ -128,7 +128,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Role
           </label>
-          <div className="rounded-lg bg-background p-4">
+          <div className="rounded-lg bg-background p-3">
             <select
               name="role"
               value={formData.role}
@@ -144,7 +144,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-yellow-400 py-3 text-lg font-bold text-gray-900 disabled:opacity-50"
+          className="mt-6 w-full rounded-lg bg-yellow-400 py-2 text-base font-bold text-gray-900 disabled:opacity-50"
         >
           {registerMutation.isPending ? "Creating..." : "Add Staff"}
         </button>

@@ -13,16 +13,16 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
       className="bg-card rounded-lg shadow-lg w-full max-w-lg mx-4">
-        <div className="flex justify-between items-center px-6 py-4 border-b border-b-[#333]">
-          <h2 className="text-xl text-foreground font-semibold">{title}</h2>
+        <div className="flex justify-between items-center px-4 py-2 border-b border-b-[#333]">
+          <h2 className="text-lg text-foreground font-semibold">{title}</h2>
           <button
-            className="text-gray-500 text-2xl hover:text-gray-800"
+            className="text-gray-500 text-xl hover:text-gray-800"
             onClick={onClose}
           >
             &times;
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-4">
           {children}
         </div>
       </motion.div>
