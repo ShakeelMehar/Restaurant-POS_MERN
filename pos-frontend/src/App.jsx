@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
 import AdminLayout from "./components/shared/AdminLayout";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -106,9 +107,11 @@ function RoleGuard({ allowedRoles, children }) {
 
 function App() {
   return (
-    <Router>
-      <Layout />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <Layout />
+      </Router>
+    </ErrorBoundary>
   );
 }
 
