@@ -49,7 +49,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="name@restaurant.com"
               required
-              className="input-base pl-11"
+              className="input-base !pl-11"
             />
           </div>
         </div>
@@ -68,7 +68,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="••••••••"
               required
-              className="input-base pl-11"
+              className="input-base !pl-11"
             />
           </div>
         </div>

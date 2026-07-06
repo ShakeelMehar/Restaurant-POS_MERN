@@ -17,7 +17,15 @@ const AddStaffModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState(initialData);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    if (name === "phone") {
+      let val = value.replace(/^\+92/, "0").replace(/\D/g, "");
+      if (val.length > 0 && val[0] !== "0") val = "0" + val;
+      if (val.length > 1 && val[1] !== "3") val = "03" + val.substring(2);
+      if (val.length > 11) val = val.substring(0, 11);
+      if (val.length > 4) val = val.substring(0, 4) + "-" + val.substring(4);
+      value = val;
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -92,7 +100,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              placeholder="+92 300 1234567"
+              placeholder="03XX-XXXXXXX"
               className="w-full bg-transparent text-white focus:outline-none"
               required
             />

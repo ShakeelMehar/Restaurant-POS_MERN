@@ -15,8 +15,18 @@ const Register = ({ setIsRegister }) => {
     name: "", email: "", phone: "", password: "", role: "",
   });
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    let { name, value } = e.target;
+    if (name === "phone") {
+      let val = value.replace(/^\+92/, "0").replace(/\D/g, "");
+      if (val.length > 0 && val[0] !== "0") val = "0" + val;
+      if (val.length > 1 && val[1] !== "3") val = "03" + val.substring(2);
+      if (val.length > 11) val = val.substring(0, 11);
+      if (val.length > 4) val = val.substring(0, 4) + "-" + val.substring(4);
+      value = val;
+    }
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleRoleSelection = (selectedRole) =>
     setFormData({ ...formData, role: selectedRole });
@@ -41,7 +51,7 @@ const Register = ({ setIsRegister }) => {
   const fields = [
     { name: "name",     icon: FiUser,  type: "text",     placeholder: "e.g. John Doe",         label: "Employee Name" },
     { name: "email",    icon: FiMail,  type: "email",    placeholder: "name@restaurant.com",   label: "Email Address" },
-    { name: "phone",    icon: FiPhone, type: "number",   placeholder: "+92 300 1234567",        label: "Phone Number" },
+    { name: "phone",    icon: FiPhone, type: "text",   placeholder: "03XX-XXXXXXX",        label: "Phone Number" },
     { name: "password", icon: FiLock,  type: "password", placeholder: "••••••••",               label: "Password" },
   ];
 
@@ -62,7 +72,7 @@ const Register = ({ setIsRegister }) => {
                 onChange={handleChange}
                 placeholder={placeholder}
                 required
-                className="input-base pl-11"
+                className="input-base !pl-11"
               />
             </div>
           </div>
