@@ -105,79 +105,71 @@ const AddDishModal = ({ isOpen, onClose }) => {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Category
+            <label className="mb-2 block text-sm font-medium text-foreground">
+              Category <span className="text-error">*</span>
             </label>
-            <div className="rounded-lg bg-background p-3">
-              <select
-                name="categoryId"
-                value={dishData.categoryId}
-                onChange={handleInputChange}
-                className="w-full bg-transparent text-foreground focus:outline-none"
-                required
-              >
-                {categories.map((category) => (
-                  <option
-                    key={category.id}
-                    value={category.id}
-                    className="bg-background"
-                  >
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              name="categoryId"
+              value={dishData.categoryId}
+              onChange={handleInputChange}
+              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none cursor-pointer"
+              required
+            >
+              {categories.map((category) => (
+                <option
+                  key={category.id}
+                  value={category.id}
+                  className="bg-background"
+                >
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Dish Name
+            <label className="mb-2 block text-sm font-medium text-foreground">
+              Dish Name <span className="text-error">*</span>
             </label>
-            <div className="rounded-lg bg-background p-3">
-              <input
-                type="text"
-                name="name"
-                value={dishData.name}
-                onChange={handleInputChange}
-                placeholder="Chicken Handi"
-                className="w-full bg-transparent text-foreground focus:outline-none"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              value={dishData.name}
+              onChange={handleInputChange}
+              placeholder="Chicken Handi"
+              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+              required
+            />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Price
+            <label className="mb-2 block text-sm font-medium text-foreground">
+              Price <span className="text-error">*</span>
             </label>
-            <div className="rounded-lg bg-background p-3">
-              <input
-                type="number"
-                name="price"
-                min="1"
-                value={dishData.price}
-                onChange={handleInputChange}
-                placeholder="450"
-                className="w-full bg-transparent text-foreground focus:outline-none"
-                required
-              />
-            </div>
+            <input
+              type="number"
+              name="price"
+              min="1"
+              value={dishData.price}
+              onChange={handleInputChange}
+              placeholder="450"
+              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+              required
+            />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-muted-foreground">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               Item Type
             </label>
-            <div className="rounded-lg bg-background p-3">
-              <input
-                type="text"
-                name="category"
-                value={dishData.category}
-                onChange={handleInputChange}
-                placeholder="Vegetarian"
-                className="w-full bg-transparent text-foreground focus:outline-none"
-              />
-            </div>
+            <input
+              type="text"
+              name="category"
+              value={dishData.category}
+              onChange={handleInputChange}
+              placeholder="Vegetarian"
+              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            />
           </div>
 
           <button

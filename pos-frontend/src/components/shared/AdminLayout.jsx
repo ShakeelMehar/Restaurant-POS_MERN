@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   return (
-    <div className="flex bg-background min-h-[calc(100vh-5rem)]">
+    <div className="flex bg-background min-h-[calc(100dvh-5rem)]">
       <Sidebar />
       <div className="flex-1 overflow-x-hidden">
         <Outlet />

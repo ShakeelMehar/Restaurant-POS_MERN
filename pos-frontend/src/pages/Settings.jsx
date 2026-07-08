@@ -12,6 +12,11 @@ const Settings = () => {
     branch: "",
     contactNumber: "",
     logoUrl: "",
+    enableCash: true,
+    enableCard: true,
+    enableOnline: true,
+    enableTaxes: true,
+    enableTakeaway: true,
   });
 
   const { data: resData, isLoading, isError } = useQuery({
@@ -32,6 +37,11 @@ const Settings = () => {
         branch: settings.branch || "",
         contactNumber: settings.contactNumber || "",
         logoUrl: settings.logoUrl || "",
+        enableCash: settings.enableCash ?? true,
+        enableCard: settings.enableCard ?? true,
+        enableOnline: settings.enableOnline ?? true,
+        enableTaxes: settings.enableTaxes ?? true,
+        enableTakeaway: settings.enableTakeaway ?? true,
       });
     }
   }, [resData]);
@@ -59,7 +69,7 @@ const Settings = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+      <div className="flex items-center justify-center h-[calc(100dvh-4rem)]">
         <p className="text-muted-foreground font-medium">Loading settings...</p>
       </div>
     );
@@ -67,14 +77,14 @@ const Settings = () => {
 
   if (isError) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+      <div className="flex items-center justify-center h-[calc(100dvh-4rem)]">
         <p className="text-error font-medium">Failed to load settings.</p>
       </div>
     );
   }
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] bg-background pb-24 p-4 md:p-6">
+    <section className="min-h-[calc(100dvh-4rem)] bg-background pb-24 p-4 md:p-6">
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Brand Settings</h1>
@@ -161,6 +171,42 @@ const Settings = () => {
               )}
             </div>
             
+          </div>
+
+          {/* Feature Toggles Section */}
+          <div className="mt-8 pt-8 border-t border-border">
+            <h2 className="text-lg font-bold text-foreground mb-4 tracking-tight">Feature Toggles</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+              
+              {[
+                { name: "enableCash", label: "Cash Payments", desc: "Allow staff to checkout with cash." },
+                { name: "enableCard", label: "Card Payments", desc: "Show Card/Swipe option at checkout." },
+                { name: "enableOnline", label: "Online Payments", desc: "Enable Razorpay integration." },
+                { name: "enableTaxes", label: "Calculate Taxes", desc: "Apply global 5.25% tax to orders." },
+                { name: "enableTakeaway", label: "Takeaway Mode", desc: "Allow orders for Takeaway." },
+              ].map((toggle) => (
+                <div key={toggle.name} className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{toggle.label}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{toggle.desc}</p>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input 
+                        type="checkbox" 
+                        name={toggle.name} 
+                        checked={formData[toggle.name]} 
+                        onChange={() => setFormData(prev => ({ ...prev, [toggle.name]: !prev[toggle.name] }))} 
+                        className="sr-only" 
+                      />
+                      <div className={`block w-11 h-6 rounded-full transition-colors ${formData[toggle.name] ? 'bg-primary' : 'bg-[hsl(var(--surface-strong))]'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData[toggle.name] ? 'transform translate-x-5' : ''}`}></div>
+                    </div>
+                  </label>
+                </div>
+              ))}
+              
+            </div>
           </div>
 
           <div className="mt-8 pt-6 border-t border-border flex justify-end">

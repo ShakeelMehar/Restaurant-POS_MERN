@@ -87,7 +87,10 @@ const CascadingMenu = ({ categories, onAdd }) => {
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
       {/* ROW 1: TOP CATEGORIES (Fixed Height) */}
-      <div className="px-4 py-3 flex gap-2 overflow-x-auto hide-scrollbar flex-shrink-0 z-10 border-b border-border bg-card">
+      <div 
+        className="px-4 py-3 flex gap-2 overflow-x-auto hide-scrollbar flex-shrink-0 z-10 border-b border-border bg-card touch-pan-x"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
         {categories.map((c) => {
           const isActive = selectedCategoryId === c.id;
           return (
@@ -110,14 +113,14 @@ const CascadingMenu = ({ categories, onAdd }) => {
       {/* ITEMS GRID */}
       <div className="flex flex-col flex-1 overflow-hidden bg-background">
         {selectedCategory && (
-          <div className="px-4 pt-4 pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          <div className="px-3 sm:px-4 pt-4 pb-20 lg:pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3">
               {categoryVariants.length > 0 ? (
                 categoryVariants.map((variant, index) => (
                   <div
                     key={`${variant.id}-${index}`}
                     onClick={() => handleVariantClick(variant)}
-                    className="card-base card-hover flex flex-col justify-between p-3 min-h-[100px] cursor-pointer active:scale-[0.98] transition-transform duration-150 border border-[hsl(var(--border-strong))] rounded-[14px]"
+                    className="card-base card-hover flex flex-col justify-between p-2.5 sm:p-3 min-h-[90px] sm:min-h-[100px] cursor-pointer active:scale-[0.98] transition-transform duration-150 border border-[hsl(var(--border-strong))] rounded-[12px] sm:rounded-[14px]"
                   >
                     <div>
                       <h3 className="text-[13px] font-semibold leading-snug mb-1 text-foreground">

@@ -57,88 +57,78 @@ const AddStaffModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Staff Member">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Full Name
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Full Name <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="e.g. Ali Khan"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="e.g. Ali Khan"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Email Address
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Email Address <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="name@restaurant.com"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="name@restaurant.com"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Phone Number
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Phone Number <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="03XX-XXXXXXX"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            placeholder="03XX-XXXXXXX"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Temporary Password
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Temporary Password <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="••••••••"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="••••••••"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
+          <label className="mb-2 block text-sm font-medium text-foreground">
             Role
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              className="w-full bg-background text-foreground focus:outline-none"
-            >
-              <option value="Cashier">Cashier</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </div>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none cursor-pointer"
+          >
+            <option value="Cashier">Cashier</option>
+            <option value="Admin">Admin</option>
+          </select>
         </div>
 
         <button

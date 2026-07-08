@@ -12,7 +12,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden lg:flex w-64 bg-[hsl(var(--surface-soft))] min-h-[calc(100vh-81px)] border-r border-border p-4 flex-col gap-2">
+    <aside className="hidden lg:flex w-64 bg-[hsl(var(--surface-soft))] min-h-[calc(100dvh-81px)] border-r border-border p-4 flex-col gap-2">
       <div className="mb-4 px-3">
         <h3 className="text-[12px] font-bold text-muted uppercase tracking-wider">Administration</h3>
       </div>

@@ -18,11 +18,17 @@ const getSettings = async (req, res, next) => {
 
 const updateSettings = async (req, res, next) => {
     try {
-        const { restaurantName, location, branch, contactNumber, logoUrl } = req.body;
+        const { 
+            restaurantName, location, branch, contactNumber, logoUrl,
+            enableCash, enableCard, enableOnline, enableTaxes, enableTakeaway
+        } = req.body;
         
         const settings = await Settings.findOneAndUpdate(
             {}, 
-            { restaurantName, location, branch, contactNumber, logoUrl },
+            { 
+                restaurantName, location, branch, contactNumber, logoUrl,
+                enableCash, enableCard, enableOnline, enableTaxes, enableTakeaway
+            },
             { new: true, upsert: true, runValidators: true }
         );
         

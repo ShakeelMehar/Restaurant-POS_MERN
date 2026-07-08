@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../../redux/slices/cartSlice";
 import {
   addOrder, createOrderRazorpay, updateTable,
-  updateOrderById, verifyPaymentRazorpay,
+  updateOrderById, verifyPaymentRazorpay, getSettings
 } from "../../https/index";
 import { db } from "../../utils/db";
 import { enqueueSnackbar } from "notistack";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { removeAllItems } from "../../redux/slices/cartSlice";
 import { removeCustomer } from "../../redux/slices/customerSlice";
 import Invoice from "../invoice/Invoice";
@@ -34,7 +34,13 @@ const Bill = () => {
   const customerData = useSelector((state) => state.customer);
   const cartData = useSelector((state) => state.cart);
   const total = useSelector(getTotalPrice);
-  const taxRate = 5.25;
+  const { data: resData } = useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => await getSettings(),
+  });
+  const settings = resData?.data?.data || { enableCash: true, enableCard: true, enableOnline: true, enableTaxes: true };
+
+  const taxRate = settings.enableTaxes ? 5.25 : 0;
   const tax = (total * taxRate) / 100;
   const totalWithTax = total + tax;
   const isEditingOrder = Boolean(customerData.editingOrderId);
@@ -157,10 +163,10 @@ const Bill = () => {
   const updateExistingOrderMutation = useMutation({ mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData), onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: false }), onError: (e) => enqueueSnackbar(e?.response?.data?.message || "Update failed", { variant: "error" }) });
 
   const paymentMethods = [
-    { id: "Cash",   label: "Cash",   icon: FiDollarSign },
-    { id: "Card",   label: "Card",   icon: FiCreditCard },
-    { id: "Online", label: "Online", icon: FiGlobe },
-  ];
+    { id: "Cash",   label: "Cash",   icon: FiDollarSign, enabled: settings.enableCash ?? true },
+    { id: "Card",   label: "Card",   icon: FiCreditCard, enabled: settings.enableCard ?? true },
+    { id: "Online", label: "Online", icon: FiGlobe, enabled: settings.enableOnline ?? true },
+  ].filter(p => p.enabled);
 
   return (
     <>
@@ -168,8 +174,8 @@ const Bill = () => {
       <div className="px-4 pt-4 pb-2 space-y-1.5">
         {[
           { label: `Items (${cartData.length})`,  value: `PKR ${total.toFixed(2)}` },
-          { label: "Tax (5.25%)",                  value: `PKR ${tax.toFixed(2)}` },
-          { label: "Total With Tax", bold: true,   value: `PKR ${totalWithTax.toFixed(2)}` },
+          ...(settings.enableTaxes ?? true ? [{ label: "Tax (5.25%)", value: `PKR ${tax.toFixed(2)}` }] : []),
+          { label: "Total", bold: true,   value: `PKR ${totalWithTax.toFixed(2)}` },
         ].map(({ label, value, bold }) => (
           <div key={label} className="flex items-center justify-between">
             <p className={`text-[13px] ${bold ? "text-foreground font-semibold" : "text-muted"}`}>
@@ -239,7 +245,7 @@ const Bill = () => {
               {[
                 { label: "Total Items",  value: cartData.length },
                 { label: "Subtotal",     value: `PKR ${total.toFixed(2)}` },
-                { label: "Tax (5.25%)", value: `PKR ${tax.toFixed(2)}` },
+                ...(settings.enableTaxes ?? true ? [{ label: "Tax (5.25%)", value: `PKR ${tax.toFixed(2)}` }] : []),
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between text-[15px] mb-2">
                   <span className="text-muted">{label}</span>

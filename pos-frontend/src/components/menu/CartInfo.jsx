@@ -5,12 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItems, removeAllItems } from "../../redux/slices/cartSlice";
 import { setOrderType } from "../../redux/slices/customerSlice";
 import TabGroup from "../shared/TabGroup";
+import { useQuery } from "@tanstack/react-query";
+import { getSettings } from "../../https";
 
 const CartInfo = () => {
   const cartData = useSelector((state) => state.cart);
   const orderType = useSelector((state) => state.customer.orderType);
   const scrollRef = useRef();
   const dispatch = useDispatch();
+
+  const { data: resData } = useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => await getSettings(),
+  });
+  const settings = resData?.data?.data || { enableTakeaway: true };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -55,7 +63,7 @@ const CartInfo = () => {
         <TabGroup
           tabs={[
             { id: "Dine In",  label: "Dine In" },
-            { id: "Takeaway", label: "Takeaway" },
+            ...(settings.enableTakeaway ?? true ? [{ id: "Takeaway", label: "Takeaway" }] : []),
             { id: "Delivery", label: "Delivery" },
           ]}
           activeTab={orderType}

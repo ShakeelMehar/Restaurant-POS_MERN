@@ -50,44 +50,40 @@ const AddTableModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Table">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
-            Table Number
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Table Number <span className="text-error">*</span>
           </label>
-          <div className="flex items-center rounded-lg bg-background p-3">
-            <input
-              type="number"
-              name="tableNo"
-              min="1"
-              value={tableData.tableNo}
-              onChange={handleInputChange}
-              className="flex-1 bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="number"
+            name="tableNo"
+            min="1"
+            value={tableData.tableNo}
+            onChange={handleInputChange}
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 mt-3 block text-sm font-medium text-muted-foreground">
-            Number of Seats
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Number of Seats <span className="text-error">*</span>
           </label>
-          <div className="flex items-center rounded-lg bg-background p-3">
-            <input
-              type="number"
-              name="seats"
-              min="1"
-              max="8"
-              value={tableData.seats}
-              onChange={handleInputChange}
-              className="flex-1 bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="number"
+            name="seats"
+            min="1"
+            max="8"
+            value={tableData.seats}
+            onChange={handleInputChange}
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <button
           type="submit"
           disabled={tableMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {tableMutation.isPending ? "Adding Table..." : "Add Table"}
         </button>

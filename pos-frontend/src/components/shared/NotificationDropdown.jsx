@@ -58,7 +58,7 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
   return (
     <div
       ref={panelRef}
-      className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[360px] rounded-[14px] border border-[hsl(var(--border-strong))] bg-card p-4 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_8px_24px]"
+      className="absolute -right-2 sm:right-0 top-[calc(100%+0.75rem)] z-50 w-[300px] sm:w-[360px] rounded-[14px] border border-[hsl(var(--border-strong))] bg-card p-4 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_8px_24px]"
     >
       <div className="flex items-center justify-between pb-3 border-b border-[hsl(var(--border-strong))] mb-3">
         <h2 className="text-[16px] font-bold text-foreground">Notifications</h2>

@@ -24,7 +24,7 @@ const Orders = () => {
   }, []);
 
   const { data: allOrders, isError } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", "all"],
     queryFn: async () => {
       let onlineOrders = [];
       let offlineQueue = [];
@@ -75,7 +75,7 @@ const Orders = () => {
   });
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
+    <section className="min-h-[calc(100dvh-4rem)] bg-background pb-24">
       {/* Page header */}
       <div className="flex flex-col gap-2 px-4 py-2 border-b border-border bg-card/50 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">

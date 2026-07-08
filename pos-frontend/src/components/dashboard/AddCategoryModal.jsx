@@ -66,52 +66,48 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Category">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            Category Name
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Category Name <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="text"
-              name="name"
-              value={categoryData.name}
-              onChange={handleInputChange}
-              placeholder="Starters"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="name"
+            value={categoryData.name}
+            onChange={handleInputChange}
+            placeholder="Starters"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
+          <label className="mb-2 block text-sm font-medium text-foreground">
             Icon
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="text"
-              name="icon"
-              value={categoryData.icon}
-              onChange={handleInputChange}
-              placeholder="+"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              maxLength={4}
-            />
-          </div>
+          <input
+            type="text"
+            name="icon"
+            value={categoryData.icon}
+            onChange={handleInputChange}
+            placeholder="+"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            maxLength={4}
+          />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
+          <label className="mb-2 block text-sm font-medium text-foreground">
             Card Color
           </label>
-          <div className="flex items-center gap-2 rounded-lg bg-background p-3">
+          <div className="flex items-center gap-4 bg-[hsl(var(--surface-strong))] border border-transparent rounded-[8px] px-4 py-3">
             <input
               type="color"
               name="bgColor"
               value={categoryData.bgColor}
               onChange={handleInputChange}
-              className="h-10 w-14 cursor-pointer rounded border-none bg-transparent"
+              className="h-8 w-14 cursor-pointer rounded border-none bg-transparent"
             />
-            <span className="text-sm text-muted-foreground">{categoryData.bgColor}</span>
+            <span className="text-sm font-medium text-foreground">{categoryData.bgColor}</span>
           </div>
         </div>
 

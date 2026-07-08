@@ -40,19 +40,17 @@ const ResetPasswordModal = ({ isOpen, onClose, staffId, staffName }) => {
     <Modal isOpen={isOpen} onClose={onClose} title={`Reset Password: ${staffName || ""}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-muted-foreground">
-            New Password
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            New Password <span className="text-error">*</span>
           </label>
-          <div className="rounded-lg bg-background p-3">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full bg-transparent text-foreground focus:outline-none"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            required
+          />
         </div>
 
         <button
