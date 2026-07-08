@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { MdDashboard, MdCategory, MdPeople, MdAssessment } from "react-icons/md";
+import { MdDashboard, MdCategory, MdPeople, MdAssessment, MdSettings } from "react-icons/md";
 
 const Sidebar = () => {
   const links = [
@@ -8,6 +8,7 @@ const Sidebar = () => {
     { name: "Catalog", path: "/catalog", icon: <MdCategory size={20} /> },
     { name: "Staff", path: "/staff", icon: <MdPeople size={20} /> },
     { name: "Reports", path: "/reports", icon: <MdAssessment size={20} /> },
+    { name: "Settings", path: "/settings", icon: <MdSettings size={20} /> },
   ];
 
   return (
@@ -20,10 +21,10 @@ const Sidebar = () => {
           key={link.name}
           to={link.path}
           className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-[10px] font-medium transition-colors ${
+            `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
               isActive
-                ? "bg-card text-foreground shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px] font-semibold"
-                : "text-muted hover:bg-[hsl(var(--border))] hover:text-foreground"
+                ? "bg-[hsl(var(--surface-strong))] text-foreground font-semibold"
+                : "text-muted hover:bg-[hsl(var(--surface-strong))] hover:text-foreground font-medium"
             }`
           }
         >

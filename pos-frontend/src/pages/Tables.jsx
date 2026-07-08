@@ -94,14 +94,14 @@ const Tables = () => {
       <div className="grid grid-cols-2 gap-2 px-4 py-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {isLoading && (
           <>
-            {[1,2,3,4,5,6].map((i) => (
-              <div key={i} className="h-32 bg-card rounded-2xl border border-border animate-pulse" />
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="h-32 bg-card rounded-[14px] border border-border animate-pulse" />
             ))}
           </>
         )}
 
         {!isLoading && tableList.length === 0 && (
-          <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-4 py-16 text-center gap-2">
+          <div className="col-span-full flex flex-col items-center justify-center rounded-[14px] border border-dashed border-border bg-card px-4 py-16 text-center gap-2">
             <span className="text-5xl">🪑</span>
             <div>
               <h2 className="text-base font-bold text-foreground">No tables yet</h2>

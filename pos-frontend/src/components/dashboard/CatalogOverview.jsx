@@ -13,7 +13,7 @@ const CatalogOverview = () => {
 
   return (
     <div className="container mx-auto mt-8 px-4 md:px-3">
-      <div className="rounded-2xl bg-card p-4">
+      <div className="rounded-[14px] bg-card p-4">
         <div className="flex items-center justify-between gap-2">
           <div>
             <h2 className="text-lg font-semibold text-foreground">

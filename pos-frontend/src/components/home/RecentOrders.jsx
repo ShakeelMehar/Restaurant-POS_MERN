@@ -33,8 +33,8 @@ const RecentOrders = () => {
   });
 
   return (
-    <div className="px-4 mt-6">
-      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+    <div className="mx-6 mt-6">
+      <div className="bg-card rounded-[14px] border border-border overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center px-4 py-2 border-b border-border">
           <h2 className="text-[15px] font-extrabold text-foreground">Recent Orders</h2>
@@ -47,7 +47,7 @@ const RecentOrders = () => {
         </div>
 
         {/* Search */}
-        <div className="flex items-center gap-2 bg-secondary/60 border-b border-border px-4 py-2">
+        <div className="flex items-center gap-2 border-b border-border px-4 py-3">
           <FiSearch size={14} className="text-muted-foreground flex-shrink-0" />
           <input
             type="text"

@@ -84,7 +84,7 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-3">
-      <div className="bg-background w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="bg-background w-full max-w-2xl rounded-[14px] shadow-2xl flex flex-col max-h-[90vh]">
         
         {/* Header */}
         <div className="flex justify-between items-start p-4 border-b border-border">

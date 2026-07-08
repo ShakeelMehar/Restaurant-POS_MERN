@@ -1,9 +1,19 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa6";
+import { useQuery } from "@tanstack/react-query";
+import { getSettings } from "../../https";
 
 const Invoice = ({ orderInfo, setShowInvoice }) => {
   const invoiceRef = useRef(null);
+  
+  const { data: settingsRes } = useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => await getSettings(),
+    staleTime: 1000 * 60 * 5,
+  });
+  const settings = settingsRes?.data?.data || {};
+
   const handlePrint = () => {
     const printContent = invoiceRef.current.innerHTML;
     const WinPrint = window.open("", "", "width=900,height=650");
@@ -14,12 +24,19 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
                 <title>Order Receipt</title>
                 <style>
                   body { font-family: Arial, sans-serif; padding: 20px; color: #1e293b; }
-                  .receipt-container { width: 300px; border: 1px solid #ddd; padding: 10px; }
-                  h2 { text-align: center; }
+                  .receipt-container { width: 300px; margin: 0 auto; border: 1px solid #ddd; padding: 15px; }
+                  h2, h3, h4, p { text-align: center; margin: 5px 0; }
+                  .text-center { text-align: center; }
                 </style>
               </head>
               <body>
-                ${printContent}
+                <div class="receipt-container">
+                  <h2>${settings.restaurantName || "Restro"}</h2>
+                  ${settings.location ? `<p style="font-size: 12px; color: #64748b;">${settings.location}</p>` : ''}
+                  ${settings.contactNumber ? `<p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Phone: ${settings.contactNumber}</p>` : ''}
+                  <div style="border-top: 1px dashed #cbd5e1; margin-bottom: 15px;"></div>
+                  ${printContent}
+                </div>
               </body>
             </html>
           `);
@@ -34,7 +51,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-3">
-      <div className="bg-white text-slate-800 p-4 rounded-2xl shadow-2xl w-[400px] border border-gray-100 max-h-[90vh] overflow-y-auto flex flex-col">
+      <div className="bg-white text-slate-800 p-4 rounded-[14px] shadow-2xl w-[400px] border border-gray-100 max-h-[90vh] overflow-y-auto flex flex-col">
         {/* Receipt Content for Printing */}
         <div ref={invoiceRef} className="p-2 flex-1">
           {/* Receipt Header */}
@@ -49,8 +66,10 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
             </motion.div>
           </div>
 
-          <h2 className="text-lg font-extrabold text-center text-slate-900 mb-1">Order Receipt</h2>
-          <p className="text-slate-500 text-sm text-center mb-4">Thank you for your order!</p>
+          <h2 className="text-lg font-extrabold text-center text-slate-900 mb-1">{settings.restaurantName || "Order Receipt"}</h2>
+          {settings.location && <p className="text-slate-500 text-xs text-center">{settings.location}</p>}
+          {settings.contactNumber && <p className="text-slate-500 text-xs text-center mb-1">Tel: {settings.contactNumber}</p>}
+          <p className="text-slate-500 text-sm text-center mb-4 mt-2">Thank you for your order!</p>
 
           {/* Order Details */}
           <div className="border-t border-dashed border-gray-200 py-2 text-xs text-slate-600 space-y-1">

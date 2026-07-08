@@ -5,26 +5,17 @@ const MiniCard = ({ title, icon, number, footerNum }) => {
   const isEarnings = title === "Total Earnings";
 
   return (
-    <div className="relative flex-1 bg-card rounded-2xl border border-border p-4 overflow-hidden transition-all duration-200 hover:border-primary/30 hover:shadow-md group">
-      {/* Ambient glow */}
-      <div className={`absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${
-        isEarnings ? "bg-success/15" : "bg-primary/15"
-      }`} />
-
+    <div className="flex-1 bg-card rounded-[14px] border border-border p-5 transition-all duration-200 hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px]">
       {/* Header row */}
-      <div className="flex items-start justify-between mb-4 relative z-10">
+      <div className="flex items-start justify-between mb-4">
         <p className="text-sm font-bold text-muted-foreground">{title}</p>
-        <div className={`flex items-center justify-center h-10 w-10 rounded-xl text-base ${
-          isEarnings
-            ? "bg-success/15 text-success border border-success/20"
-            : "bg-primary/15 text-primary border border-primary/20"
-        }`}>
+        <div className="flex items-center justify-center h-10 w-10 text-xl text-muted-foreground">
           {icon}
         </div>
       </div>
 
       {/* Main metric */}
-      <div className="relative z-10">
+      <div>
         <p className="text-3xl font-extrabold text-foreground tracking-tight">
           {isEarnings ? `PKR ${number}` : number}
         </p>

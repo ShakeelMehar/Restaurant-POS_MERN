@@ -29,18 +29,15 @@ const Greetings = () => {
   };
 
   return (
-    <div className="relative mx-6 mt-6 rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-card to-secondary/50">
-      {/* Ambient glow */}
-      <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-2">
+    <div className="mx-6 mt-6 rounded-[14px] border border-border bg-card p-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         {/* Left: greeting */}
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xl">{hours < 12 ? "☀️" : hours < 17 ? "🌤️" : "🌙"}</span>
             <span className="text-xs font-bold text-primary uppercase tracking-widest">{greeting}</span>
           </div>
-          <h1 className="text-xl font-extrabold text-foreground tracking-tight">
+          <h1 className="text-2xl font-extrabold text-foreground tracking-tight">
             {userData.name || "Team Member"}
           </h1>
           <p className="text-sm text-muted-foreground mt-1 font-medium">
@@ -49,7 +46,7 @@ const Greetings = () => {
         </div>
 
         {/* Right: live clock */}
-        <div className="flex flex-col items-start sm:items-end bg-card/60 rounded-xl border border-border px-4 py-2 backdrop-blur-sm">
+        <div className="flex flex-col items-start sm:items-end rounded-xl px-4 py-2">
           <p className="text-3xl font-extrabold text-foreground tracking-tight font-mono tabular-nums">
             {formatTime(dateTime)}
           </p>

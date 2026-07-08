@@ -34,11 +34,11 @@ const Reports = () => {
       <div className="px-4 py-3 space-y-6">
         {/* Stat Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          <div className="bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all p-4 col-span-1">
+          <div className="bg-card rounded-[14px] border border-border transition-all duration-200 hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] p-6 col-span-1">
             <div className="flex items-start justify-between mb-4">
               <p className="text-sm font-bold text-muted-foreground">Total Sales</p>
-              <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/15 text-primary border border-primary/20">
-                <FiDollarSign size={18} />
+              <div className="flex items-center justify-center h-10 w-10 text-xl text-muted-foreground">
+                <FiDollarSign />
               </div>
             </div>
             <p className="text-3xl font-extrabold text-foreground">PKR {reportData.totalSales.total.toLocaleString()}</p>
@@ -51,7 +51,7 @@ const Reports = () => {
         {/* Breakdown cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {/* Payment Methods */}
-          <div className="bg-card rounded-2xl border border-border p-4">
+          <div className="bg-card rounded-[14px] border border-border p-6">
             <h2 className="text-[15px] font-extrabold text-foreground mb-4">By Payment Method</h2>
             <div className="space-y-3">
               {reportData.paymentMethods.map((pm) => {
@@ -70,7 +70,7 @@ const Reports = () => {
                     </div>
                     <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full"
+                        className="h-full bg-primary rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -82,13 +82,13 @@ const Reports = () => {
           </div>
 
           {/* By Cashier */}
-          <div className="bg-card rounded-2xl border border-border p-4">
+          <div className="bg-card rounded-[14px] border border-border p-6">
             <h2 className="text-[15px] font-extrabold text-foreground mb-4">By Cashier</h2>
             <div className="space-y-3">
               {reportData.cashierSales.map((cs) => (
-                <div key={cs._id} className="flex items-center justify-between p-3 bg-secondary rounded-xl border border-border">
+                <div key={cs._id} className="flex items-center justify-between p-3 rounded-xl border border-transparent hover:bg-[hsl(var(--surface-soft))] transition-all">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 font-extrabold text-sm text-foreground">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[hsl(var(--surface-strong))] font-semibold text-sm text-foreground">
                       {cs.name?.charAt(0) || <FiUser />}
                     </div>
                     <span className="text-sm font-bold text-foreground">{cs.name}</span>

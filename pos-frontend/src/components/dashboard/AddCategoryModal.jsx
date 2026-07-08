@@ -117,7 +117,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
 
         <button
           type="submit"
-          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground"
+          className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white"
         >
           Add Category
         </button>

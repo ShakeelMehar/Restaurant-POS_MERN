@@ -144,7 +144,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="mt-6 w-full rounded-lg bg-primary py-2 text-base font-bold text-primary-foreground disabled:opacity-50"
+          className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white disabled:opacity-50"
         >
           {registerMutation.isPending ? "Creating..." : "Add Staff"}
         </button>

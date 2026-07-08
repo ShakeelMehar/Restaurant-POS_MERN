@@ -38,3 +38,7 @@ export const addCategory = (data) => axiosWrapper.post("/api/category/", data);
 export const getCategories = () => axiosWrapper.get("/api/category");
 export const addProduct = (data) => axiosWrapper.post("/api/product/", data);
 export const getProducts = () => axiosWrapper.get("/api/product");
+
+// Settings Endpoints
+export const getSettings = () => axiosWrapper.get("/api/settings");
+export const updateSettings = (data) => axiosWrapper.put("/api/settings", data);

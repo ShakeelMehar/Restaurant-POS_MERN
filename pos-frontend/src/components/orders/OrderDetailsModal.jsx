@@ -9,7 +9,7 @@ import { formatDateAndTime, getAvatarName } from "../../utils";
 import { setEditingOrder } from "../../redux/slices/customerSlice";
 import { setCart } from "../../redux/slices/cartSlice";
 
-const statusOptions = ["In Progress", "Ready", "Completed"];
+const statusOptions = ["Held", "In Progress", "Ready", "Completed"];
 
 const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   });
 
   const handleStatusChange = (nextStatus) => {
-    if (!order?._id || nextStatus === order.orderStatus) {
+    if (!order?._id || nextStatus === order.orderStatus || order.isOffline) {
       return;
     }
 
@@ -65,6 +65,10 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   };
 
   const handleEditOrder = () => {
+    if (order.isOffline) {
+      enqueueSnackbar("Cannot modify offline orders until they sync.", { variant: "warning" });
+      return;
+    }
     dispatch(setEditingOrder({ order }));
     dispatch(
       setCart(
@@ -99,7 +103,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                 {order.customerDetails?.guests || 0}
               </p>
               <p className="mt-0.5 text-[13px] text-muted">
-                {formatDateAndTime(order.orderDate || order.createdAt)}
+                {formatDateAndTime(order.orderDate || order.createdAt || Date.now())}
               </p>
             </div>
           </div>
@@ -112,20 +116,27 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
         </div>
 
         <div>
-          <p className="mb-3 text-[12px] font-bold uppercase tracking-wide text-muted">
-            Update Status
-          </p>
-          <div className="flex gap-2 bg-[hsl(var(--surface-soft))] p-1 rounded-[9999px]">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[12px] font-bold uppercase tracking-wide text-muted">
+              Update Status
+            </p>
+            {order.isOffline && (
+              <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded font-bold">
+                Waiting for sync...
+              </span>
+            )}
+          </div>
+          <div className="flex gap-2 bg-[hsl(var(--surface-soft))] p-1 rounded-[9999px] overflow-x-auto hide-scrollbar">
             {statusOptions.map((status) => (
               <button
                 key={status}
                 onClick={() => handleStatusChange(status)}
-                disabled={orderUpdateMutation.isPending}
-                className={`flex-1 rounded-[9999px] px-3 py-2 text-[13px] font-semibold transition whitespace-nowrap border ${
+                disabled={orderUpdateMutation.isPending || order.isOffline}
+                className={`flex-1 min-w-[80px] rounded-[9999px] px-3 py-2 text-[13px] font-semibold transition whitespace-nowrap border ${
                   order.orderStatus === status
                     ? "border-foreground bg-foreground text-[hsl(var(--background))]"
                     : "border-transparent bg-transparent text-muted hover:text-foreground hover:bg-[rgba(0,0,0,0.03)]"
-                } disabled:cursor-not-allowed disabled:opacity-70`}
+                } disabled:cursor-not-allowed disabled:opacity-50`}
               >
                 {status}
               </button>

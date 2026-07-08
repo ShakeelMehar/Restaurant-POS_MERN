@@ -1,13 +1,22 @@
 import React from "react";
-import { FaCheckDouble, FaLongArrowAltRight } from "react-icons/fa";
+import { FaCheckDouble, FaLongArrowAltRight, FaWifi } from "react-icons/fa";
 import { FaCircle } from "react-icons/fa";
 import { formatDateAndTime, getAvatarName } from "../../utils/index";
 
 const OrderCard = ({ order, onManage }) => {
+  const orderType = order.orderType || "Dine In";
+  
+  // Handle offline local- timestamps
+  const orderId = String(
+    order.isOffline 
+      ? order._id.split("-")[1] 
+      : Math.floor(new Date(order.orderDate || order.createdAt || Date.now()).getTime())
+  ).slice(-6);
+
   return (
     <button
       onClick={() => onManage(order)}
-      className="mb-4 w-full bg-card rounded-[14px] border border-[hsl(var(--border-strong))] shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px] p-5 text-left transition hover:-translate-y-[1px] hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_4px_12px] flex flex-col gap-4"
+      className="mb-4 w-full bg-card rounded-[14px] border border-[hsl(var(--border-strong))] shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px] p-5 text-left transition hover:-translate-y-[1px] hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_4px_12px] flex flex-col gap-4 relative"
     >
       <div className="flex items-start gap-4">
         {/* Avatar */}
@@ -19,10 +28,15 @@ const OrderCard = ({ order, onManage }) => {
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start gap-2">
             <div>
-              <h1 className="text-foreground text-[16px] font-bold tracking-tight truncate">
-                {order?.customerDetails?.name || "Unknown"}
-              </h1>
-              <p className="text-muted text-[14px] mt-0.5">#{String(Math.floor(new Date(order.orderDate).getTime())).slice(-6)} / Dine in</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-foreground text-[16px] font-bold tracking-tight truncate">
+                  {order?.customerDetails?.name || "Unknown"}
+                </h1>
+                {order.isOffline && (
+                   <span className="text-[10px] bg-amber-500/10 text-amber-500 px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FaWifi size={8}/> Offline</span>
+                )}
+              </div>
+              <p className="text-muted text-[14px] mt-0.5">#{orderId} / {orderType}</p>
               <p className="text-muted text-[14px] mt-0.5">
                 Table <FaLongArrowAltRight className="inline mx-1 text-[10px]" /> {order.table?.tableNo || "N/A"}
               </p>
@@ -37,6 +51,15 @@ const OrderCard = ({ order, onManage }) => {
                   </span>
                   <p className="text-muted text-[13px] mt-1.5 flex items-center gap-1.5">
                     <FaCircle className="text-green-600 text-[8px]" /> Ready to serve
+                  </p>
+                </div>
+              ) : order.orderStatus === "Held" ? (
+                <div className="flex flex-col items-end">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[9999px] border border-[hsl(var(--border-strong))] bg-card text-[13px] font-bold text-foreground">
+                    <FaCircle className="text-amber-500 text-[10px]" /> {order.orderStatus}
+                  </span>
+                  <p className="text-muted text-[13px] mt-1.5 flex items-center gap-1.5">
+                    <FaCircle className="text-amber-500 text-[8px]" /> On Hold
                   </p>
                 </div>
               ) : (

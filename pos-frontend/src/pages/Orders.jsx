@@ -4,10 +4,12 @@ import OrderDetailsModal from "../components/orders/OrderDetailsModal";
 import BackButton from "../components/shared/BackButton";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getOrders } from "../https/index";
+import { db } from "../utils/db";
 import { enqueueSnackbar } from "notistack";
 
 const FILTERS = [
   { id: "all",       label: "All" },
+  { id: "held",      label: "Held" },
   { id: "progress",  label: "In Progress" },
   { id: "ready",     label: "Ready" },
   { id: "completed", label: "Completed" },
@@ -21,28 +23,51 @@ const Orders = () => {
     document.title = "POS | Orders";
   }, []);
 
-  const { data: resData, isError } = useQuery({
+  const { data: allOrders, isError } = useQuery({
     queryKey: ["orders"],
-    queryFn: async () => await getOrders(),
+    queryFn: async () => {
+      let onlineOrders = [];
+      let offlineQueue = [];
+      try {
+        const res = await getOrders();
+        onlineOrders = res.data.data || [];
+      } catch (err) {
+        console.error("Failed to fetch online orders:", err);
+      }
+      try {
+        const pending = await db.ordersQueue.where('status').equals('pending').toArray();
+        offlineQueue = pending.map(record => ({
+          ...record.payload,
+          _id: record.payload._id || `local-${record.id}`,
+          isOffline: true
+        }));
+      } catch (err) {
+        console.error("Failed to fetch offline orders:", err);
+      }
+      // Combine, placing newest offline orders at the top
+      return [...offlineQueue, ...onlineOrders];
+    },
     placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
-    if (isError) enqueueSnackbar("Something went wrong!", { variant: "error" });
+    if (isError) enqueueSnackbar("Something went wrong loading orders!", { variant: "error" });
   }, [isError]);
 
-  const allOrders = resData?.data?.data || [];
+  const ordersList = allOrders || [];
 
   const getCount = (id) => {
-    if (id === "all") return allOrders.length;
-    if (id === "progress") return allOrders.filter((o) => o.orderStatus === "In Progress").length;
-    if (id === "ready") return allOrders.filter((o) => o.orderStatus === "Ready").length;
-    if (id === "completed") return allOrders.filter((o) => o.orderStatus === "Completed").length;
+    if (id === "all") return ordersList.length;
+    if (id === "held") return ordersList.filter((o) => o.orderStatus === "Held").length;
+    if (id === "progress") return ordersList.filter((o) => o.orderStatus === "In Progress").length;
+    if (id === "ready") return ordersList.filter((o) => o.orderStatus === "Ready").length;
+    if (id === "completed") return ordersList.filter((o) => o.orderStatus === "Completed").length;
     return 0;
   };
 
-  const filteredOrders = allOrders.filter((order) => {
+  const filteredOrders = ordersList.filter((order) => {
     if (status === "all") return true;
+    if (status === "held") return order.orderStatus === "Held";
     if (status === "progress") return order.orderStatus === "In Progress";
     if (status === "ready") return order.orderStatus === "Ready";
     if (status === "completed") return order.orderStatus === "Completed";
@@ -57,7 +82,7 @@ const Orders = () => {
           <BackButton />
           <div>
             <h1 className="text-lg font-extrabold text-foreground tracking-tight">Orders</h1>
-            <p className="text-xs text-muted-foreground font-medium">{allOrders.length} total orders</p>
+            <p className="text-xs text-muted-foreground font-medium">{ordersList.length} total orders</p>
           </div>
         </div>
 

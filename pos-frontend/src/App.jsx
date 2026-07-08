@@ -16,6 +16,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Catalog = lazy(() => import("./pages/Catalog.jsx"));
 const Staff = lazy(() => import("./pages/Staff.jsx"));
 const Reports = lazy(() => import("./pages/Reports.jsx"));
+const Settings = lazy(() => import("./pages/Settings.jsx"));
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
@@ -82,6 +83,7 @@ function Layout() {
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/staff" element={<Staff />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<div>Not Found</div>} />
         </Routes>

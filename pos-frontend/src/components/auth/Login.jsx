@@ -24,6 +24,9 @@ const Login = () => {
     mutationFn: (reqData) => login(reqData),
     onSuccess: (res) => {
       const { _id, name, email, phone, role } = res.data.data;
+      if (res.data.accessToken) {
+        localStorage.setItem("accessToken", res.data.accessToken);
+      }
       dispatch(setUser({ _id, name, email, phone, role }));
       navigate("/");
     },

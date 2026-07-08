@@ -53,7 +53,7 @@ const Staff = () => {
         </div>
         <button
           onClick={() => setIsAddStaffModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-blue-500 px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-200 active:scale-95"
+          className="flex items-center gap-2 rounded-[8px] bg-primary px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 active:scale-95"
         >
           <FiUserPlus size={16} /> Add Cashier
         </button>
@@ -64,7 +64,7 @@ const Staff = () => {
         {isLoading ? (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-48 bg-card rounded-2xl border border-border animate-pulse" />
+              <div key={i} className="h-48 bg-card rounded-[14px] border border-border animate-pulse" />
             ))}
           </div>
         ) : staffList.length === 0 ? (
@@ -78,18 +78,16 @@ const Staff = () => {
         ) : (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {staffList.map((member) => (
-              <div key={member._id} className="bg-card rounded-2xl border border-border hover:border-primary/20 hover:shadow-md transition-all duration-200 p-4 group">
+              <div key={member._id} className="bg-card rounded-[14px] border border-border transition-all duration-200 hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] p-6 group">
                 {/* Avatar + role */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 text-foreground font-extrabold text-base">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(var(--surface-strong))] text-foreground font-semibold text-base">
                       {member.name?.charAt(0)?.toUpperCase() || "?"}
                     </div>
                     <div>
-                      <h2 className="text-[15px] font-extrabold text-foreground leading-tight">{member.name}</h2>
-                      <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold border uppercase tracking-wider ${
-                        roleColors[member.role] || "bg-secondary text-muted-foreground border-border"
-                      }`}>
+                      <h2 className="text-[15px] font-bold text-foreground leading-tight">{member.name}</h2>
+                      <span className="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border border-border text-muted-foreground uppercase tracking-wider">
                         {member.role}
                       </span>
                     </div>
@@ -109,10 +107,10 @@ const Staff = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 pt-3 border-t border-border">
+                <div className="flex gap-2 pt-3 mt-2">
                   <button
                     onClick={() => setResetModalData({ isOpen: true, staffId: member._id, staffName: member.name })}
-                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-success/10 border border-success/20 px-3 py-2 text-xs font-bold text-success hover:bg-success/20 transition-all"
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-[8px] bg-white border border-border px-3 py-2 text-xs font-medium text-foreground hover:bg-[hsl(var(--surface-soft))] transition-all"
                   >
                     <FiKey size={12} /> Reset PW
                   </button>
@@ -121,7 +119,7 @@ const Staff = () => {
                       if (window.confirm(`Remove ${member.name}?`)) deleteMutation.mutate(member._id);
                     }}
                     disabled={deleteMutation.isPending}
-                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs font-bold text-destructive hover:bg-destructive/20 transition-all disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-[8px] bg-white border border-border px-3 py-2 text-xs font-medium text-primary hover:bg-[hsl(var(--surface-soft))] transition-all disabled:opacity-50"
                   >
                     <FiTrash2 size={12} /> {deleteMutation.isPending ? "…" : "Remove"}
                   </button>

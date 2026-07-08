@@ -23,6 +23,7 @@ const BottomNav = () => {
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
+      localStorage.removeItem("accessToken");
       dispatch(removeUser());
       setIsLogoutModalOpen(false);
       setIsMoreModalOpen(false);

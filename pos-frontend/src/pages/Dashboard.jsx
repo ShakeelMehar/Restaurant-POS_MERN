@@ -36,7 +36,7 @@ const Dashboard = () => {
       </div>
 
       {/* ── RIGHT COLUMN ── */}
-      <div className="xl:w-[320px] xl:flex-shrink-0 xl:border-l border-border min-w-0">
+      <div className="xl:w-[340px] xl:flex-shrink-0 min-w-0 xl:pr-6">
         <PopularDishes />
       </div>
     </section>

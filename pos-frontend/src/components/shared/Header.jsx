@@ -3,7 +3,7 @@ import { FiSearch, FiBell, FiLogOut } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import logo from "../../assets/images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { logout } from "../../https";
 import { removeUser } from "../../redux/slices/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,9 +22,20 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const activeTab = location.pathname;
 
+  const { data: settingsRes } = useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => {
+      const { getSettings } = await import("../../https");
+      return await getSettings();
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+  const settings = settingsRes?.data?.data || {};
+
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
+      localStorage.removeItem("accessToken");
       dispatch(removeUser());
       setIsLogoutModalOpen(false);
       navigate("/auth");
@@ -42,9 +53,13 @@ const Header = () => {
           onClick={() => navigate("/")}
           className="flex items-center gap-2 cursor-pointer flex-shrink-0"
         >
-          <img src={logo} className="h-6 w-6 object-contain" alt="restro logo" />
-          <span className="text-[18px] font-display text-primary tracking-tight">
-            Restro
+          {settings.logoUrl ? (
+            <img src={settings.logoUrl} className="h-6 object-contain" alt="brand logo" />
+          ) : (
+            <img src={logo} className="h-6 w-6 object-contain" alt="default logo" />
+          )}
+          <span className="text-[18px] font-display text-primary tracking-tight font-bold">
+            {settings.restaurantName || "Restro"}
           </span>
         </div>
 
