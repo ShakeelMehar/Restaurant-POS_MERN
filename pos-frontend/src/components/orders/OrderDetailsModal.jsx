@@ -85,46 +85,46 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Manage Order">
       <div className="space-y-5">
-        <div className="flex items-start justify-between gap-2 rounded-xl bg-popover p-3">
-          <div className="flex items-center gap-2">
-            <div className="rounded-xl bg-primary text-primary-foreground px-3 py-2 text-lg font-bold text-white">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-4">
+            <div className="flex-shrink-0 h-12 w-12 rounded-[9999px] bg-foreground text-[hsl(var(--background))] flex items-center justify-center text-[18px] font-bold">
               {getAvatarName(order.customerDetails?.name) || "CN"}
             </div>
             <div>
-              <h3 className="text-base font-semibold text-foreground">
+              <h3 className="text-[16px] font-bold text-foreground">
                 {order.customerDetails?.name || "Customer"}
               </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[14px] text-muted mt-0.5">
                 Table {order.table?.tableNo || "N/A"} | Guests{" "}
                 {order.customerDetails?.guests || 0}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-0.5 text-[13px] text-muted">
                 {formatDateAndTime(order.orderDate || order.createdAt)}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Total</p>
-            <p className="text-lg font-bold text-foreground">
+            <p className="text-[14px] text-muted">Total</p>
+            <p className="text-[18px] font-bold text-foreground">
               PKR {order.bills?.totalWithTax?.toFixed(2) || "0.00"}
             </p>
           </div>
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="mb-3 text-[12px] font-bold uppercase tracking-wide text-muted">
             Update Status
           </p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="flex gap-2 bg-[hsl(var(--surface-soft))] p-1 rounded-[9999px]">
             {statusOptions.map((status) => (
               <button
                 key={status}
                 onClick={() => handleStatusChange(status)}
                 disabled={orderUpdateMutation.isPending}
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-[9999px] px-3 py-2 text-[13px] font-semibold transition whitespace-nowrap border ${
                   order.orderStatus === status
-                    ? "bg-primary-blue text-white"
-                    : "bg-background text-foreground hover:bg-secondary"
+                    ? "border-foreground bg-foreground text-[hsl(var(--background))]"
+                    : "border-transparent bg-transparent text-muted hover:text-foreground hover:bg-[rgba(0,0,0,0.03)]"
                 } disabled:cursor-not-allowed disabled:opacity-70`}
               >
                 {status}
@@ -135,27 +135,27 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
 
         <div>
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-[12px] font-bold uppercase tracking-wide text-muted">
               Order Items
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[13px] text-muted">
               {(order.items || []).length} items
             </p>
           </div>
-          <div className="max-h-72 space-y-3 overflow-y-auto pr-1 scrollbar-hide">
+          <div className="max-h-72 space-y-2 overflow-y-auto pr-1 hide-scrollbar">
             {(order.items || []).map((item, index) => (
               <div
                 key={item.id || `${item.name}-${index}`}
-                className="rounded-xl bg-popover px-3 py-2"
+                className="rounded-[12px] bg-card border border-[hsl(var(--border-strong))] px-4 py-3 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px]"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-foreground">{item.name}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="font-bold text-[14px] text-foreground">{item.name}</p>
+                    <p className="mt-1 text-[13px] text-muted">
                       Qty {item.quantity} | PKR {item.pricePerQuantity} each
                     </p>
                   </div>
-                  <p className="font-semibold text-primary-blue">
+                  <p className="font-bold text-[14px] text-foreground">
                     PKR {item.price}
                   </p>
                 </div>
@@ -164,16 +164,16 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-3 pt-2">
           <button
             onClick={onClose}
-            className="w-full rounded-lg bg-background px-3 py-2 font-semibold text-foreground"
+            className="flex-1 btn btn-secondary"
           >
             Close
           </button>
           <button
             onClick={handleEditOrder}
-            className="w-full rounded-lg bg-primary-blue px-3 py-2 font-semibold text-white"
+            className="flex-1 btn btn-primary"
           >
             Modify In Menu
           </button>

@@ -32,3 +32,9 @@ export const updateOrderStatus = ({ orderId, orderStatus }) =>
   axiosWrapper.put(`/api/order/${orderId}`, { orderStatus });
 export const updateOrderById = (orderId, orderData) =>
   axiosWrapper.put(`/api/order/${orderId}`, orderData);
+
+// Menu Catalog Endpoints
+export const addCategory = (data) => axiosWrapper.post("/api/category/", data);
+export const getCategories = () => axiosWrapper.get("/api/category");
+export const addProduct = (data) => axiosWrapper.post("/api/product/", data);
+export const getProducts = () => axiosWrapper.get("/api/product");

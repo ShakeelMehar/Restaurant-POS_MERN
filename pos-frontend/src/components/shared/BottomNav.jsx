@@ -35,21 +35,12 @@ const BottomNav = () => {
     return (
       <button
         onClick={onClick || (() => navigate(path))}
-        className={`flex flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 flex-1 transition-all duration-200 ${
-          active
-            ? "text-primary"
-            : "text-muted-foreground hover:text-foreground"
+        className={`flex flex-col items-center justify-center gap-1 px-3 py-2 flex-1 transition-colors ${
+          active ? "text-primary" : "text-muted hover:text-foreground"
         }`}
       >
-        <div className={`relative flex items-center justify-center h-7 w-7 rounded-xl transition-all duration-200 ${
-          active ? "bg-primary/15" : "bg-transparent"
-        }`}>
-          <Icon size={17} />
-          {active && (
-            <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
-          )}
-        </div>
-        <span className={`text-[10px] font-bold leading-none ${active ? "text-primary" : ""}`}>
+        <Icon size={24} />
+        <span className={`text-[11px] font-medium leading-none ${active ? "text-primary font-semibold" : ""}`}>
           {label}
         </span>
       </button>
@@ -57,8 +48,8 @@ const BottomNav = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/90 backdrop-blur-md border-t border-border">
-      <div className="flex items-center justify-around px-2 py-2 pb-safe">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border md:hidden">
+      <div className="flex items-center justify-around px-2 py-3 pb-safe">
         <NavBtn path="/menu" icon={FiHome} label="POS" />
         <NavBtn path="/orders" icon={FiList} label="Orders" />
 
@@ -67,7 +58,7 @@ const BottomNav = () => {
           <button
             disabled={isActive("/menu")}
             onClick={() => navigate("/menu")}
-            className="relative flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-gradient-to-br from-primary to-blue-500 shadow-lg shadow-primary/40 text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-glow active:scale-95 animate-pulse-ring"
+            className="flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-primary text-primary-foreground shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
           >
             <BiSolidDish size={28} />
           </button>
@@ -87,17 +78,17 @@ const BottomNav = () => {
           {["Admin", "Super Admin"].includes(userData.role) && (
             <button
               onClick={() => { setIsMoreModalOpen(false); navigate("/dashboard"); }}
-              className="w-full flex items-center gap-2 rounded-xl bg-secondary hover:bg-muted border border-border px-3 py-2.5 text-left font-semibold text-foreground transition-all hover:border-primary/30"
+              className="w-full flex items-center gap-3 rounded-lg hover:bg-[hsl(var(--surface-soft))] px-4 py-3 text-left font-medium text-foreground transition-colors"
             >
-              <FiGrid size={18} className="text-primary" />
+              <FiGrid size={20} className="text-foreground" />
               Open Dashboard
             </button>
           )}
           <button
             onClick={() => { setIsMoreModalOpen(false); setIsLogoutModalOpen(true); }}
-            className="w-full flex items-center gap-2 rounded-xl bg-secondary hover:bg-destructive/10 border border-border hover:border-destructive/30 px-3 py-2.5 text-left font-semibold text-foreground transition-all"
+            className="w-full flex items-center gap-3 rounded-lg hover:bg-[hsl(var(--surface-soft))] px-4 py-3 text-left font-medium text-error transition-colors"
           >
-            <FiMoreHorizontal size={18} className="text-muted-foreground" />
+            <FiLogOut size={20} className="text-error" />
             Logout
           </button>
         </div>

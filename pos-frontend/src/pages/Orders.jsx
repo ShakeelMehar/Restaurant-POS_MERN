@@ -70,15 +70,15 @@ const Orders = () => {
               <button
                 key={id}
                 onClick={() => setStatus(id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-[9999px] text-[13px] font-semibold transition-all duration-200 border ${
                   isActive
-                    ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
-                    : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+                    ? "border-foreground bg-foreground text-[hsl(var(--background))]"
+                    : "border-[hsl(var(--border-strong))] bg-card text-foreground hover:border-foreground"
                 }`}
               >
                 {label}
-                <span className={`text-xs rounded-full px-1.5 py-0.5 font-extrabold ${
-                  isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted text-muted-foreground"
+                <span className={`text-[11px] rounded-full px-2 py-0.5 font-bold ${
+                  isActive ? "bg-[hsl(var(--background))] text-foreground" : "bg-[hsl(var(--surface-strong))] text-foreground"
                 }`}>
                   {count}
                 </span>

@@ -3,10 +3,10 @@ const Category = require("../models/categoryModel");
 
 const createCategory = async (req, res, next) => {
     try {
-        const { name, order } = req.body;
+        const { name, bgColor, icon, order } = req.body;
         if (!name) return next(createHttpError(400, "Category name is required"));
 
-        const category = await Category.create({ name, order });
+        const category = await Category.create({ name, bgColor, icon, order });
         res.status(201).json({ success: true, data: category });
     } catch (error) {
         next(error);

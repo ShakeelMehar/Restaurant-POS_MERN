@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { enqueueSnackbar } from "notistack";
+import { useMutation } from "@tanstack/react-query";
 import Modal from "../shared/Modal";
 import { addCategory } from "../../redux/slices/menuSlice";
 
@@ -19,6 +20,31 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
     setCategoryData((prev) => ({ ...prev, [name]: value }));
   };
 
+    const mutation = useMutation({
+      mutationFn: async (data) => {
+        const { addCategory: apiAddCategory } = await import("../../https/index");
+        return apiAddCategory(data);
+      },
+      onSuccess: (res) => {
+        const backendCategory = res.data.data;
+        // Map backend to frontend schema for Redux
+        const mappedCat = {
+            id: backendCategory._id,
+            name: backendCategory.name,
+            bgColor: backendCategory.bgColor,
+            icon: backendCategory.icon,
+            items: []
+        };
+        dispatch(addCategory(mappedCat));
+        enqueueSnackbar("Category added.", { variant: "success" });
+        setCategoryData(initialCategoryData);
+        onClose();
+      },
+      onError: (err) => {
+        enqueueSnackbar(err?.response?.data?.message || "Failed to add category", { variant: "error" });
+      }
+    });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = categoryData.name.trim();
@@ -28,10 +54,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    dispatch(addCategory({ ...categoryData, name }));
-    enqueueSnackbar("Category added.", { variant: "success" });
-    setCategoryData(initialCategoryData);
-    onClose();
+    mutation.mutate({ ...categoryData, name });
   };
 
   const handleClose = () => {

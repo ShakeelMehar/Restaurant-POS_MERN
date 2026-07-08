@@ -54,6 +54,7 @@ const Bill = () => {
       guests: customerData.guests,
     },
     orderStatus: "In Progress",
+    orderType: customerData.orderType,
     bills: { total, tax, totalWithTax },
     items: cartData,
     table: customerData.table?.tableId,
@@ -63,11 +64,30 @@ const Bill = () => {
 
   const handleOrderSaved = (data, opts = { showInvoice: false }) => {
     setOrderInfo(data);
-    queryClient.invalidateQueries({ queryKey: ["orders"] });
-    const tableData = { status: "Booked", orderId: data._id, tableId: customerData.table?.tableId || data.table };
-    setTimeout(() => tableUpdateMutation.mutate({ tableData, redirectToOrders: !opts.showInvoice }), 500);
-    enqueueSnackbar(opts.showInvoice ? "Order Placed!" : "Order updated!", { variant: "success" });
+    queryClient.invalidateQueries({ queryKey: ["orders", "tables"] });
+    
+    // Table update is now handled on the backend for online syncs. 
+    // We clear the frontend cart.
+    dispatch(removeCustomer());
+    dispatch(removeAllItems());
+    
+    if (!opts.showInvoice) {
+      navigate("/orders");
+    }
+    
+    enqueueSnackbar(opts.showInvoice ? "Order Placed!" : "Order saved!", { variant: "success" });
     if (opts.showInvoice) setShowInvoice(true);
+  };
+
+  const handleHoldOrder = () => {
+    if (cartData.length === 0) { enqueueSnackbar("Add at least one item.", { variant: "warning" }); return; }
+    
+    // For hold orders, payment method isn't strictly required yet, but we'll default to Cash for the local queue
+    orderMutation.mutate(buildOrderData({ orderStatus: "Held", paymentMethod: paymentMethod || "Cash" }), {
+      onSuccess: () => {
+        // handleOrderSaved will be called by orderMutation on success
+      }
+    });
   };
 
   const handlePlaceOrder = async () => {
@@ -96,7 +116,7 @@ const Bill = () => {
             setTimeout(() => orderMutation.mutate(buildOrderData({ paymentData: { razorpay_order_id: response.razorpay_order_id, razorpay_payment_id: response.razorpay_payment_id } })), 1500);
           },
           prefill: { name: customerData.customerName, contact: customerData.customerPhone },
-          theme: { color: "#2563EB" },
+          theme: { color: "#ff385c" },
         };
         new window.Razorpay(options).open();
       } catch { enqueueSnackbar("Payment Failed!", { variant: "error" }); }
@@ -131,11 +151,10 @@ const Bill = () => {
         throw error;
       }
     }, 
-    onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: true }),
+    onSuccess: (r, variables) => handleOrderSaved(r.data.data, { showInvoice: variables.orderStatus !== "Held" }),
     networkMode: 'always'
   });
   const updateExistingOrderMutation = useMutation({ mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData), onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: false }), onError: (e) => enqueueSnackbar(e?.response?.data?.message || "Update failed", { variant: "error" }) });
-  const tableUpdateMutation = useMutation({ mutationFn: ({ tableData }) => updateTable(tableData), onSuccess: (_, vars) => { queryClient.invalidateQueries({ queryKey: ["tables"] }); dispatch(removeCustomer()); dispatch(removeAllItems()); if (vars.redirectToOrders) navigate("/orders"); } });
 
   const paymentMethods = [
     { id: "Cash",   label: "Cash",   icon: FiDollarSign },
@@ -153,10 +172,10 @@ const Bill = () => {
           { label: "Total With Tax", bold: true,   value: `PKR ${totalWithTax.toFixed(2)}` },
         ].map(({ label, value, bold }) => (
           <div key={label} className="flex items-center justify-between">
-            <p className={`text-xs font-semibold ${bold ? "text-foreground" : "text-muted-foreground"}`}>
+            <p className={`text-[13px] ${bold ? "text-foreground font-semibold" : "text-muted"}`}>
               {label}
             </p>
-            <p className={`font-extrabold ${bold ? "text-primary text-sm" : "text-foreground text-sm"}`}>
+            <p className={`text-[14px] ${bold ? "text-foreground font-bold" : "text-foreground font-medium"}`}>
               {value}
             </p>
           </div>
@@ -164,19 +183,19 @@ const Bill = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="px-4 pt-4 pb-5 flex flex-col gap-2">
+      <div className="px-4 pt-2 pb-4 flex flex-col gap-2">
         <div className="flex gap-2">
           <button
             onClick={() => dispatch(removeAllItems())}
-            className="flex-1 flex items-center justify-center gap-2 bg-secondary hover:bg-muted border border-border text-foreground text-sm font-bold rounded-xl py-2 transition-all duration-200"
+            className="flex-1 btn btn-secondary"
           >
-            <FiPlus size={14} className="text-muted-foreground" /> New Order
+            <FiPlus size={16} /> New
           </button>
           <button
             onClick={() => window.print()}
-            className="flex-1 flex items-center justify-center gap-2 bg-secondary hover:bg-muted border border-border text-foreground text-sm font-bold rounded-xl py-2 transition-all duration-200"
+            className="flex-1 btn btn-secondary"
           >
-            <FiPrinter size={14} className="text-muted-foreground" /> Print
+            <FiPrinter size={16} /> Print
           </button>
         </div>
         <button
@@ -184,10 +203,17 @@ const Bill = () => {
             if (cartData.length === 0) { enqueueSnackbar("Add at least one item.", { variant: "warning" }); return; }
             setShowCheckoutModal(true);
           }}
-          className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary text-primary-foreground font-extrabold text-sm rounded-xl py-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98]"
+          className="btn btn-primary w-full shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px]"
         >
           <FiCheckCircle size={18} />
           {isEditingOrder ? "Update Order" : "Proceed to Checkout"}
+        </button>
+        <button
+          onClick={handleHoldOrder}
+          disabled={orderMutation.isPending || isEditingOrder}
+          className="btn btn-surface w-full"
+        >
+          Hold Order
         </button>
       </div>
 
@@ -195,56 +221,56 @@ const Bill = () => {
 
       {/* Checkout Modal */}
       {showCheckoutModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card w-full sm:max-w-[480px] sm:rounded-2xl rounded-t-3xl border border-border shadow-2xl p-4 animate-slide-up">
+        <div className="modal-overlay">
+          <div className="modal-content bg-card w-full sm:max-w-[480px] rounded-[14px] p-6 shadow-xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
-              <h2 className="text-lg font-extrabold text-foreground">Checkout Review</h2>
+              <h2 className="text-[20px] font-bold text-foreground">Checkout Review</h2>
               <button
                 onClick={() => setShowCheckoutModal(false)}
-                className="flex items-center justify-center h-8 w-8 rounded-lg bg-secondary border border-border text-muted-foreground hover:text-foreground transition-all"
+                className="flex items-center justify-center h-8 w-8 rounded-full bg-[hsl(var(--surface-soft))] text-foreground hover:bg-[hsl(var(--border))]"
               >
-                <FiX size={16} />
+                <FiX size={18} />
               </button>
             </div>
 
             {/* Order Summary */}
-            <div className="bg-secondary/50 rounded-xl p-3 mb-5 space-y-2 border border-border">
+            <div className="bg-[hsl(var(--surface-soft))] rounded-[14px] p-4 mb-6">
               {[
                 { label: "Total Items",  value: cartData.length },
                 { label: "Subtotal",     value: `PKR ${total.toFixed(2)}` },
                 { label: "Tax (5.25%)", value: `PKR ${tax.toFixed(2)}` },
               ].map(({ label, value }) => (
-                <div key={label} className="flex justify-between text-sm">
-                  <span className="text-muted-foreground font-medium">{label}</span>
-                  <span className="text-foreground font-bold">{value}</span>
+                <div key={label} className="flex justify-between text-[15px] mb-2">
+                  <span className="text-muted">{label}</span>
+                  <span className="text-foreground font-medium">{value}</span>
                 </div>
               ))}
-              <div className="flex justify-between text-[15px] font-extrabold pt-2 border-t border-border mt-2">
+              <div className="flex justify-between text-[16px] font-bold pt-3 border-t border-border mt-3">
                 <span className="text-foreground">Grand Total</span>
                 <span className="text-primary">PKR {totalWithTax.toFixed(2)}</span>
               </div>
             </div>
 
             {/* Payment Methods */}
-            <div className="mb-6">
-              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">
+            <div className="mb-8">
+              <h3 className="text-[14px] font-semibold text-foreground mb-4">
                 Payment Method
               </h3>
-              <div className="flex gap-2.5">
+              <div className="flex gap-3">
                 {paymentMethods.map(({ id, label, icon: Icon }) => {
                   const isSelected = paymentMethod === id;
                   return (
                     <button
                       key={id}
                       onClick={() => setPaymentMethod(id)}
-                      className={`flex-1 py-2 flex flex-col items-center justify-center gap-2 rounded-xl font-bold text-sm border-2 transition-all duration-200 ${
+                      className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-[8px] font-medium text-[15px] transition-colors border ${
                         isSelected
-                          ? "bg-primary/10 border-primary text-primary shadow-md shadow-primary/20"
-                          : "bg-secondary border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                          ? "border-foreground bg-foreground text-[hsl(var(--background))]"
+                          : "border-border bg-card text-foreground hover:border-foreground"
                       }`}
                     >
-                      <Icon size={18} />
+                      <Icon size={20} />
                       {label}
                     </button>
                   );
@@ -253,12 +279,12 @@ const Bill = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => setShowCheckoutModal(false)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-secondary hover:bg-muted border border-border text-foreground font-bold rounded-xl transition-all"
+                className="btn btn-secondary flex-1"
               >
-                <FiX size={16} /> Cancel
+                Cancel
               </button>
               <button
                 onClick={() => {
@@ -267,7 +293,7 @@ const Bill = () => {
                   handlePlaceOrder();
                 }}
                 disabled={!paymentMethod || orderMutation.isPending || updateExistingOrderMutation.isPending}
-                className="flex-[2] flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary text-primary-foreground font-extrabold rounded-xl transition-all shadow-md shadow-primary/30 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary flex-[2]"
               >
                 {orderMutation.isPending || updateExistingOrderMutation.isPending ? (
                   <><FiLoader size={18} className="animate-spin" /> Processing…</>

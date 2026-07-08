@@ -25,15 +25,18 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
+        type: String,
         required: true
     },
-    basePrice: {
+    description: {
+        type: String,
+        default: ""
+    },
+    price: {
         type: Number,
         required: true
     },
-    variantGroups: [variantGroupSchema]
+    optionGroups: [variantGroupSchema]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);

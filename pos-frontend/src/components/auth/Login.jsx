@@ -34,55 +34,37 @@ const Login = () => {
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email */}
-        <div>
-          <label className="form-label">Email Address</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FiMail size={16} className="text-muted-foreground" />
-            </div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="name@restaurant.com"
-              required
-              className="input-base !pl-11"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-0">
+        <div className="border border-[hsl(var(--border-strong))] rounded-[8px] overflow-hidden">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email address"
+            required
+            className="w-full bg-card px-4 py-4 text-[15px] text-foreground placeholder:text-muted outline-none border-b border-[hsl(var(--border-strong))] focus:bg-[hsl(var(--surface-soft))] transition-colors"
+          />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+            className="w-full bg-card px-4 py-4 text-[15px] text-foreground placeholder:text-muted outline-none focus:bg-[hsl(var(--surface-soft))] transition-colors"
+          />
         </div>
 
-        {/* Password */}
-        <div>
-          <label className="form-label">Password</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FiLock size={16} className="text-muted-foreground" />
-            </div>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-              className="input-base !pl-11"
-            />
-          </div>
-        </div>
-
-        {/* Submit */}
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary text-primary-foreground font-bold rounded-xl py-2.5 mt-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full btn btn-primary py-4 text-[16px] font-bold mt-8 h-auto"
         >
           {loginMutation.isPending ? (
             <><FiLoader size={18} className="animate-spin" /> Authenticating…</>
           ) : (
-            <>Sign Into POS <FiArrowRight size={18} /></>
+            "Continue"
           )}
         </button>
       </form>

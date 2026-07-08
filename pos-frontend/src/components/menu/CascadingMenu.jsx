@@ -85,19 +85,19 @@ const CascadingMenu = ({ categories, onAdd }) => {
   if (categories.length === 0) return null;
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden bg-background">
       {/* ROW 1: TOP CATEGORIES (Fixed Height) */}
-      <div className="px-4 py-2 flex gap-2 overflow-x-auto hide-scrollbar flex-shrink-0 border-b border-border bg-background z-10">
+      <div className="px-4 py-3 flex gap-2 overflow-x-auto hide-scrollbar flex-shrink-0 z-10 border-b border-border bg-card">
         {categories.map((c) => {
           const isActive = selectedCategoryId === c.id;
           return (
             <button
               key={c.id}
               onClick={() => handleCategoryClick(c.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap flex-shrink-0 transition-all duration-200 ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-[9999px] text-[13px] font-semibold whitespace-nowrap flex-shrink-0 transition-colors ${
                 isActive
-                  ? "bg-gradient-to-r from-primary to-blue-500 text-primary-foreground shadow-md shadow-primary/30"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-card/80"
+                  ? "bg-foreground text-[hsl(var(--background))]"
+                  : "bg-card border border-[hsl(var(--border-strong))] text-foreground hover:border-foreground"
               }`}
             >
               <span>{c.icon}</span>
@@ -108,36 +108,36 @@ const CascadingMenu = ({ categories, onAdd }) => {
       </div>
 
       {/* ITEMS GRID */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden bg-background">
         {selectedCategory && (
           <div className="px-4 pt-4 pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {categoryVariants.length > 0 ? (
                 categoryVariants.map((variant, index) => (
                   <div
                     key={`${variant.id}-${index}`}
                     onClick={() => handleVariantClick(variant)}
-                    className="group bg-card rounded-xl border border-border cursor-pointer transition-all duration-200 flex flex-col justify-between p-3 min-h-[90px] hover:border-primary/50 hover:shadow-md hover:bg-card/80"
+                    className="card-base card-hover flex flex-col justify-between p-3 min-h-[100px] cursor-pointer active:scale-[0.98] transition-transform duration-150 border border-[hsl(var(--border-strong))] rounded-[14px]"
                   >
                     <div>
-                      <h3 className="text-[14px] font-bold leading-tight mb-1 text-foreground group-hover:text-primary transition-colors">
+                      <h3 className="text-[13px] font-semibold leading-snug mb-1 text-foreground">
                         {variant.name}
                       </h3>
                     </div>
                     <div className="flex items-center justify-between mt-auto pt-2">
-                      <p className="text-primary text-[15px] font-extrabold">
+                      <p className="text-foreground text-[13px] font-medium">
                         PKR {variant.price}
                       </p>
-                      <div className="flex items-center justify-center h-7 w-7 rounded-full border bg-secondary border-border text-muted-foreground transition-all duration-200 group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground">
+                      <div className="flex items-center justify-center h-7 w-7 rounded-full bg-[hsl(var(--surface-strong))] text-foreground hover:bg-foreground hover:text-background transition-colors shadow-sm">
                         <FiPlus size={14} />
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="col-span-full rounded-xl bg-card border border-dashed border-border px-4 py-8 text-center">
-                  <span className="text-3xl mb-2 block">🫙</span>
-                  <p className="text-sm font-semibold text-muted-foreground">No dishes in this category yet.</p>
+                <div className="col-span-full rounded-[14px] bg-card border border-border px-6 py-12 text-center">
+                  <span className="text-4xl mb-3 block">🫙</span>
+                  <p className="text-[16px] font-medium text-foreground">No dishes in this category yet.</p>
                 </div>
               )}
             </div>

@@ -3,12 +3,12 @@ const Product = require("../models/productModel");
 
 const createProduct = async (req, res, next) => {
     try {
-        const { name, category, basePrice, variantGroups } = req.body;
-        if (!name || !category || basePrice == null) {
-            return next(createHttpError(400, "Name, category, and basePrice are required"));
+        const { name, category, description, price, optionGroups } = req.body;
+        if (!name || !category || price == null) {
+            return next(createHttpError(400, "Name, category, and price are required"));
         }
 
-        const product = await Product.create({ name, category, basePrice, variantGroups });
+        const product = await Product.create({ name, category, description, price, optionGroups });
         res.status(201).json({ success: true, data: product });
     } catch (error) {
         next(error);

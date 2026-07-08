@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItems, removeAllItems } from "../../redux/slices/cartSlice";
+import { setOrderType } from "../../redux/slices/customerSlice";
 import TabGroup from "../shared/TabGroup";
 
 const CartInfo = () => {
   const cartData = useSelector((state) => state.cart);
+  const orderType = useSelector((state) => state.customer.orderType);
   const scrollRef = useRef();
   const dispatch = useDispatch();
-  const [orderType, setOrderType] = useState("Dine In");
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -29,13 +30,13 @@ const CartInfo = () => {
   };
 
   return (
-    <div className="px-4 py-3 h-full flex flex-col bg-background">
+    <div className="px-4 py-4 h-full flex flex-col bg-card">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-lg font-extrabold text-foreground tracking-tight">Current Order</h2>
+          <h2 className="text-[16px] font-bold text-foreground tracking-tight">Current Order</h2>
           {cartData.length > 0 && (
-            <p className="text-xs text-muted-foreground mt-0.5 font-medium">
+            <p className="text-[12px] text-muted mt-0.5 font-medium">
               {cartData.length} {cartData.length === 1 ? "item" : "items"} added
             </p>
           )}
@@ -43,14 +44,14 @@ const CartInfo = () => {
         <button
           onClick={() => dispatch(removeAllItems())}
           title="Clear Order"
-          className="flex items-center justify-center h-8 w-8 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:border-red-500/40 transition-all duration-200"
+          className="flex items-center justify-center h-9 w-9 rounded-full bg-[hsl(var(--surface-soft))] text-muted hover:text-error hover:bg-[hsl(var(--border))] transition-colors"
         >
-          <RiDeleteBin2Fill size={15} />
+          <RiDeleteBin2Fill size={16} />
         </button>
       </div>
 
       {/* Order Type Tabs */}
-      <div className="mb-5">
+      <div className="mb-4">
         <TabGroup
           tabs={[
             { id: "Dine In",  label: "Dine In" },
@@ -58,18 +59,18 @@ const CartInfo = () => {
             { id: "Delivery", label: "Delivery" },
           ]}
           activeTab={orderType}
-          onTabChange={setOrderType}
+          onTabChange={(tab) => dispatch(setOrderType(tab))}
           fullWidth
         />
       </div>
 
       {/* Cart Items */}
-      <div className="flex-1 overflow-y-auto hide-scrollbar space-y-2.5 min-h-0" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto hide-scrollbar space-y-2 min-h-0" ref={scrollRef}>
         {cartData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full gap-2 py-10">
-            <span className="text-5xl">🛒</span>
-            <p className="text-sm font-semibold text-muted-foreground">Your cart is empty</p>
-            <p className="text-xs text-muted-foreground/70">Add items from the menu to get started</p>
+          <div className="flex flex-col items-center justify-center h-full gap-3 py-12">
+            <span className="text-4xl">🛒</span>
+            <p className="text-[15px] font-semibold text-muted">Your cart is empty</p>
+            <p className="text-[13px] text-[hsl(var(--muted-soft))]">Add items from the menu to get started</p>
           </div>
         ) : (
           cartData.map((item) => {
@@ -84,37 +85,34 @@ const CartInfo = () => {
             return (
               <div
                 key={item.id}
-                className="flex items-center gap-2 bg-card rounded-2xl px-3 py-2.5 border border-border hover:border-primary/20 transition-all duration-200 shadow-sm"
+                className="flex items-start justify-between gap-3 bg-card rounded-[14px] px-3 py-3 border border-[hsl(var(--border-strong))] shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px] transition-colors"
               >
-                {/* Emoji avatar */}
-                <div className="flex-shrink-0 h-12 w-12 bg-secondary rounded-xl flex items-center justify-center border border-border text-lg">
-                  🍲
+                {/* Text (Left) */}
+                <div className="flex-1 min-w-0 py-0.5 flex flex-col justify-between">
+                  <p className="text-foreground font-bold text-[14px] leading-snug break-words">{itemName}</p>
+                  <p className="text-muted text-[13px] mt-1 leading-snug">{variantName}</p>
                 </div>
 
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-foreground font-bold text-sm leading-tight truncate">{itemName}</p>
-                  <p className="text-muted-foreground text-xs mt-0.5">{variantName}</p>
-                  <p className="text-primary text-sm font-extrabold mt-1">Rs. {item.pricePerQuantity}</p>
-                </div>
-
-                {/* Qty stepper */}
-                <div className="flex flex-col items-center bg-secondary rounded-full border border-border overflow-hidden flex-shrink-0">
-                  <button
-                    onClick={() => handleIncrement(item)}
-                    className="px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  >
-                    <FiPlus size={11} />
-                  </button>
-                  <span className="text-foreground font-extrabold text-[13px] px-1 leading-none py-0.5 min-w-[20px] text-center">
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() => handleDecrement(item)}
-                    className="px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  >
-                    <FiMinus size={11} />
-                  </button>
+                {/* Price & Stepper (Right) */}
+                <div className="flex flex-col items-end justify-between gap-3 flex-shrink-0 py-0.5">
+                  <p className="text-foreground text-[14px] font-bold">PKR {item.price}</p>
+                  <div className="flex items-center bg-card rounded-[9999px] border border-[hsl(var(--border-strong))] overflow-hidden shadow-[rgba(0,0,0,0.02)_0_0_0_1px]">
+                    <button
+                      onClick={() => handleDecrement(item)}
+                      className="px-2.5 py-1 text-muted hover:text-foreground hover:bg-[hsl(var(--surface-soft))] transition-colors"
+                    >
+                      <FiMinus size={14} />
+                    </button>
+                    <span className="text-foreground font-bold text-[14px] px-1 min-w-[24px] text-center">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => handleIncrement(item)}
+                      className="px-2.5 py-1 text-muted hover:text-foreground hover:bg-[hsl(var(--surface-soft))] transition-colors"
+                    >
+                      <FiPlus size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
             );

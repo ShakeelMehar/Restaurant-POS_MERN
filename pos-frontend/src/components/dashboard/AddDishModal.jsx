@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { enqueueSnackbar } from "notistack";
+import { useMutation } from "@tanstack/react-query";
 import Modal from "../shared/Modal";
 import {
   addDish,
@@ -33,6 +34,33 @@ const AddDishModal = ({ isOpen, onClose }) => {
     setDishData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const mutation = useMutation({
+    mutationFn: async (data) => {
+      const { addProduct: apiAddProduct } = await import("../../https/index");
+      return apiAddProduct(data);
+    },
+    onSuccess: (res) => {
+      const backendProduct = res.data.data;
+      const mappedDish = {
+          id: backendProduct._id,
+          categoryId: dishData.categoryId,
+          name: backendProduct.name,
+          price: backendProduct.price,
+          category: backendProduct.category,
+      };
+      dispatch(addDish(mappedDish));
+      enqueueSnackbar("Dish added.", { variant: "success" });
+      setDishData({
+        ...initialDishData,
+        categoryId: categories[0]?.id || "",
+      });
+      onClose();
+    },
+    onError: (err) => {
+      enqueueSnackbar(err?.response?.data?.message || "Failed to add dish", { variant: "error" });
+    }
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = dishData.name.trim();
@@ -42,20 +70,13 @@ const AddDishModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    dispatch(
-      addDish({
-        ...dishData,
-        name,
-        category: dishData.category.trim(),
-        price: Number(dishData.price),
-      })
-    );
-    enqueueSnackbar("Dish added.", { variant: "success" });
-    setDishData({
-      ...initialDishData,
-      categoryId: categories[0]?.id || "",
+    mutation.mutate({
+      name,
+      category: dishData.category.trim() || categories.find((c) => c.id === dishData.categoryId)?.name || "Uncategorized",
+      price: Number(dishData.price),
+      description: "",
+      optionGroups: []
     });
-    onClose();
   };
 
   const handleClose = () => {

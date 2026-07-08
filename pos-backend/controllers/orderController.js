@@ -4,10 +4,15 @@ const { default: mongoose } = require("mongoose");
 
 const addOrder = async (req, res, next) => {
   try {
-
-
     const order = new Order(req.body);
     await order.save();
+    
+    // Automatically book the table if present
+    if (order.table) {
+      const Table = require("../models/tableModel");
+      await Table.findByIdAndUpdate(order.table, { status: "Booked", currentOrder: order._id });
+    }
+
     res
       .status(201)
       .json({ success: true, message: "Order created!", data: order });

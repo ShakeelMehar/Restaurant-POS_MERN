@@ -6,6 +6,14 @@ const categorySchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    bgColor: {
+        type: String,
+        default: "#5b45b0"
+    },
+    icon: {
+        type: String,
+        default: "+"
+    },
     order: {
         type: Number,
         default: 0

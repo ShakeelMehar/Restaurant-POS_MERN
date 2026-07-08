@@ -18,22 +18,22 @@ const Menu = () => {
     const isEditingOrder = Boolean(customerData.editingOrderId);
 
     return (
-        <section className="h-[calc(100vh-4rem)] overflow-hidden bg-background xl:flex xl:gap-0">
+        <section className="h-[calc(100vh-64px)] overflow-hidden bg-background lg:flex lg:gap-0">
             {/* ── LEFT: Menu ── */}
-            <div className="flex-[3] min-w-0 flex flex-col">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/50">
-                    <div className="flex items-center gap-2">
-                        <h1 className="text-lg font-extrabold text-foreground tracking-tight">
-                            {isEditingOrder ? "✏️ Modify Order" : "🍽️ Menu"}
+            <div className="flex-[3] min-w-0 flex flex-col border-r border-border">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card">
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-[18px] font-bold text-foreground tracking-tight">
+                            {isEditingOrder ? "Modify Order" : "Menu"}
                         </h1>
                         {isEditingOrder && (
-                            <span className="badge badge-progress">Editing</span>
+                            <span className="badge">Editing</span>
                         )}
                     </div>
                     {["Admin", "Super Admin"].includes(role) && (
                         <button
                             onClick={() => navigate("/catalog?tab=categories")}
-                            className="flex items-center gap-2 rounded-xl bg-secondary hover:bg-muted border border-border px-3 py-2 text-sm font-bold text-foreground transition-all duration-200 hover:border-primary/30">
+                            className="btn btn-secondary !h-8 !px-3 !text-[13px]">
                             <FiBookOpen size={14} />
                             Browse Catalog
                         </button>
@@ -43,11 +43,11 @@ const Menu = () => {
             </div>
 
             {/* ── RIGHT: Cart ── */}
-            <div className="xl:w-[320px] xl:flex-shrink-0 xl:border-l border-border flex flex-col bg-background">
+            <div className="lg:w-[320px] lg:flex-shrink-0 flex flex-col bg-card shadow-[-2px_0_8px_rgba(0,0,0,0.02)]">
                 <div className="flex-1 overflow-hidden">
                     <CartInfo />
                 </div>
-                <div className="border-t border-border bg-card/40">
+                <div className="border-t border-border bg-card">
                     <Bill />
                 </div>
             </div>

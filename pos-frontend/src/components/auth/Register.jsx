@@ -53,48 +53,47 @@ const Register = ({ setIsRegister }) => {
   });
 
   const fields = [
-    { name: "name",     icon: FiUser,  type: "text",     placeholder: "e.g. John Doe",         label: "Employee Name" },
-    { name: "email",    icon: FiMail,  type: "email",    placeholder: "name@restaurant.com",   label: "Email Address" },
-    { name: "phone",    icon: FiPhone, type: "text",   placeholder: "03XX-XXXXXXX",        label: "Phone Number" },
-    { name: "password", icon: FiLock,  type: "password", placeholder: "••••••••",               label: "Password" },
+    { name: "name",     type: "text",     placeholder: "Full Name" },
+    { name: "email",    type: "email",    placeholder: "Email address" },
+    { name: "phone",    type: "text",     placeholder: "Phone Number (03XX-XXXXXXX)" },
+    { name: "password", type: "password", placeholder: "Password" },
   ];
 
   const roles = ["Cashier", "Admin", "Super Admin"];
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {fields.map(({ name, icon, type, placeholder, label }) => (
-          <div key={name}>
-            <label className="form-label">{label}</label>
-            <div className="relative">
-              <FieldIcon icon={icon} />
-              <input
-                type={type}
-                name={name}
-                value={formData[name]}
-                onChange={handleChange}
-                placeholder={placeholder}
-                required
-                className="input-base !pl-11"
-              />
-            </div>
-          </div>
-        ))}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="border border-[hsl(var(--border-strong))] rounded-[8px] overflow-hidden">
+          {fields.map(({ name, type, placeholder }, index) => (
+            <input
+              key={name}
+              type={type}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              placeholder={placeholder}
+              required
+              className={`w-full bg-card px-4 py-4 text-[15px] text-foreground placeholder:text-muted outline-none focus:bg-[hsl(var(--surface-soft))] transition-colors ${
+                index < fields.length - 1 ? "border-b border-[hsl(var(--border-strong))]" : ""
+              }`}
+            />
+          ))}
+        </div>
 
         {/* Role Selector */}
         <div>
-          <label className="form-label">Choose Role</label>
-          <div className="flex gap-2 mt-1">
+          <label className="block text-[14px] font-bold text-foreground mb-3">Choose Role</label>
+          <div className="flex gap-2 bg-[hsl(var(--surface-soft))] p-1 rounded-[9999px]">
             {roles.map((role) => (
               <button
                 key={role}
                 type="button"
                 onClick={() => handleRoleSelection(role)}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-2 transition-all duration-200 ${
+                className={`flex-1 rounded-[9999px] px-3 py-2.5 text-[13px] font-semibold transition whitespace-nowrap border ${
                   formData.role === role
-                    ? "bg-gradient-to-r from-primary to-blue-500 border-transparent text-primary-foreground shadow-md shadow-primary/30"
-                    : "bg-secondary border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    ? "border-foreground bg-foreground text-[hsl(var(--background))]"
+                    : "border-transparent bg-transparent text-muted hover:text-foreground hover:bg-[rgba(0,0,0,0.03)]"
                 }`}
               >
                 {role}
@@ -106,13 +105,13 @@ const Register = ({ setIsRegister }) => {
         {/* Submit */}
         <button
           type="submit"
-          disabled={registerMutation.isPending}
-          className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-500 hover:to-primary text-primary-foreground font-bold rounded-xl py-2.5 mt-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+          disabled={registerMutation.isPending || !formData.role}
+          className="w-full btn btn-primary py-4 text-[16px] font-bold h-auto mt-8"
         >
           {registerMutation.isPending ? (
             <><FiLoader size={18} className="animate-spin" /> Creating Account…</>
           ) : (
-            <>Create Account <FiArrowRight size={18} /></>
+            "Create Account"
           )}
         </button>
       </form>

@@ -8,6 +8,7 @@ const initialState = {
     table: null,
     editingOrderId: "",
     orderStatus: "",
+    orderType: "Dine In",
     paymentMethod: "",
     orderDate: ""
 }
@@ -25,6 +26,7 @@ const customerSlice = createSlice({
             state.guests = guests;
             state.editingOrderId = "";
             state.orderStatus = "";
+            state.orderType = "Dine In";
             state.paymentMethod = "";
             state.orderDate = new Date().toISOString();
         },
@@ -37,12 +39,17 @@ const customerSlice = createSlice({
             state.table = null;
             state.editingOrderId = "";
             state.orderStatus = "";
+            state.orderType = "Dine In";
             state.paymentMethod = "";
             state.orderDate = "";
         },
 
         updateTable: (state, action) => {
             state.table = action.payload.table;
+        },
+
+        setOrderType: (state, action) => {
+            state.orderType = action.payload;
         },
 
         setEditingOrder: (state, action) => {
@@ -61,6 +68,7 @@ const customerSlice = createSlice({
                 : null;
             state.editingOrderId = order._id;
             state.orderStatus = order.orderStatus || "In Progress";
+            state.orderType = order.orderType || "Dine In";
             state.paymentMethod = order.paymentMethod || "";
             state.orderDate = order.orderDate || order.createdAt || "";
         }
@@ -69,5 +77,5 @@ const customerSlice = createSlice({
 })
 
 
-export const { setCustomer, removeCustomer, updateTable, setEditingOrder } = customerSlice.actions;
+export const { setCustomer, removeCustomer, updateTable, setOrderType, setEditingOrder } = customerSlice.actions;
 export default customerSlice.reducer;
