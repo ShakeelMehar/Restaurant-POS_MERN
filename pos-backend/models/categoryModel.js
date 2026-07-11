@@ -1,10 +1,16 @@
 const mongoose = require("mongoose");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const categorySchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true,
+        index: true
+    },
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     bgColor: {
         type: String,
@@ -19,5 +25,10 @@ const categorySchema = new mongoose.Schema({
         default: 0
     }
 }, { timestamps: true });
+
+// Ensure category names are unique per restaurant
+categorySchema.index({ restaurantId: 1, name: 1 }, { unique: true });
+
+categorySchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("Category", categorySchema);

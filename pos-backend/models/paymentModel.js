@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const paymentSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true,
+        index: true
+    },
     paymentId: String,
     orderId: String,
     amount: Number,
@@ -11,6 +18,8 @@ const paymentSchema = new mongoose.Schema({
     contact: String,
     createdAt: Date
 })
+
+paymentSchema.plugin(tenantIsolation);
 
 const Payment = mongoose.model("Payment", paymentSchema);
 module.exports = Payment;

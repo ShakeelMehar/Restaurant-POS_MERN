@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const variantOptionSchema = new mongoose.Schema({
     name: {
@@ -20,6 +21,12 @@ const variantGroupSchema = new mongoose.Schema({
 });
 
 const productSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true,
+        index: true
+    },
     name: {
         type: String,
         required: true
@@ -38,5 +45,10 @@ const productSchema = new mongoose.Schema({
     },
     optionGroups: [variantGroupSchema]
 }, { timestamps: true });
+
+// Ensure product names are unique per restaurant
+productSchema.index({ restaurantId: 1, name: 1 }, { unique: true });
+
+productSchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("Product", productSchema);

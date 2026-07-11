@@ -23,11 +23,11 @@ const Login = () => {
     const loginMutation = useMutation({
         mutationFn: (reqData) => login(reqData),
         onSuccess: (res) => {
-            const { _id, name, email, phone, role } = res.data.data;
+            const { _id, name, email, phone, role, restaurantId } = res.data.data;
             if (res.data.accessToken) {
                 localStorage.setItem("accessToken", res.data.accessToken);
             }
-            dispatch(setUser({ _id, name, email, phone, role }));
+            dispatch(setUser({ _id, name, email, phone, role, restaurantId }));
             navigate("/");
         },
         onError: (error) => {

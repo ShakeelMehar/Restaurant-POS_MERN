@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const orderSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true,
+        index: true
+    },
     customerDetails: {
         name: { type: String, required: true },
         phone: { type: String, requried: true},
@@ -33,5 +40,7 @@ const orderSchema = new mongoose.Schema({
         razorpay_payment_id: String
     }
 }, { timestamps : true } );
+
+orderSchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("Order", orderSchema);

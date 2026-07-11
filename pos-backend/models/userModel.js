@@ -1,7 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const userSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        index: true
+    },
     name : {
         type: String,
         required: true,
@@ -10,6 +16,7 @@ const userSchema = new mongoose.Schema({
     email : {
         type: String,
         required: true,
+        unique: true,
         validate: {
             validator: function (v) {
                 return /\S+@\S+\.\S+/.test(v);
@@ -37,6 +44,11 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+        index: true
     }
 }, { timestamps : true })
 
@@ -48,5 +60,7 @@ userSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 })
+
+userSchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("User", userSchema);

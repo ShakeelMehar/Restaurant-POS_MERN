@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
+const tenantIsolation = require("./plugins/tenantIsolation");
 
 const settingsSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
+        required: true,
+        unique: true
+    },
     restaurantName: {
         type: String,
         required: true,
@@ -43,5 +50,7 @@ const settingsSchema = new mongoose.Schema({
         default: true
     }
 }, { timestamps: true });
+
+settingsSchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("Settings", settingsSchema);

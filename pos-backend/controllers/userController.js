@@ -1,5 +1,6 @@
 const createHttpError = require("http-errors");
 const User = require("../models/userModel");
+const tenantContext = require("../middlewares/tenantContext");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
@@ -16,7 +17,10 @@ const register = async (req, res, next) => {
 
 
 
-        const isUserPresent = await User.findOne({email});
+        let isUserPresent;
+        await tenantContext.run({ bypassIsolation: true }, async () => {
+            isUserPresent = await User.findOne({email});
+        });
         if(isUserPresent){
             const error = createHttpError(400, "User already exist!");
             return next(error);
@@ -24,8 +28,12 @@ const register = async (req, res, next) => {
 
 
         const user = { name, phone, email, password, role };
-        const newUser = User(user);
-        await newUser.save();
+        // For self-registration (if allowed), we need to handle restaurantId
+        // Usually Super Admin registers tenants. We bypass isolation to save.
+        let newUser = User(user);
+        await tenantContext.run({ bypassIsolation: true }, async () => {
+            await newUser.save();
+        });
 
         res.status(201).json({success: true, message: "New user created!", data: newUser});
 
@@ -50,7 +58,10 @@ const login = async (req, res, next) => {
         let isUserPresent;
         let isMatch = false;
 
-        isUserPresent = await User.findOne({email});
+        await tenantContext.run({ bypassIsolation: true }, async () => {
+            // Find active users only (or if soft deleted, they can't login)
+            isUserPresent = await User.findOne({email, isDeleted: { $ne: true }});
+        });
         if (isUserPresent) {
             isMatch = await bcrypt.compare(password, isUserPresent.password);
         }
@@ -111,7 +122,7 @@ const logout = async (req, res, next) => {
 const getAllStaff = async (req, res, next) => {
     try {
 
-        const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") } }).select("-password");
+        const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") }, isDeleted: { $ne: true } }).select("-password");
         res.status(200).json({ success: true, data: staff });
     } catch (error) {
         next(error);
@@ -124,8 +135,14 @@ const deleteStaff = async (req, res, next) => {
 
 
 
-        const user = await User.findByIdAndDelete(staffId);
+        const user = await User.findById(staffId);
         if (!user) return next(createHttpError(404, "User not found"));
+        
+        user.isDeleted = true;
+        // Optionally scramble the email to free it up for real:
+        user.email = `${user.email}.deleted.${Date.now()}`;
+        await user.save();
+        
         res.status(200).json({ success: true, message: "Staff removed successfully" });
     } catch (error) {
         next(error);

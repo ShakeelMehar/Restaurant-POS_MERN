@@ -22,13 +22,27 @@ const BottomNav = () => {
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
-    onSuccess: () => {
+    onSuccess: async () => {
       localStorage.removeItem("accessToken");
+      
+      // Wipe all IndexedDB databases to prevent multi-tenant offline data leaks
+      try {
+        if (window.indexedDB.databases) {
+          const dbs = await window.indexedDB.databases();
+          dbs.forEach(db => {
+            window.indexedDB.deleteDatabase(db.name);
+          });
+        }
+      } catch (e) {
+        console.error("Failed to wipe IndexedDB:", e);
+      }
+
       dispatch(removeUser());
       setIsLogoutModalOpen(false);
       setIsMoreModalOpen(false);
       navigate("/auth");
     },
+    onError: (error) => console.log(error),
   });
 
   const NavBtn = ({ path, icon: Icon, label, onClick }) => {
