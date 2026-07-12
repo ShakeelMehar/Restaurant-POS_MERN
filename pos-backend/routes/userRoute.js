@@ -6,7 +6,7 @@ const { checkRole } = require("../middlewares/verifyRole");
 const router = express.Router();
 
 // Authentication Routes
-router.route("/register").post(register);
+router.route("/register").post(isVerifiedUser, checkRole(["admin"]), register);
 router.route("/login").post(login);
 router.route("/logout").post(isVerifiedUser, logout);
 router.route("/").get(isVerifiedUser, getUserData);

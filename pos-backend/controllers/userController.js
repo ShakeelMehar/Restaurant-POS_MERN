@@ -15,28 +15,23 @@ const register = async (req, res, next) => {
             return next(error);
         }
 
-
-
+        // Check for duplicate email globally (across all tenants)
         let isUserPresent;
         await tenantContext.run({ bypassIsolation: true }, async () => {
-            isUserPresent = await User.findOne({email});
+            isUserPresent = await User.findOne({ email });
         });
-        if(isUserPresent){
+        if (isUserPresent) {
             const error = createHttpError(400, "User already exist!");
             return next(error);
         }
 
+        // If called by an authenticated admin, tenantContext is already set by isVerifiedUser.
+        // The tenantIsolation plugin will automatically attach restaurantId on save.
+        // If called as a public route (Super Admin bootstrap), bypassIsolation is still active.
+        const newUser = new User({ name, phone, email, password, role });
+        await newUser.save();
 
-        const user = { name, phone, email, password, role };
-        // For self-registration (if allowed), we need to handle restaurantId
-        // Usually Super Admin registers tenants. We bypass isolation to save.
-        let newUser = User(user);
-        await tenantContext.run({ bypassIsolation: true }, async () => {
-            await newUser.save();
-        });
-
-        res.status(201).json({success: true, message: "New user created!", data: newUser});
-
+        res.status(201).json({ success: true, message: "New user created!", data: newUser });
 
     } catch (error) {
         next(error);
