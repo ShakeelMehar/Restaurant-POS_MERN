@@ -171,7 +171,7 @@ const AddDishModal = ({ isOpen, onClose, dishToEdit }) => {
 
     mutation.mutate({
       name,
-      category: dishData.category.trim() || categories.find((c) => c.id === dishData.categoryId)?.name || "Uncategorized",
+      category: dishData.categoryId,
       price: basePrice,
       description: "",
       optionGroups: [],

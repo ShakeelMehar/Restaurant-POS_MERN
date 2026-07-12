@@ -19,6 +19,8 @@ const paymentSchema = new mongoose.Schema({
     createdAt: Date
 })
 
+paymentSchema.index({ paymentId: 1 }, { unique: true });
+
 paymentSchema.plugin(tenantIsolation);
 
 const Payment = mongoose.model("Payment", paymentSchema);

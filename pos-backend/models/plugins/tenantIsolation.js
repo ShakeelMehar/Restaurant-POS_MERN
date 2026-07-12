@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const tenantContext = require('../../middlewares/tenantContext');
 
 module.exports = function tenantIsolationPlugin(schema, options) {
@@ -27,6 +28,23 @@ module.exports = function tenantIsolationPlugin(schema, options) {
     schema.pre('updateMany', applyTenantFilter);
     schema.pre('deleteMany', applyTenantFilter);
     schema.pre('findOneAndDelete', applyTenantFilter);
+
+    // Apply to aggregate operations
+    schema.pre('aggregate', function (next) {
+        const store = tenantContext.getStore();
+        
+        if (store && store.restaurantId) {
+            this.pipeline().unshift({
+                $match: { restaurantId: new mongoose.Types.ObjectId(store.restaurantId) }
+            });
+        } else if (store && store.bypassIsolation) {
+            // Bypassed, do nothing
+        } else {
+            return next(new Error('Strict Tenant Isolation: Missing restaurantId context for aggregation. You must wrap this query in tenantContext.run()'));
+        }
+
+        next();
+    });
 
     // Apply to create/save operations
     schema.pre('validate', function (next) {

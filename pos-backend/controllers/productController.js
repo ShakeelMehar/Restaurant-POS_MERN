@@ -9,6 +9,8 @@ const createProduct = async (req, res, next) => {
         }
 
         const product = await Product.create({ name, category, description, price, optionGroups, hasPortions, portions });
+        // Populate after creation to return full category object
+        await product.populate("category", "name bgColor icon order");
         res.status(201).json({ success: true, data: product });
     } catch (error) {
         next(error);
@@ -17,7 +19,9 @@ const createProduct = async (req, res, next) => {
 
 const getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find().populate("category", "name order").sort({ createdAt: -1 });
+        const products = await Product.find()
+            .populate("category", "name bgColor icon order")
+            .sort({ createdAt: -1 });
         res.status(200).json({ success: true, data: products });
     } catch (error) {
         next(error);
@@ -26,7 +30,8 @@ const getProducts = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     try {
-        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate("category", "name");
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+            .populate("category", "name bgColor icon order");
         if (!product) return next(createHttpError(404, "Product not found"));
         res.status(200).json({ success: true, data: product });
     } catch (error) {

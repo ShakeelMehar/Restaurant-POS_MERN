@@ -40,6 +40,8 @@ const orderSchema = new mongoose.Schema({
     }
 }, { timestamps : true } );
 
+orderSchema.index({ restaurantId: 1, createdAt: -1 });
+
 orderSchema.plugin(tenantIsolation);
 
 module.exports = mongoose.model("Order", orderSchema);

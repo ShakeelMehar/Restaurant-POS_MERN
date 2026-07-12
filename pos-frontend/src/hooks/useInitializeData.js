@@ -22,19 +22,24 @@ export const useInitializeData = () => {
             const backendProducts = productsRes.data.data;
 
             // Map to frontend structure
-            const mappedCatalog = backendCategories.map(cat => {
+              const mappedCatalog = backendCategories.map(cat => {
               return {
                 id: cat._id,
                 name: cat.name,
                 bgColor: cat.bgColor,
                 icon: cat.icon,
                 items: backendProducts
-                  .filter(prod => typeof prod.category === 'object' ? prod.category.name === cat.name : prod.category === cat.name)
+                  .filter(prod => {
+                    // Safely coerce both sides to string to avoid ObjectId === ObjectId always being false
+                    const prodCatId = typeof prod.category === 'object' ? prod.category?._id : prod.category;
+                    return prodCatId && cat._id && prodCatId.toString() === cat._id.toString();
+                  })
                   .map(prod => ({
                     id: prod._id,
                     name: prod.name,
                     description: prod.description,
                     price: prod.price,
+                    // Always normalise to a string so UI components never render [object Object]
                     category: typeof prod.category === 'object' ? prod.category.name : prod.category,
                     optionGroups: prod.optionGroups || [],
                     hasPortions: prod.hasPortions || false,
