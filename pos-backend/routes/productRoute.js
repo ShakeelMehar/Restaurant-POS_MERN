@@ -6,7 +6,7 @@ const { checkRole } = require("../middlewares/verifyRole");
 const router = express.Router();
 
 router.route("/")
-    .get(getProducts)
+    .get(isVerifiedUser, getProducts)
     .post(isVerifiedUser, checkRole(["admin"]), createProduct);
 
 router.route("/:id")

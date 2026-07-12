@@ -5,7 +5,6 @@ const initialState = {
     customerName: "",
     customerPhone: "",
     guests: 0,
-    table: null,
     editingOrderId: "",
     orderStatus: "",
     orderType: "Dine In",
@@ -36,7 +35,6 @@ const customerSlice = createSlice({
             state.customerName = "";
             state.customerPhone = "";
             state.guests = 0;
-            state.table = null;
             state.editingOrderId = "";
             state.orderStatus = "";
             state.orderType = "Dine In";
@@ -44,9 +42,7 @@ const customerSlice = createSlice({
             state.orderDate = "";
         },
 
-        updateTable: (state, action) => {
-            state.table = action.payload.table;
-        },
+
 
         setOrderType: (state, action) => {
             state.orderType = action.payload;
@@ -60,12 +56,6 @@ const customerSlice = createSlice({
             state.customerName = order.customerDetails?.name || "";
             state.customerPhone = order.customerDetails?.phone || "";
             state.guests = order.customerDetails?.guests || 0;
-            state.table = order.table
-                ? {
-                    tableId: order.table._id,
-                    tableNo: order.table.tableNo,
-                  }
-                : null;
             state.editingOrderId = order._id;
             state.orderStatus = order.orderStatus || "In Progress";
             state.orderType = order.orderType || "Dine In";
@@ -77,5 +67,5 @@ const customerSlice = createSlice({
 })
 
 
-export const { setCustomer, removeCustomer, updateTable, setOrderType, setEditingOrder } = customerSlice.actions;
+export const { setCustomer, removeCustomer, setOrderType, setEditingOrder } = customerSlice.actions;
 export default customerSlice.reducer;

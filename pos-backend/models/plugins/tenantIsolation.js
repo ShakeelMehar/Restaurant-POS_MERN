@@ -29,7 +29,7 @@ module.exports = function tenantIsolationPlugin(schema, options) {
     schema.pre('findOneAndDelete', applyTenantFilter);
 
     // Apply to create/save operations
-    schema.pre('save', function (next) {
+    schema.pre('validate', function (next) {
         const store = tenantContext.getStore();
         
         if (store && store.restaurantId) {

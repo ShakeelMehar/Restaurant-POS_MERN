@@ -25,7 +25,7 @@ const LogoutConfirmModal = ({
           <button
             onClick={onConfirm}
             disabled={isPending}
-            className="w-full rounded-lg bg-primary-blue px-3 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-lg bg-primary px-3 py-2 font-semibold text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? "Logging Out..." : "Logout"}
           </button>

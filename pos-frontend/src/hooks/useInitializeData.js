@@ -10,7 +10,8 @@ export const useInitializeData = () => {
   useEffect(() => {
     const initializeMenu = async () => {
       try {
-        if (navigator.onLine) {
+        const token = localStorage.getItem("accessToken");
+        if (navigator.onLine && token) {
           try {
             const [categoriesRes, productsRes] = await Promise.all([
               getCategories(),
@@ -35,7 +36,9 @@ export const useInitializeData = () => {
                     description: prod.description,
                     price: prod.price,
                     category: typeof prod.category === 'object' ? prod.category.name : prod.category,
-                    optionGroups: prod.optionGroups || []
+                    optionGroups: prod.optionGroups || [],
+                    hasPortions: prod.hasPortions || false,
+                    portions: prod.portions || { quarter: 0, half: 0, large: 0 }
                   }))
               };
             });

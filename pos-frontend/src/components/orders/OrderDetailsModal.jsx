@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import Modal from "../shared/Modal";
-import { updateOrderById, updateTable } from "../../https";
+import { updateOrderById } from "../../https";
 import { formatDateAndTime, getAvatarName } from "../../utils";
 import { setEditingOrder } from "../../redux/slices/customerSlice";
 import { setCart } from "../../redux/slices/cartSlice";
@@ -19,27 +19,10 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   const orderUpdateMutation = useMutation({
     mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData),
     onSuccess: async (_, variables) => {
-      try {
-        const nextStatus = variables.reqData.orderStatus;
-        const shouldFreeTable = nextStatus === "Completed";
-
-        if (order?.table?._id) {
-          await tableMutation.mutateAsync({
-            tableId: order.table._id,
-            status: shouldFreeTable ? "Available" : "Booked",
-            orderId: shouldFreeTable ? null : order._id,
-          });
-        }
-
-        queryClient.invalidateQueries({ queryKey: ["orders"] });
-        queryClient.invalidateQueries({ queryKey: ["tables"] });
-        enqueueSnackbar(`Order marked as ${nextStatus}.`, { variant: "success" });
-        onClose();
-      } catch (error) {
-        enqueueSnackbar("Order status updated, but table refresh failed.", {
-          variant: "warning",
-        });
-      }
+      const nextStatus = variables.reqData.orderStatus;
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      enqueueSnackbar(`Order marked as ${nextStatus}.`, { variant: "success" });
+      onClose();
     },
     onError: (error) => {
       enqueueSnackbar(
@@ -49,9 +32,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
     },
   });
 
-  const tableMutation = useMutation({
-    mutationFn: (reqData) => updateTable(reqData),
-  });
+
 
   const handleStatusChange = (nextStatus) => {
     if (!order?._id || nextStatus === order.orderStatus || order.isOffline) {
@@ -99,8 +80,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
                 {order.customerDetails?.name || "Customer"}
               </h3>
             <p className="text-[14px] text-muted mt-0.5">
-                Table {order.table?.tableNo || "N/A"} | Guests{" "}
-                {order.customerDetails?.guests || 0}
+                Guests {order.customerDetails?.guests || 0}
               </p>
               <p className="mt-0.5 text-[13px] text-muted">
                 {formatDateAndTime(order.orderDate || order.createdAt || Date.now())}
@@ -157,7 +137,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
             {(order.items || []).map((item, index) => (
               <div
                 key={item.id || `${item.name}-${index}`}
-                className="rounded-[12px] bg-card border border-[hsl(var(--border-strong))] px-4 py-3 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px]"
+                className="rounded-[12px] bg-card border border-border px-4 py-3 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px]"
               >
                 <div className="flex items-center justify-between">
                   <div>

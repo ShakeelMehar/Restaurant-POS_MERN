@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../../redux/slices/cartSlice";
 import {
-  addOrder, createOrderRazorpay, updateTable,
+  addOrder, createOrderRazorpay,
   updateOrderById, verifyPaymentRazorpay, getSettings
 } from "../../https/index";
 import { db } from "../../utils/db";
@@ -63,14 +63,14 @@ const Bill = () => {
     orderType: customerData.orderType,
     bills: { total, tax, totalWithTax },
     items: cartData,
-    table: customerData.table?.tableId,
     paymentMethod,
     ...extra,
   });
 
   const handleOrderSaved = (data, opts = { showInvoice: false }) => {
     setOrderInfo(data);
-    queryClient.invalidateQueries({ queryKey: ["orders", "tables"] });
+    queryClient.invalidateQueries({ queryKey: ["orders"] });
+    setShowCheckoutModal(false);
     
     // Table update is now handled on the backend for online syncs. 
     // We clear the frontend cart.
@@ -158,9 +158,20 @@ const Bill = () => {
       }
     }, 
     onSuccess: (r, variables) => handleOrderSaved(r.data.data, { showInvoice: variables.orderStatus !== "Held" }),
+    onError: (error) => {
+      console.error("Order placement failed:", error);
+      enqueueSnackbar("Failed to place order. Please try again.", { variant: "error" });
+    },
     networkMode: 'always'
   });
-  const updateExistingOrderMutation = useMutation({ mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData), onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: false }), onError: (e) => enqueueSnackbar(e?.response?.data?.message || "Update failed", { variant: "error" }) });
+  const updateExistingOrderMutation = useMutation({ 
+    mutationFn: ({ orderId, reqData }) => updateOrderById(orderId, reqData), 
+    onSuccess: (r) => handleOrderSaved(r.data.data, { showInvoice: false }), 
+    onError: (e) => {
+      console.error("Order update failed:", e);
+      enqueueSnackbar("Failed to update order. Please try again.", { variant: "error" });
+    }
+  });
 
   const paymentMethods = [
     { id: "Cash",   label: "Cash",   icon: FiDollarSign, enabled: settings.enableCash ?? true },
@@ -228,13 +239,14 @@ const Bill = () => {
       {/* Checkout Modal */}
       {showCheckoutModal && (
         <div className="modal-overlay">
-          <div className="modal-content bg-card w-full sm:max-w-[480px] rounded-[14px] p-6 shadow-xl">
+          <div className="modal-content bg-card w-full sm:max-w-[480px] rounded-[20px] p-6 shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_8px_24px]">
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
               <h2 className="text-[20px] font-bold text-foreground">Checkout Review</h2>
               <button
                 onClick={() => setShowCheckoutModal(false)}
-                className="flex items-center justify-center h-8 w-8 rounded-full bg-[hsl(var(--surface-soft))] text-foreground hover:bg-[hsl(var(--border))]"
+                disabled={orderMutation.isPending || updateExistingOrderMutation.isPending}
+                className="flex items-center justify-center h-8 w-8 rounded-full bg-[hsl(var(--surface-soft))] text-foreground hover:bg-[hsl(var(--border))] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiX size={18} />
               </button>
@@ -269,8 +281,9 @@ const Bill = () => {
                   return (
                     <button
                       key={id}
+                      disabled={orderMutation.isPending || updateExistingOrderMutation.isPending}
                       onClick={() => setPaymentMethod(id)}
-                      className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-[8px] font-medium text-[15px] transition-colors border ${
+                      className={`flex-1 py-3 flex flex-col items-center justify-center gap-2 rounded-[8px] font-medium text-[15px] transition-colors border disabled:opacity-50 disabled:cursor-not-allowed ${
                         isSelected
                           ? "border-foreground bg-foreground text-[hsl(var(--background))]"
                           : "border-border bg-card text-foreground hover:border-foreground"
@@ -288,6 +301,7 @@ const Bill = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowCheckoutModal(false)}
+                disabled={orderMutation.isPending || updateExistingOrderMutation.isPending}
                 className="btn btn-secondary flex-1"
               >
                 Cancel
@@ -295,7 +309,6 @@ const Bill = () => {
               <button
                 onClick={() => {
                   if (!paymentMethod) { enqueueSnackbar("Select a payment method.", { variant: "warning" }); return; }
-                  setShowCheckoutModal(false);
                   handlePlaceOrder();
                 }}
                 disabled={!paymentMethod || orderMutation.isPending || updateExistingOrderMutation.isPending}

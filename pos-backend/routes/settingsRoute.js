@@ -6,7 +6,7 @@ const { checkRole } = require("../middlewares/verifyRole");
 const router = express.Router();
 
 router.route("/")
-    .get(getSettings)
+    .get(isVerifiedUser, getSettings)
     .put(isVerifiedUser, checkRole(["admin"]), updateSettings);
 
 module.exports = router;

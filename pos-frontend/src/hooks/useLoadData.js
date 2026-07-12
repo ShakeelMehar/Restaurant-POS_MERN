@@ -9,11 +9,17 @@ const useLoadData = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        dispatch(removeUser());
+        setIsLoading(false);
+        return;
+      }
       try {
         const res = await getUserData();
         const { data } = res;
-        const { _id, name, email, phone, role } = data.data;
-        dispatch(setUser({ _id, name, email, phone, role }));
+        const { _id, name, email, phone, role, restaurantId } = data.data;
+        dispatch(setUser({ _id, name, email, phone, role, restaurantId }));
       } catch (error) {
         dispatch(removeUser());
       } finally {

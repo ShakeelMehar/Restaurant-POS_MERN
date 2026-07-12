@@ -1,24 +1,58 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
 import BackButton from "../components/shared/BackButton";
 import AddCategoryModal from "../components/dashboard/AddCategoryModal";
 import AddDishModal from "../components/dashboard/AddDishModal";
-import { selectAllDishes, selectMenuCategories, selectTotalDishCount } from "../redux/slices/menuSlice";
+import ConfirmModal from "../components/shared/ConfirmModal";
+import { selectAllDishes, selectMenuCategories, selectTotalDishCount, deleteDish } from "../redux/slices/menuSlice";
+import { deleteProduct } from "../https/index";
 import TabGroup from "../components/shared/TabGroup";
-import { FiPlus, FiGrid } from "react-icons/fi";
+import { FiPlus, FiGrid, FiEdit2, FiTrash2 } from "react-icons/fi";
 
 const Catalog = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const categories = useSelector(selectMenuCategories);
   const allDishes = useSelector(selectAllDishes);
   const totalDishCount = useSelector(selectTotalDishCount);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isDishModalOpen, setIsDishModalOpen] = useState(false);
+  const [editingDish, setEditingDish] = useState(null);
+  const [deletingDishId, setDeletingDishId] = useState(null);
   const activeTab = searchParams.get("tab") === "dishes" ? "dishes" : "categories";
 
   useEffect(() => { document.title = "POS | Catalog"; }, []);
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => deleteProduct(id),
+    onSuccess: (_, id) => {
+      dispatch(deleteDish(id));
+      setDeletingDishId(null);
+      enqueueSnackbar("Dish deleted successfully", { variant: "success" });
+    },
+    onError: (err) => {
+      enqueueSnackbar(err?.response?.data?.message || "Failed to delete dish", { variant: "error" });
+    }
+  });
+
+  const handleEditDish = (dish) => {
+    setEditingDish(dish);
+    setIsDishModalOpen(true);
+  };
+
+  const handleDeleteDish = (id) => {
+    setDeletingDishId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingDishId) {
+      deleteMutation.mutate(deletingDishId);
+    }
+  };
 
   const setTab = (tab) => setSearchParams({ tab });
 
@@ -29,13 +63,13 @@ const Catalog = () => {
         <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Menu Catalog</h1>
+            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Menu Catalog</h1>
             <p className="text-xs text-muted-foreground font-medium">
               {categories.length} categories · {totalDishCount} dishes
             </p>
           </div>
         </div>
-
+ 
         <div className="flex flex-wrap items-center gap-2">
           <TabGroup
             tabs={[
@@ -48,13 +82,13 @@ const Catalog = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsCategoryModalOpen(true)}
-              className="flex items-center gap-2 rounded-[8px] bg-primary px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 active:scale-95"
+              className="btn btn-primary"
             >
               <FiPlus size={15} /> Add Category
             </button>
             <button
               onClick={() => setIsDishModalOpen(true)}
-              className="flex items-center gap-2 rounded-[8px] bg-white border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-soft transition-all duration-200"
+              className="btn btn-secondary"
             >
               <FiGrid size={15} className="text-muted-foreground" /> Add Dish
             </button>
@@ -84,7 +118,7 @@ const Catalog = () => {
                 </div>
                 <button
                   onClick={() => setTab("dishes")}
-                  className="flex-shrink-0 rounded-[8px] bg-white hover:bg-surface-soft border border-border px-3 py-1.5 text-xs font-medium text-foreground transition-all"
+                  className="btn btn-secondary flex-shrink-0 !h-8 text-xs px-3"
                 >
                   View Dishes
                 </button>
@@ -134,8 +168,33 @@ const Catalog = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Price</p>
-                  <p className="text-[15px] font-extrabold text-primary mt-0.5">PKR {dish.price}</p>
+                  {dish.hasPortions ? (
+                    <div className="text-[11px] font-bold text-foreground mt-0.5 space-y-0.5">
+                      {dish.portions?.quarter > 0 && <div>Q: PKR {dish.portions.quarter}</div>}
+                      {dish.portions?.half > 0 && <div>H: PKR {dish.portions.half}</div>}
+                      {dish.portions?.large > 0 && <div>L: PKR {dish.portions.large}</div>}
+                    </div>
+                  ) : (
+                    <p className="text-[15px] font-extrabold text-primary mt-0.5">PKR {dish.price}</p>
+                  )}
                 </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-3 mt-4 border-t border-border/50">
+                <button
+                  onClick={() => handleEditDish(dish)}
+                  className="btn btn-secondary flex-1 !h-9 text-xs"
+                >
+                  <FiEdit2 size={12} /> Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteDish(dish.id)}
+                  disabled={deleteMutation.isPending}
+                  className="btn btn-secondary flex-1 !h-9 text-xs !text-primary"
+                >
+                  <FiTrash2 size={12} /> Delete
+                </button>
               </div>
             </div>
           ))}
@@ -143,7 +202,23 @@ const Catalog = () => {
       )}
 
       <AddCategoryModal isOpen={isCategoryModalOpen} onClose={() => setIsCategoryModalOpen(false)} />
-      <AddDishModal isOpen={isDishModalOpen} onClose={() => setIsDishModalOpen(false)} />
+      <AddDishModal
+        isOpen={isDishModalOpen}
+        onClose={() => {
+          setIsDishModalOpen(false);
+          setEditingDish(null);
+        }}
+        dishToEdit={editingDish}
+      />
+      <ConfirmModal
+        isOpen={Boolean(deletingDishId)}
+        onClose={() => setDeletingDishId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Dish"
+        message="Are you sure you want to delete this dish? This action cannot be undone."
+        confirmText="Delete"
+        isPending={deleteMutation.isPending}
+      />
     </section>
   );
 };

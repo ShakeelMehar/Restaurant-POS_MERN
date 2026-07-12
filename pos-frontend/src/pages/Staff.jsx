@@ -5,7 +5,8 @@ import BackButton from "../components/shared/BackButton";
 import { getAllStaff, deleteStaff } from "../https";
 import AddStaffModal from "../components/staff/AddStaffModal";
 import ResetPasswordModal from "../components/staff/ResetPasswordModal";
-import { FiUserPlus, FiMail, FiPhone, FiKey, FiTrash2, FiUser } from "react-icons/fi";
+import ConfirmModal from "../components/shared/ConfirmModal";
+import { FiUserPlus, FiMail, FiPhone, FiKey, FiTrash2, FiUser, FiEdit2 } from "react-icons/fi";
 
 const roleColors = {
   "Cashier":     "bg-blue-500/10 text-blue-500 border-blue-500/20",
@@ -18,6 +19,8 @@ const Staff = () => {
 
   const queryClient = useQueryClient();
   const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState(false);
+  const [editingStaff, setEditingStaff] = useState(null);
+  const [deletingStaff, setDeletingStaff] = useState(null);
   const [resetModalData, setResetModalData] = useState({ isOpen: false, staffId: null, staffName: "" });
 
   const { data: resData, isLoading } = useQuery({
@@ -30,11 +33,18 @@ const Staff = () => {
     onSuccess: () => {
       enqueueSnackbar("Staff member removed", { variant: "success" });
       queryClient.invalidateQueries({ queryKey: ["staff"] });
+      setDeletingStaff(null);
     },
     onError: (err) => {
       enqueueSnackbar(err?.response?.data?.message || "Failed to remove staff", { variant: "error" });
     },
   });
+
+  const handleConfirmDeleteStaff = () => {
+    if (deletingStaff) {
+      deleteMutation.mutate(deletingStaff.id);
+    }
+  };
 
   const staffList = resData?.data?.data || [];
 
@@ -45,7 +55,7 @@ const Staff = () => {
         <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Staff Management</h1>
+            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Staff Management</h1>
             <p className="text-xs text-muted-foreground font-medium">
               {staffList.length} {staffList.length === 1 ? "member" : "members"} · Manage cashier accounts
             </p>
@@ -53,7 +63,7 @@ const Staff = () => {
         </div>
         <button
           onClick={() => setIsAddStaffModalOpen(true)}
-          className="flex items-center gap-2 rounded-[8px] bg-primary px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 active:scale-95"
+          className="btn btn-primary"
         >
           <FiUserPlus size={16} /> Add Cashier
         </button>
@@ -79,7 +89,7 @@ const Staff = () => {
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {staffList.map((member) => (
               <div key={member._id} className="bg-card rounded-[14px] border border-border transition-all duration-200 hover:shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] p-6 group">
-                {/* Avatar + role */}
+                {/* Avatar + role + Remove */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(var(--surface-strong))] text-foreground font-semibold text-base">
@@ -87,11 +97,23 @@ const Staff = () => {
                     </div>
                     <div>
                       <h2 className="text-[15px] font-bold text-foreground leading-tight">{member.name}</h2>
-                      <span className="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border border-border text-muted-foreground uppercase tracking-wider">
+                      <span className="badge mt-1 text-[10px] uppercase tracking-wider border border-border">
                         {member.role}
                       </span>
                     </div>
                   </div>
+
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => {
+                      setDeletingStaff({ id: member._id, name: member.name });
+                    }}
+                    disabled={deleteMutation.isPending}
+                    title="Remove Staff Member"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-muted-foreground hover:bg-red-50 hover:text-primary transition-all disabled:opacity-50"
+                  >
+                    <FiTrash2 size={15} />
+                  </button>
                 </div>
 
                 {/* Contact info */}
@@ -107,21 +129,21 @@ const Staff = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 pt-3 mt-2">
-                  <button
-                    onClick={() => setResetModalData({ isOpen: true, staffId: member._id, staffName: member.name })}
-                    className="flex-1 flex items-center justify-center gap-1.5 rounded-[8px] bg-white border border-border px-3 py-2 text-xs font-medium text-foreground hover:bg-[hsl(var(--surface-soft))] transition-all"
-                  >
-                    <FiKey size={12} /> Reset PW
-                  </button>
+                <div className="flex gap-2 pt-3 mt-2 border-t border-border/50">
                   <button
                     onClick={() => {
-                      if (window.confirm(`Remove ${member.name}?`)) deleteMutation.mutate(member._id);
+                      setEditingStaff(member);
+                      setIsAddStaffModalOpen(true);
                     }}
-                    disabled={deleteMutation.isPending}
-                    className="flex-1 flex items-center justify-center gap-1.5 rounded-[8px] bg-white border border-border px-3 py-2 text-xs font-medium text-primary hover:bg-[hsl(var(--surface-soft))] transition-all disabled:opacity-50"
+                    className="btn btn-secondary flex-1 !h-9 text-xs"
                   >
-                    <FiTrash2 size={12} /> {deleteMutation.isPending ? "…" : "Remove"}
+                    <FiEdit2 size={12} /> Edit
+                  </button>
+                  <button
+                    onClick={() => setResetModalData({ isOpen: true, staffId: member._id, staffName: member.name })}
+                    className="btn btn-secondary flex-1 !h-9 text-xs"
+                  >
+                    <FiKey size={12} /> Reset PW
                   </button>
                 </div>
               </div>
@@ -130,12 +152,28 @@ const Staff = () => {
         )}
       </div>
 
-      <AddStaffModal isOpen={isAddStaffModalOpen} onClose={() => setIsAddStaffModalOpen(false)} />
+      <AddStaffModal
+        isOpen={isAddStaffModalOpen}
+        onClose={() => {
+          setIsAddStaffModalOpen(false);
+          setEditingStaff(null);
+        }}
+        staffToEdit={editingStaff}
+      />
       <ResetPasswordModal
         isOpen={resetModalData.isOpen}
         onClose={() => setResetModalData({ isOpen: false, staffId: null, staffName: "" })}
         staffId={resetModalData.staffId}
         staffName={resetModalData.staffName}
+      />
+      <ConfirmModal
+        isOpen={Boolean(deletingStaff)}
+        onClose={() => setDeletingStaff(null)}
+        onConfirm={handleConfirmDeleteStaff}
+        title="Remove Staff Member"
+        message={`Are you sure you want to remove ${deletingStaff?.name || "this staff member"}? They will lose access to the POS system.`}
+        confirmText="Remove"
+        isPending={deleteMutation.isPending}
       />
     </section>
   );

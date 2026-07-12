@@ -10,7 +10,6 @@ import {
 import { lazy, Suspense } from "react";
 const Auth = lazy(() => import("./pages/Auth.jsx"));
 const Orders = lazy(() => import("./pages/Orders.jsx"));
-const Tables = lazy(() => import("./pages/Tables.jsx"));
 const Menu = lazy(() => import("./pages/Menu.jsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Catalog = lazy(() => import("./pages/Catalog.jsx"));
@@ -54,14 +53,7 @@ function Layout() {
               </ProtectedRoutes>
             }
           />
-          <Route
-            path="/tables"
-            element={
-              <ProtectedRoutes>
-                <Tables />
-              </ProtectedRoutes>
-            }
-          />
+
           <Route
             path="/menu"
             element={

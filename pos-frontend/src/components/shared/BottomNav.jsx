@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FiHome, FiList, FiGrid, FiMoreHorizontal } from "react-icons/fi";
-import { MdTableBar } from "react-icons/md";
 import { BiSolidDish } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "./Modal";
@@ -79,7 +78,6 @@ const BottomNav = () => {
           </button>
         </div>
 
-        <NavBtn path="/tables" icon={MdTableBar} label="Tables" />
         <NavBtn
           path="/dashboard"
           icon={FiMoreHorizontal}

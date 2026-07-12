@@ -12,12 +12,8 @@ export const logout = () => axiosWrapper.post("/api/user/logout");
 export const getAllStaff = () => axiosWrapper.get("/api/user/staff");
 export const deleteStaff = (id) => axiosWrapper.delete(`/api/user/staff/${id}`);
 export const resetStaffPassword = (id, password) => axiosWrapper.put(`/api/user/staff/${id}/password`, { password });
+export const updateStaff = (id, data) => axiosWrapper.put(`/api/user/staff/${id}`, data);
 
-// Table Endpoints
-export const addTable = (data) => axiosWrapper.post("/api/table/", data);
-export const getTables = () => axiosWrapper.get("/api/table");
-export const updateTable = ({ tableId, ...tableData }) =>
-  axiosWrapper.put(`/api/table/${tableId}`, tableData);
 
 // Payment Endpoints
 export const createOrderRazorpay = (data) =>
@@ -38,6 +34,8 @@ export const addCategory = (data) => axiosWrapper.post("/api/category/", data);
 export const getCategories = () => axiosWrapper.get("/api/category");
 export const addProduct = (data) => axiosWrapper.post("/api/product/", data);
 export const getProducts = () => axiosWrapper.get("/api/product");
+export const updateProduct = (id, data) => axiosWrapper.put(`/api/product/${id}`, data);
+export const deleteProduct = (id) => axiosWrapper.delete(`/api/product/${id}`);
 
 // Settings Endpoints
 export const getSettings = () => axiosWrapper.get("/api/settings");

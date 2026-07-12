@@ -25,7 +25,7 @@ const menuSlice = createSlice({
     },
 
     addDish: (state, action) => {
-      const { categoryId, name, price, category } = action.payload;
+      const { categoryId, name, price, category, hasPortions, portions } = action.payload;
       const targetCategory = state.categories.find(
         (item) => item.id === categoryId
       );
@@ -39,6 +39,41 @@ const menuSlice = createSlice({
         name,
         price: Number(price),
         category: category || targetCategory.name,
+        hasPortions: Boolean(hasPortions),
+        portions: portions || { quarter: 0, half: 0, large: 0 },
+      });
+    },
+
+    updateDish: (state, action) => {
+      const { id, categoryId, name, price, category, hasPortions, portions } = action.payload;
+      let dishObj = null;
+      state.categories.forEach((cat) => {
+        const index = cat.items.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          [dishObj] = cat.items.splice(index, 1);
+        }
+      });
+
+      if (!dishObj) {
+        dishObj = { id };
+      }
+
+      dishObj.name = name;
+      dishObj.price = Number(price);
+      dishObj.category = category || state.categories.find(c => c.id === categoryId)?.name || dishObj.category;
+      dishObj.hasPortions = Boolean(hasPortions);
+      dishObj.portions = portions || { quarter: 0, half: 0, large: 0 };
+
+      const targetCategory = state.categories.find((c) => c.id === categoryId);
+      if (targetCategory) {
+        targetCategory.items.push(dishObj);
+      }
+    },
+
+    deleteDish: (state, action) => {
+      const dishId = action.payload;
+      state.categories.forEach((cat) => {
+        cat.items = cat.items.filter((item) => item.id !== dishId);
       });
     },
   },
@@ -61,5 +96,5 @@ export const selectAllDishes = createSelector(
     )
 );
 
-export const { setCategories, addCategory, addDish } = menuSlice.actions;
+export const { setCategories, addCategory, addDish, updateDish, deleteDish } = menuSlice.actions;
 export default menuSlice.reducer;

@@ -168,4 +168,38 @@ const updateStaffPassword = async (req, res, next) => {
     }
 };
 
-module.exports = { register, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword }
+const updateStaff = async (req, res, next) => {
+    try {
+        const staffId = req.params.id;
+        const { name, email, phone, role } = req.body;
+
+        if (!name || !email || !phone || !role) {
+            return next(createHttpError(400, "Name, email, phone, and role are required"));
+        }
+
+        // Check if email is already taken by another user (bypass tenant isolation for unique check)
+        let isEmailTaken;
+        await tenantContext.run({ bypassIsolation: true }, async () => {
+            isEmailTaken = await User.findOne({ email, _id: { $ne: staffId }, isDeleted: { $ne: true } });
+        });
+        if (isEmailTaken) {
+            return next(createHttpError(400, "Email is already in use by another user"));
+        }
+
+        const user = await User.findById(staffId);
+        if (!user) return next(createHttpError(404, "Staff member not found"));
+
+        user.name = name;
+        user.email = email;
+        user.phone = phone;
+        user.role = role;
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Staff member updated successfully", data: user });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { register, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword, updateStaff }

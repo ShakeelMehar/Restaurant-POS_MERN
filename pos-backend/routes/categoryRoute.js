@@ -6,7 +6,7 @@ const { checkRole } = require("../middlewares/verifyRole");
 const router = express.Router();
 
 router.route("/")
-    .get(getCategories)
+    .get(isVerifiedUser, getCategories)
     .post(isVerifiedUser, checkRole(["admin"]), createCategory);
 
 router.route("/:id")

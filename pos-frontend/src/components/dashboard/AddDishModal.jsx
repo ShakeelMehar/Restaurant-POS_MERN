@@ -3,10 +3,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { enqueueSnackbar } from "notistack";
 import { useMutation } from "@tanstack/react-query";
 import Modal from "../shared/Modal";
+import Switch from "../shared/Switch";
+import { addProduct, updateProduct } from "../../https/index";
 import {
   addDish,
+  updateDish,
   selectMenuCategories,
 } from "../../redux/slices/menuSlice";
+
+const CustomCheckbox = ({ checked, onChange, label }) => (
+  <div className="flex items-center gap-3 cursor-pointer select-none">
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] border transition-all duration-150 ${
+        checked
+          ? "bg-[#222222] border-[#222222] text-white"
+          : "border-[hsl(var(--border-strong))] bg-background hover:border-foreground"
+      }`}
+    >
+      {checked && (
+        <svg className="h-3 w-3 stroke-[3px] stroke-white fill-none" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      )}
+    </button>
+    <span className="text-sm font-semibold text-foreground" onClick={() => onChange(!checked)}>{label}</span>
+  </div>
+);
 
 const initialDishData = {
   categoryId: "",
@@ -15,10 +39,13 @@ const initialDishData = {
   category: "",
 };
 
-const AddDishModal = ({ isOpen, onClose }) => {
+const AddDishModal = ({ isOpen, onClose, dishToEdit }) => {
   const dispatch = useDispatch();
   const categories = useSelector(selectMenuCategories);
   const [dishData, setDishData] = useState(initialDishData);
+  const [hasPortions, setHasPortions] = useState(false);
+  const [activePortions, setActivePortions] = useState({ quarter: false, half: false, large: false });
+  const [portionPrices, setPortionPrices] = useState({ quarter: "", half: "", large: "" });
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -29,15 +56,53 @@ const AddDishModal = ({ isOpen, onClose }) => {
     }
   }, [categories]);
 
+  useEffect(() => {
+    if (dishToEdit) {
+      setDishData({
+        categoryId: dishToEdit.categoryId,
+        name: dishToEdit.name,
+        price: dishToEdit.price || "",
+        category: dishToEdit.category || "",
+      });
+      setHasPortions(dishToEdit.hasPortions || false);
+      if (dishToEdit.portions) {
+        setActivePortions({
+          quarter: dishToEdit.portions.quarter > 0,
+          half: dishToEdit.portions.half > 0,
+          large: dishToEdit.portions.large > 0,
+        });
+        setPortionPrices({
+          quarter: dishToEdit.portions.quarter || "",
+          half: dishToEdit.portions.half || "",
+          large: dishToEdit.portions.large || "",
+        });
+      }
+    } else {
+      handleReset();
+    }
+  }, [dishToEdit, isOpen]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDishData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleReset = () => {
+    setDishData({
+      ...initialDishData,
+      categoryId: categories[0]?.id || "",
+    });
+    setHasPortions(false);
+    setActivePortions({ quarter: false, half: false, large: false });
+    setPortionPrices({ quarter: "", half: "", large: "" });
+  };
+
   const mutation = useMutation({
-    mutationFn: async (data) => {
-      const { addProduct: apiAddProduct } = await import("../../https/index");
-      return apiAddProduct(data);
+    mutationFn: (data) => {
+      if (dishToEdit) {
+        return updateProduct(dishToEdit.id, data);
+      }
+      return addProduct(data);
     },
     onSuccess: (res) => {
       const backendProduct = res.data.data;
@@ -47,17 +112,21 @@ const AddDishModal = ({ isOpen, onClose }) => {
           name: backendProduct.name,
           price: backendProduct.price,
           category: backendProduct.category,
+          hasPortions: backendProduct.hasPortions,
+          portions: backendProduct.portions,
       };
-      dispatch(addDish(mappedDish));
-      enqueueSnackbar("Dish added.", { variant: "success" });
-      setDishData({
-        ...initialDishData,
-        categoryId: categories[0]?.id || "",
-      });
+      if (dishToEdit) {
+        dispatch(updateDish(mappedDish));
+        enqueueSnackbar("Dish updated.", { variant: "success" });
+      } else {
+        dispatch(addDish(mappedDish));
+        enqueueSnackbar("Dish added.", { variant: "success" });
+      }
+      handleReset();
       onClose();
     },
     onError: (err) => {
-      enqueueSnackbar(err?.response?.data?.message || "Failed to add dish", { variant: "error" });
+      enqueueSnackbar(err?.response?.data?.message || `Failed to ${dishToEdit ? "update" : "add"} dish`, { variant: "error" });
     }
   });
 
@@ -70,25 +139,54 @@ const AddDishModal = ({ isOpen, onClose }) => {
       return;
     }
 
+    if (hasPortions) {
+      const activeKeys = Object.keys(activePortions).filter((k) => activePortions[k]);
+      if (activeKeys.length === 0) {
+        enqueueSnackbar("Please select at least one portion size.", { variant: "warning" });
+        return;
+      }
+      for (const k of activeKeys) {
+        const pVal = Number(portionPrices[k]);
+        if (isNaN(pVal) || pVal <= 0) {
+          enqueueSnackbar(`Please enter a valid price for the ${k} portion.`, { variant: "warning" });
+          return;
+        }
+      }
+    } else {
+      if (!dishData.price || Number(dishData.price) <= 0) {
+        enqueueSnackbar("Price is required and must be greater than 0.", { variant: "warning" });
+        return;
+      }
+    }
+
+    const basePrice = hasPortions
+      ? Number(portionPrices.quarter || portionPrices.half || portionPrices.large || 0)
+      : Number(dishData.price);
+
+    const portionsPayload = {
+      quarter: hasPortions && activePortions.quarter ? Number(portionPrices.quarter) : 0,
+      half: hasPortions && activePortions.half ? Number(portionPrices.half) : 0,
+      large: hasPortions && activePortions.large ? Number(portionPrices.large) : 0,
+    };
+
     mutation.mutate({
       name,
       category: dishData.category.trim() || categories.find((c) => c.id === dishData.categoryId)?.name || "Uncategorized",
-      price: Number(dishData.price),
+      price: basePrice,
       description: "",
-      optionGroups: []
+      optionGroups: [],
+      hasPortions,
+      portions: portionsPayload
     });
   };
 
   const handleClose = () => {
-    setDishData({
-      ...initialDishData,
-      categoryId: categories[0]?.id || "",
-    });
+    handleReset();
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Add Dish">
+    <Modal isOpen={isOpen} onClose={handleClose} title={dishToEdit ? "Edit Dish" : "Add Dish"}>
       {categories.length === 0 ? (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -112,7 +210,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
               name="categoryId"
               value={dishData.categoryId}
               onChange={handleInputChange}
-              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none cursor-pointer"
+              className="input-base cursor-pointer"
               required
             >
               {categories.map((category) => (
@@ -137,46 +235,116 @@ const AddDishModal = ({ isOpen, onClose }) => {
               value={dishData.name}
               onChange={handleInputChange}
               placeholder="Chicken Handi"
-              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+              className="input-base"
               required
             />
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-foreground">
-              Price <span className="text-error">*</span>
+          {/* Portion/Size Toggle */}
+          <div className="flex items-center justify-between py-3 border-t border-b border-border/50">
+            <label className="text-sm font-semibold text-foreground cursor-pointer select-none" htmlFor="hasPortions-toggle" onClick={() => setHasPortions(!hasPortions)}>
+              Portion or Size (Quatr, Half, Large)
             </label>
-            <input
-              type="number"
-              name="price"
-              min="1"
-              value={dishData.price}
-              onChange={handleInputChange}
-              placeholder="450"
-              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
-              required
+            <Switch
+              id="hasPortions-toggle"
+              checked={hasPortions}
+              onChange={setHasPortions}
             />
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-foreground">
-              Item Type
-            </label>
-            <input
-              type="text"
-              name="category"
-              value={dishData.category}
-              onChange={handleInputChange}
-              placeholder="Vegetarian"
-              className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
-            />
-          </div>
+          {!hasPortions ? (
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-foreground">
+                Price <span className="text-error">*</span>
+              </label>
+              <input
+                type="number"
+                name="price"
+                min="1"
+                value={dishData.price}
+                onChange={handleInputChange}
+                placeholder="450"
+                className="input-base"
+                required
+              />
+            </div>
+          ) : (
+            <div className="space-y-3.5 p-4 bg-secondary/10 border border-border rounded-[14px]">
+              <span className="block text-[11px] font-bold text-muted uppercase tracking-wider">Configure Portions</span>
+              
+              {/* Quarter Portion */}
+              <div className="flex items-center justify-between gap-3 h-10">
+                <div className="min-w-[140px]">
+                  <CustomCheckbox
+                    checked={activePortions.quarter}
+                    onChange={(val) => setActivePortions(prev => ({ ...prev, quarter: val }))}
+                    label="Quarter (Quatr)"
+                  />
+                </div>
+                {activePortions.quarter && (
+                  <input
+                    type="number"
+                    value={portionPrices.quarter}
+                    onChange={(e) => setPortionPrices(prev => ({ ...prev, quarter: e.target.value }))}
+                    placeholder="Price (e.g. 200)"
+                    min="1"
+                    className="w-[120px] sm:w-[150px] bg-background border border-border focus:border-primary/50 rounded-[8px] px-3 py-2 text-xs font-semibold text-foreground outline-none transition-all"
+                    required
+                  />
+                )}
+              </div>
+
+              {/* Half Portion */}
+              <div className="flex items-center justify-between gap-3 h-10">
+                <div className="min-w-[140px]">
+                  <CustomCheckbox
+                    checked={activePortions.half}
+                    onChange={(val) => setActivePortions(prev => ({ ...prev, half: val }))}
+                    label="Half"
+                  />
+                </div>
+                {activePortions.half && (
+                  <input
+                    type="number"
+                    value={portionPrices.half}
+                    onChange={(e) => setPortionPrices(prev => ({ ...prev, half: e.target.value }))}
+                    placeholder="Price (e.g. 400)"
+                    min="1"
+                    className="w-[120px] sm:w-[150px] bg-background border border-border focus:border-primary/50 rounded-[8px] px-3 py-2 text-xs font-semibold text-foreground outline-none transition-all"
+                    required
+                  />
+                )}
+              </div>
+
+              {/* Large Portion */}
+              <div className="flex items-center justify-between gap-3 h-10">
+                <div className="min-w-[140px]">
+                  <CustomCheckbox
+                    checked={activePortions.large}
+                    onChange={(val) => setActivePortions(prev => ({ ...prev, large: val }))}
+                    label="Large"
+                  />
+                </div>
+                {activePortions.large && (
+                  <input
+                    type="number"
+                    value={portionPrices.large}
+                    onChange={(e) => setPortionPrices(prev => ({ ...prev, large: e.target.value }))}
+                    placeholder="Price (e.g. 800)"
+                    min="1"
+                    className="w-[120px] sm:w-[150px] bg-background border border-border focus:border-primary/50 rounded-[8px] px-3 py-2 text-xs font-semibold text-foreground outline-none transition-all"
+                    required
+                  />
+                )}
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
-            className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white"
+            className="mt-6 w-full btn btn-primary h-auto py-3 text-[16px]"
           >
-            Add Dish
+            {dishToEdit ? "Update Dish" : "Add Dish"}
           </button>
         </form>
       )}

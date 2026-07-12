@@ -43,7 +43,16 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    optionGroups: [variantGroupSchema]
+    optionGroups: [variantGroupSchema],
+    hasPortions: {
+        type: Boolean,
+        default: false
+    },
+    portions: {
+        quarter: { type: Number, default: 0 },
+        half: { type: Number, default: 0 },
+        large: { type: Number, default: 0 }
+    }
 }, { timestamps: true });
 
 // Ensure product names are unique per restaurant

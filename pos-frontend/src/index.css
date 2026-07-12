@@ -54,6 +54,32 @@
   --shadow-hover:     rgba(0,0,0,0.02) 0 0 0 1px, rgba(0,0,0,0.04) 0 2px 6px, rgba(0,0,0,0.1) 0 4px 8px;
 }
 
+/* Dark mode theme overrides */
+.dark {
+  --background:       0 0% 9%;          /* dark background */
+  --foreground:       0 0% 95%;         /* light text */
+  
+  --card:             0 0% 13%;         /* dark card background */
+  --card-foreground:  0 0% 95%;
+
+  --popover:          0 0% 13%;
+  --popover-foreground: 0 0% 95%;
+
+  --surface-soft:     0 0% 16%;         /* #292929 */
+  --surface-strong:   0 0% 20%;         /* #333333 */
+
+  /* Text */
+  --body:             0 0% 85%;
+  --muted:            0 0% 65%;
+  --muted-soft:       0 0% 50%;
+
+  /* Borders & Hairlines */
+  --border:           0 0% 20%;         /* #333333 */
+  --border-strong:    0 0% 30%;         /* #4d4d4d */
+  --input:            0 0% 20%;
+  --ring:             0 0% 95%;
+}
+
 /* ============================================================
    BASE / RESET
    ============================================================ */

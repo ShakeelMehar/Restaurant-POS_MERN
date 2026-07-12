@@ -83,8 +83,8 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-3">
-      <div className="bg-background w-full max-w-2xl rounded-[14px] shadow-2xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-background w-full max-w-2xl rounded-[20px] shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.08)_0_8px_24px] flex flex-col max-h-[90vh] overflow-hidden">
         
         {/* Header */}
         <div className="flex justify-between items-start p-4 border-b border-border">
@@ -142,11 +142,11 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border bg-card rounded-b-2xl">
+        <div className="p-4 border-t border-border bg-background">
           <div className="flex flex-col sm:flex-row items-center gap-2">
             
             {/* Quantity Controls */}
-            <div className="flex items-center bg-secondary text-foreground rounded-xl font-bold text-lg h-14 border border-border w-full sm:w-auto px-2">
+            <div className="flex items-center bg-[hsl(var(--surface-strong))] text-foreground rounded-[8px] font-bold text-[16px] h-14 border border-transparent focus-within:border-primary/50 w-full sm:w-auto px-2">
               <button onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))} className="px-4 hover:text-foreground transition-colors">-</button>
               <span className="px-3 min-w-[50px] text-center">{itemQuantity}</span>
               <button onClick={() => setItemQuantity(itemQuantity + 1)} className="px-4 hover:text-foreground transition-colors">+</button>
@@ -155,7 +155,7 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
             {/* Add Button */}
             <button 
               onClick={handleAddToCart}
-              className="flex-1 w-full bg-primary hover:brightness-110 text-white font-bold py-2 px-4 rounded-xl flex justify-between items-center transition-all h-14 text-base shadow-[0_0_15px_rgba(246,177,0,0.2)]"
+              className="flex-1 w-full bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded-[8px] flex justify-between items-center transition-colors h-14 text-[16px]"
             >
               <span className="flex items-center gap-2">
                 <FaShoppingCart size={18} /> Add to Order

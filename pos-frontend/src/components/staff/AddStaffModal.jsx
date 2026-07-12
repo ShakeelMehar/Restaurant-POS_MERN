@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { register } from "../../https";
+import { register, updateStaff } from "../../https";
 import Modal from "../shared/Modal";
 
 const initialData = {
@@ -12,9 +12,23 @@ const initialData = {
   role: "Cashier", // Default to Cashier
 };
 
-const AddStaffModal = ({ isOpen, onClose }) => {
+const AddStaffModal = ({ isOpen, onClose, staffToEdit }) => {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState(initialData);
+
+  useEffect(() => {
+    if (staffToEdit) {
+      setFormData({
+        name: staffToEdit.name || "",
+        email: staffToEdit.email || "",
+        phone: staffToEdit.phone || "",
+        password: "",
+        role: staffToEdit.role || "Cashier",
+      });
+    } else {
+      setFormData(initialData);
+    }
+  }, [staffToEdit, isOpen]);
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
@@ -30,15 +44,25 @@ const AddStaffModal = ({ isOpen, onClose }) => {
   };
 
   const registerMutation = useMutation({
-    mutationFn: (data) => register(data),
+    mutationFn: (data) => {
+      if (staffToEdit) {
+        const payload = { ...data };
+        delete payload.password; // Do not update password through this endpoint
+        return updateStaff(staffToEdit._id, payload);
+      }
+      return register(data);
+    },
     onSuccess: (res) => {
-      enqueueSnackbar("Staff member created successfully!", { variant: "success" });
+      enqueueSnackbar(
+        staffToEdit ? "Staff member updated successfully!" : "Staff member created successfully!",
+        { variant: "success" }
+      );
       queryClient.invalidateQueries({ queryKey: ["staff"] });
       setFormData(initialData);
       onClose();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Failed to add staff";
+      const message = error?.response?.data?.message || `Failed to ${staffToEdit ? "update" : "add"} staff`;
       enqueueSnackbar(message, { variant: "error" });
     },
   });
@@ -54,7 +78,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Add Staff Member">
+    <Modal isOpen={isOpen} onClose={handleClose} title={staffToEdit ? "Edit Staff Member" : "Add Staff Member"}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-foreground">
@@ -66,7 +90,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
             value={formData.name}
             onChange={handleInputChange}
             placeholder="e.g. Ali Khan"
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            className="input-base"
             required
           />
         </div>
@@ -81,7 +105,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="name@restaurant.com"
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            className="input-base"
             required
           />
         </div>
@@ -96,25 +120,27 @@ const AddStaffModal = ({ isOpen, onClose }) => {
             value={formData.phone}
             onChange={handleInputChange}
             placeholder="03XX-XXXXXXX"
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            className="input-base"
             required
           />
         </div>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-foreground">
-            Temporary Password <span className="text-error">*</span>
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            placeholder="••••••••"
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
-            required
-          />
-        </div>
+        {!staffToEdit && (
+          <div>
+            <label className="mb-2 block text-sm font-medium text-foreground">
+              Temporary Password <span className="text-error">*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="••••••••"
+              className="input-base"
+              required
+            />
+          </div>
+        )}
 
         <div>
           <label className="mb-2 block text-sm font-medium text-foreground">
@@ -124,7 +150,7 @@ const AddStaffModal = ({ isOpen, onClose }) => {
             name="role"
             value={formData.role}
             onChange={handleInputChange}
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none cursor-pointer"
+            className="input-base cursor-pointer"
           >
             <option value="Cashier">Cashier</option>
             <option value="Admin">Admin</option>
@@ -134,9 +160,9 @@ const AddStaffModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={registerMutation.isPending}
-          className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white disabled:opacity-50"
+          className="mt-6 w-full btn btn-primary h-auto py-3 text-[16px]"
         >
-          {registerMutation.isPending ? "Creating..." : "Add Staff"}
+          {registerMutation.isPending ? "Saving..." : (staffToEdit ? "Save Changes" : "Add Staff")}
         </button>
       </form>
     </Modal>

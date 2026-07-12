@@ -38,6 +38,8 @@ const sanitizeCatalog = (catalog) =>
                   price: Number(item.price) || 0,
                   category: item.category || category.name,
                   optionGroups: Array.isArray(item.optionGroups) ? item.optionGroups : [],
+                  hasPortions: Boolean(item.hasPortions),
+                  portions: item.portions || { quarter: 0, half: 0, large: 0 },
                 }))
             : [],
         }))
@@ -66,7 +68,7 @@ export const saveMenuCatalog = async (catalog) => {
   try {
     await db.menu.clear();
     const bulkAdd = catalog.map(cat => ({ id: cat.id, data: cat }));
-    await db.menu.bulkAdd(bulkAdd);
+    await db.menu.bulkPut(bulkAdd);
   } catch (error) {
     console.error("Dexie save error:", error);
   }

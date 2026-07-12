@@ -31,13 +31,6 @@ const Metrics = () => {
       color: "#735f32",
       isIncrease: true,
     },
-    {
-      title: "Total Tables",
-      value: "10",
-      percentage: "Live",
-      color: "#7f167f",
-      isIncrease: true,
-    },
   ];
 
   return (

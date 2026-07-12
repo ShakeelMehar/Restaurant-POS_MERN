@@ -48,7 +48,7 @@ const ResetPasswordModal = ({ isOpen, onClose, staffId, staffName }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+            className="input-base"
             required
           />
         </div>
@@ -56,7 +56,7 @@ const ResetPasswordModal = ({ isOpen, onClose, staffId, staffName }) => {
         <button
           type="submit"
           disabled={resetMutation.isPending}
-          className="mt-6 w-full rounded-[8px] bg-primary py-3 text-[16px] font-medium text-white disabled:opacity-50"
+          className="mt-6 w-full btn btn-primary h-auto py-3 text-[16px]"
         >
           {resetMutation.isPending ? "Resetting..." : "Confirm Reset"}
         </button>

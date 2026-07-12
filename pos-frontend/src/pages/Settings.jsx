@@ -3,6 +3,7 @@ import { FiSave } from "react-icons/fi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getSettings, updateSettings } from "../https/index";
 import { enqueueSnackbar } from "notistack";
+import Switch from "../components/shared/Switch";
 
 const Settings = () => {
   const queryClient = useQueryClient();
@@ -105,7 +106,7 @@ const Settings = () => {
                 value={formData.restaurantName}
                 onChange={handleInputChange}
                 required
-                className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+                className="input-base"
                 placeholder="e.g. Restro"
               />
             </div>
@@ -118,7 +119,7 @@ const Settings = () => {
                 name="branch"
                 value={formData.branch}
                 onChange={handleInputChange}
-                className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+                className="input-base"
                 placeholder="e.g. Downtown Branch"
               />
             </div>
@@ -131,7 +132,7 @@ const Settings = () => {
                 name="contactNumber"
                 value={formData.contactNumber}
                 onChange={handleInputChange}
-                className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+                className="input-base"
                 placeholder="e.g. +1 234 567 890"
               />
             </div>
@@ -144,7 +145,7 @@ const Settings = () => {
                 value={formData.location}
                 onChange={handleInputChange}
                 rows={2}
-                className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none resize-none"
+                className="input-base resize-none !h-auto"
                 placeholder="e.g. 123 Main St, City, Country"
               />
             </div>
@@ -157,7 +158,7 @@ const Settings = () => {
                 name="logoUrl"
                 value={formData.logoUrl}
                 onChange={handleInputChange}
-                className="w-full bg-[hsl(var(--surface-strong))] border border-transparent focus:border-primary/50 focus:bg-background rounded-[8px] px-4 py-3 text-sm text-foreground transition-all outline-none"
+                className="input-base"
                 placeholder="https://example.com/logo.png"
               />
               <p className="text-xs text-muted-foreground mt-2">
@@ -190,19 +191,11 @@ const Settings = () => {
                     <p className="text-sm font-semibold text-foreground">{toggle.label}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{toggle.desc}</p>
                   </div>
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input 
-                        type="checkbox" 
-                        name={toggle.name} 
-                        checked={formData[toggle.name]} 
-                        onChange={() => setFormData(prev => ({ ...prev, [toggle.name]: !prev[toggle.name] }))} 
-                        className="sr-only" 
-                      />
-                      <div className={`block w-11 h-6 rounded-full transition-colors ${formData[toggle.name] ? 'bg-primary' : 'bg-[hsl(var(--surface-strong))]'}`}></div>
-                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData[toggle.name] ? 'transform translate-x-5' : ''}`}></div>
-                    </div>
-                  </label>
+                  <Switch
+                    id={`toggle-${toggle.name}`}
+                    checked={formData[toggle.name]}
+                    onChange={() => setFormData(prev => ({ ...prev, [toggle.name]: !prev[toggle.name] }))}
+                  />
                 </div>
               ))}
               
@@ -213,7 +206,7 @@ const Settings = () => {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="flex items-center gap-2 rounded-[8px] bg-primary px-6 py-2.5 text-[15px] font-medium text-white hover:bg-primary-active transition-all disabled:opacity-70 active:scale-95"
+              className="btn btn-primary"
             >
               <FiSave size={16} />
               {mutation.isPending ? "Saving..." : "Save Settings"}

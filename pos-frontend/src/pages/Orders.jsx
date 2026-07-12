@@ -81,7 +81,7 @@ const Orders = () => {
         <div className="flex items-center gap-2">
           <BackButton />
           <div>
-            <h1 className="text-lg font-extrabold text-foreground tracking-tight">Orders</h1>
+            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Orders</h1>
             <p className="text-xs text-muted-foreground font-medium">{ordersList.length} total orders</p>
           </div>
         </div>

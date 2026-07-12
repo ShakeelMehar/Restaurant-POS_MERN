@@ -6,12 +6,6 @@ const addOrder = async (req, res, next) => {
   try {
     const order = new Order(req.body);
     await order.save();
-    
-    // Automatically book the table if present
-    if (order.table) {
-      const Table = require("../models/tableModel");
-      await Table.findByIdAndUpdate(order.table, { status: "Booked", currentOrder: order._id });
-    }
 
     res
       .status(201)
@@ -48,7 +42,7 @@ const getOrders = async (req, res, next) => {
   try {
 
 
-    const orders = await Order.find().populate("table");
+    const orders = await Order.find();
     res.status(200).json({ data: orders });
   } catch (error) {
     next(error);
@@ -64,7 +58,6 @@ const updateOrder = async (req, res, next) => {
       items,
       paymentMethod,
       paymentData,
-      table,
     } = req.body;
     const { id } = req.params;
 
@@ -83,7 +76,6 @@ const updateOrder = async (req, res, next) => {
     if (items !== undefined) updateData.items = items;
     if (paymentMethod !== undefined) updateData.paymentMethod = paymentMethod;
     if (paymentData !== undefined) updateData.paymentData = paymentData;
-    if (table !== undefined) updateData.table = table;
 
     if (Object.keys(updateData).length === 0) {
       const error = createHttpError(400, "No order fields provided for update!");

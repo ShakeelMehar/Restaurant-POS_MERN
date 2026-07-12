@@ -42,6 +42,8 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         'primary-blue': 'hsl(var(--primary))',
+        'surface-soft': 'hsl(var(--surface-soft))',
+        'surface-strong': 'hsl(var(--surface-strong))',
         active: '#4338ca',
       },
       borderRadius: {

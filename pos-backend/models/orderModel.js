@@ -9,9 +9,9 @@ const orderSchema = new mongoose.Schema({
         index: true
     },
     customerDetails: {
-        name: { type: String, required: true },
-        phone: { type: String, requried: true},
-        guests: { type: Number, required: true },
+        name: { type: String, default: "Customer" },
+        phone: { type: String, default: "" },
+        guests: { type: Number, default: 1 },
     },
     orderStatus: {
         type: String,
@@ -32,7 +32,6 @@ const orderSchema = new mongoose.Schema({
         totalWithTax: { type: Number, required: true }
     },
     items: [],
-    table: { type: mongoose.Schema.Types.ObjectId, ref: "Table" },
     cashier: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     paymentMethod: String,
     paymentData: {

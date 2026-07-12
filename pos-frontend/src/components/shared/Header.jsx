@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import NotificationDropdown from "./NotificationDropdown";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 import GlobalSearchModal from "./GlobalSearchModal";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const userData = useSelector((state) => state.user);
@@ -30,6 +31,7 @@ const Header = () => {
       return await getSettings();
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!userData?.isAuth,
   });
   const settings = settingsRes?.data?.data || {};
 
@@ -147,6 +149,9 @@ const Header = () => {
 
         {/* ── RIGHT ACTIONS ── */}
         <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Notification Bell */}
           <div className="relative">
             <button
