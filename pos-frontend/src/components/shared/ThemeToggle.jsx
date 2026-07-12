@@ -26,9 +26,7 @@ const ThemeToggle = () => {
           <FiSun className="h-3.5 w-3.5 text-white" />
         )}
       </span>
-      {/* Background icons */}
-      <FiSun className={`absolute left-2 h-3 w-3 transition-opacity duration-300 ${isDark ? 'opacity-40 text-muted-foreground' : 'opacity-0'}`} />
-      <FiMoon className={`absolute right-2 h-3 w-3 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-40 text-muted-foreground'}`} />
+
     </button>
   );
 };
