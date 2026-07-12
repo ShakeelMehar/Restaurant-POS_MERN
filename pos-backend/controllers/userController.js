@@ -1,7 +1,7 @@
 const createHttpError = require("http-errors");
 const User = require("../models/userModel");
 const tenantContext = require("../middlewares/tenantContext");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 

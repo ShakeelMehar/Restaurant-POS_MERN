@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 import { getSettings } from "../../https";
@@ -56,14 +55,11 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
         <div ref={invoiceRef} className="p-2 flex-1">
           {/* Receipt Header */}
           <div className="flex justify-center mb-4">
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.4, type: "spring", stiffness: 150 }}
-              className="w-12 h-12 rounded-full flex items-center justify-center shadow-md bg-emerald-500"
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center shadow-md bg-emerald-500 animate-pop-in"
             >
               <FaCheck className="text-white text-base" />
-            </motion.div>
+            </div>
           </div>
 
           <h2 className="text-lg font-extrabold text-center text-slate-900 mb-1">{settings.restaurantName || "Order Receipt"}</h2>
