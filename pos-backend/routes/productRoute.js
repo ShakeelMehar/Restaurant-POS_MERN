@@ -2,15 +2,17 @@ const express = require("express");
 const { createProduct, getProducts, updateProduct, deleteProduct } = require("../controllers/productController");
 const { isVerifiedUser } = require("../middlewares/tokenVerification");
 const { checkRole } = require("../middlewares/verifyRole");
+const validateRequest = require("../middlewares/validateRequest");
+const { createProductSchema, updateProductSchema } = require("../validations/productValidation");
 
 const router = express.Router();
 
 router.route("/")
     .get(isVerifiedUser, getProducts)
-    .post(isVerifiedUser, checkRole(["admin"]), createProduct);
+    .post(isVerifiedUser, checkRole(["admin"]), validateRequest(createProductSchema), createProduct);
 
 router.route("/:id")
-    .put(isVerifiedUser, checkRole(["admin"]), updateProduct)
+    .put(isVerifiedUser, checkRole(["admin"]), validateRequest(updateProductSchema), updateProduct)
     .delete(isVerifiedUser, checkRole(["admin"]), deleteProduct);
 
 module.exports = router;

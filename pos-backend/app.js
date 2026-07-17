@@ -20,6 +20,14 @@ const limiter = rateLimit({
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+const loginLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5, // Limit each IP to 5 requests per 10 minutes
+    message: { message: "Too many login attempts, please try again after 10 minutes." },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // Middlewares
 app.use(helmet());
 app.use(limiter);
@@ -38,6 +46,7 @@ app.get("/", (req,res) => {
 })
 
 // Other Endpoints
+app.use("/api/user/login", loginLimiter);
 app.use("/api/user", require("./routes/userRoute"));
 app.use("/api/order", require("./routes/orderRoute"));
 app.use("/api/payment", require("./routes/paymentRoute"));

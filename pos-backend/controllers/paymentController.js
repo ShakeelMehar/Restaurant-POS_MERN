@@ -47,6 +47,54 @@ const verifyPayment = async (req, res, next) => {
       .digest("hex");
 
     if (safeCompare(expectedSignature, razorpay_signature)) {
+      const razorpay = new Razorpay({
+        key_id: config.razorpayKeyId,
+        key_secret: config.razorpaySecretKey,
+      });
+
+      const payment = await razorpay.payments.fetch(razorpay_payment_id);
+      
+      const newPayment = new Payment({
+        restaurantId: req.user.restaurantId,
+        paymentId: payment.id,
+        orderId: payment.order_id,
+        amount: payment.amount / 100,
+        currency: payment.currency,
+        status: payment.status,
+        method: payment.method,
+        email: payment.email,
+        contact: payment.contact,
+        createdAt: new Date(payment.created_at * 1000),
+      });
+
+      try {
+        await newPayment.save();
+      } catch (saveError) {
+        if (saveError.code === 11000) {
+          console.log(`ℹ️ Duplicate payment verify received for paymentId: ${payment.id}. Ignoring duplicate.`);
+        } else {
+          throw saveError;
+        }
+      }
+
+      // Reconcile order if it already exists
+      let order;
+      await tenantContext.run({ bypassIsolation: true }, async () => {
+        order = await Order.findOne({ "paymentData.razorpay_order_id": payment.order_id });
+      });
+
+      if (order) {
+        await tenantContext.run({ restaurantId: req.user.restaurantId }, async () => {
+          order.orderStatus = "In Progress";
+          order.paymentMethod = "Online";
+          order.paymentData = {
+            razorpay_order_id: payment.order_id,
+            razorpay_payment_id: payment.id
+          };
+          await order.save();
+        });
+      }
+
       res.json({ success: true, message: "Payment verified successfully!" });
     } else {
       const error = createHttpError(400, "Payment verification failed!");
@@ -114,9 +162,33 @@ const webHookVerification = async (req, res, next) => {
         await tenantContext.run({ restaurantId }, async () => {
           try {
             await newPayment.save();
+
+            // Reconcile order if it exists
+            if (order) {
+              order.orderStatus = "In Progress";
+              order.paymentMethod = "Online";
+              order.paymentData = {
+                razorpay_order_id: payment.order_id,
+                razorpay_payment_id: payment.id
+              };
+              await order.save();
+              console.log(`✅ Order ${order._id} updated to In Progress via webhook.`);
+            }
           } catch (saveError) {
             if (saveError.code === 11000) {
               console.log(`ℹ️ Duplicate payment webhook received for paymentId: ${payment.id}. Ignoring duplicate.`);
+              
+              // Fallback update if order exists but wasn't marked paid yet
+              if (order && order.orderStatus !== "In Progress") {
+                order.orderStatus = "In Progress";
+                order.paymentMethod = "Online";
+                order.paymentData = {
+                  razorpay_order_id: payment.order_id,
+                  razorpay_payment_id: payment.id
+                };
+                await order.save();
+                console.log(`✅ Order ${order._id} updated to In Progress via duplicate webhook.`);
+              }
             } else {
               throw saveError;
             }

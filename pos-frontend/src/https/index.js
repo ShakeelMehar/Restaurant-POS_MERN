@@ -23,7 +23,7 @@ export const verifyPaymentRazorpay = (data) =>
 
 // Order Endpoints
 export const addOrder = (data) => axiosWrapper.post("/api/order/", data);
-export const getOrders = () => axiosWrapper.get("/api/order");
+export const getOrders = () => axiosWrapper.get("/api/order?page=1&limit=1000");
 export const updateOrderStatus = ({ orderId, orderStatus }) =>
   axiosWrapper.put(`/api/order/${orderId}`, { orderStatus });
 export const updateOrderById = (orderId, orderData) =>
@@ -33,7 +33,7 @@ export const updateOrderById = (orderId, orderData) =>
 export const addCategory = (data) => axiosWrapper.post("/api/category/", data);
 export const getCategories = () => axiosWrapper.get("/api/category");
 export const addProduct = (data) => axiosWrapper.post("/api/product/", data);
-export const getProducts = () => axiosWrapper.get("/api/product");
+export const getProducts = () => axiosWrapper.get("/api/product?page=1&limit=1000");
 export const updateProduct = (id, data) => axiosWrapper.put(`/api/product/${id}`, data);
 export const deleteProduct = (id) => axiosWrapper.delete(`/api/product/${id}`);
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const defaultHeader = {
   "Content-Type": "application/json",
@@ -20,4 +21,20 @@ axiosWrapper.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+// Global response interceptor for capturing Zod validation errors
+axiosWrapper.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 400 && error.response.data?.errors) {
+      error.response.data.errors.forEach((err) => {
+        const fieldName = err.field.split(".").pop();
+        // Capitalize the field name for better readability
+        const formattedField = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+        enqueueSnackbar(`${formattedField}: ${err.message}`, { variant: "error" });
+      });
+    }
+    return Promise.reject(error);
+  }
 );

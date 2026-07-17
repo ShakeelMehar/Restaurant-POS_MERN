@@ -1,5 +1,6 @@
 const createHttpError = require("http-errors");
 const Category = require("../models/categoryModel");
+const Product = require("../models/productModel");
 
 const createCategory = async (req, res, next) => {
     try {
@@ -34,6 +35,12 @@ const updateCategory = async (req, res, next) => {
 
 const deleteCategory = async (req, res, next) => {
     try {
+        // Prevent deleting category if there are associated products
+        const productsCount = await Product.countDocuments({ category: req.params.id });
+        if (productsCount > 0) {
+            return next(createHttpError(400, "Cannot delete category: it has associated products. Please reassign or delete the products first."));
+        }
+
         const category = await Category.findByIdAndDelete(req.params.id);
         if (!category) return next(createHttpError(404, "Category not found"));
         res.status(200).json({ success: true, message: "Category deleted" });
