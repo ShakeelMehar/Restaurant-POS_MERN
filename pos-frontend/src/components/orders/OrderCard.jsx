@@ -1,5 +1,6 @@
 import React from "react";
-import { FaCheckDouble, FaWifi, FaCircle } from "react-icons/fa";
+import { FiCheckCircle, FiWifi, FiCircle } from "react-icons/fi";
+import { FaCheckDouble, FaCircle } from "react-icons/fa";
 import { formatDateAndTime } from "../../utils/index";
 
 const OrderCard = ({ order, onManage }) => {
@@ -12,6 +13,19 @@ const OrderCard = ({ order, onManage }) => {
       ? order._id.split("-")[1] 
       : Math.floor(new Date(order.orderDate || order.createdAt || Date.now()).getTime())
   ).slice(-6);
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "Pending":
+        return <FiCircle size={12} className="text-warning fill-warning/20" />;
+      case "In Progress":
+        return <FiWifi size={12} className="text-info" />;
+      case "Completed":
+        return <FiCheckCircle size={12} className="text-success" />;
+      default:
+        return <FiCircle size={12} />;
+    }
+  };
 
   const itemsPreview = (order.items || []).map(i => `${i.quantity}x ${i.name}`).join(", ");
 
@@ -28,7 +42,7 @@ const OrderCard = ({ order, onManage }) => {
               #{orderId}
             </h1>
             {order.isOffline && (
-               <span className="text-[10px] bg-warning/10 text-warning px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FaWifi size={8}/> Offline</span>
+               <span className="text-[10px] bg-warning/10 text-warning px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FiWifi size={8}/> Offline</span>
             )}
           </div>
           <p className="text-muted text-[13px] mt-0.5 font-medium">{formatDateAndTime(order.orderDate)}</p>

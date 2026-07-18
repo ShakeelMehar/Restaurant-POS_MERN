@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FiHome, FiList, FiGrid, FiMoreHorizontal, FiLogOut } from "react-icons/fi";
-import { BiSolidDish } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -75,7 +74,7 @@ const BottomNav = () => {
             onClick={() => navigate("/menu")}
             className="flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-primary text-primary-foreground shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
           >
-            <BiSolidDish size={28} />
+            <FiGrid size={28} />
           </button>
         </div>
 

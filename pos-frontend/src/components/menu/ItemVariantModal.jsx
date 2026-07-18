@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaTimes } from "react-icons/fa";
+import { FiShoppingCart, FiX } from "react-icons/fi";
 
 const ItemVariantModal = ({ item, onClose, onAdd }) => {
   const [itemSelections, setItemSelections] = useState({});
@@ -96,7 +96,7 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
             onClick={onClose}
             className="p-2 bg-card hover:bg-secondary text-muted-foreground hover:text-foreground rounded-full transition-colors"
           >
-            <FaTimes />
+            <FiX size={18} />
           </button>
         </div>
 
@@ -158,7 +158,7 @@ const ItemVariantModal = ({ item, onClose, onAdd }) => {
               className="flex-1 w-full bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded-[8px] flex justify-between items-center transition-colors h-14 text-[16px]"
             >
               <span className="flex items-center gap-2">
-                <FaShoppingCart size={18} /> Add to Order
+                <FiShoppingCart size={16} /> Add to Order
               </span>
               <span>PKR {calculateItemUnitPrice() * itemQuantity}</span>
             </button>

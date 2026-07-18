@@ -15,6 +15,15 @@ export const resetStaffPassword = (id, password) => axiosWrapper.put(`/api/user/
 export const updateStaff = (id, data) => axiosWrapper.put(`/api/user/staff/${id}`, data);
 
 
+// Platform (Super Admin) Endpoints
+export const getRestaurants = () => axiosWrapper.get("/api/admin/restaurants");
+export const getRestaurant = (id) => axiosWrapper.get(`/api/admin/restaurants/${id}`);
+export const createRestaurant = (data) => axiosWrapper.post("/api/admin/restaurants", data);
+export const setRestaurantStatus = (id, isActive) =>
+  axiosWrapper.patch(`/api/admin/restaurants/${id}/status`, { isActive });
+export const resetRestaurantAdminPassword = (id, adminId) =>
+  axiosWrapper.post(`/api/admin/restaurants/${id}/reset-admin-password`, { adminId });
+
 // Payment Endpoints
 export const createOrderRazorpay = (data) =>
   axiosWrapper.post("/api/payment/create-order", data);

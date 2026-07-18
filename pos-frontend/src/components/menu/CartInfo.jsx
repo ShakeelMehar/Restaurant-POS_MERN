@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { RiDeleteBin2Fill } from "react-icons/ri";
-import { FiPlus, FiMinus } from "react-icons/fi";
+import { FiPlus, FiMinus, FiTrash2, FiShoppingCart } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItems, removeAllItems } from "../../redux/slices/cartSlice";
 import { setOrderType } from "../../redux/slices/customerSlice";
@@ -54,7 +53,7 @@ const CartInfo = () => {
           title="Clear Order"
           className="flex items-center justify-center h-9 w-9 rounded-full bg-[hsl(var(--surface-soft))] text-muted hover:text-error hover:bg-[hsl(var(--border))] transition-colors"
         >
-          <RiDeleteBin2Fill size={16} />
+          <FiTrash2 size={16} />
         </button>
       </div>
 
@@ -76,8 +75,8 @@ const CartInfo = () => {
       <div className="flex-1 overflow-y-auto hide-scrollbar space-y-2 min-h-0" ref={scrollRef}>
         {cartData.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 py-12">
-            <span className="text-4xl">🛒</span>
-            <p className="text-[15px] font-semibold text-muted">Your cart is empty</p>
+            <FiShoppingCart className="text-[hsl(var(--muted-soft))]" size={40} strokeWidth={1} />
+            <p className="text-[15px] font-semibold text-muted mt-2">Your cart is empty</p>
             <p className="text-[13px] text-[hsl(var(--muted-soft))]">Add items from the menu to get started</p>
           </div>
         ) : (

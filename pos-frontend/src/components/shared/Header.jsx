@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiSearch, FiBell, FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import { FiSearch, FiBell, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 const logo = "/vite.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -172,7 +172,7 @@ const Header = () => {
           {/* User Profile */}
           <div className="hidden lg:flex items-center gap-2 pl-3 border-l border-border ml-1">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--surface-strong))] text-foreground">
-              <FaUserCircle size={18} />
+              <FiUser size={18} />
             </div>
             <div className="flex-col items-start hidden sm:flex">
               <span className="text-[13px] font-semibold text-foreground leading-tight">

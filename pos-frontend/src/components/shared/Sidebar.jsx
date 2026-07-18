@@ -1,14 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { MdDashboard, MdCategory, MdPeople, MdAssessment, MdSettings } from "react-icons/md";
+import { FiHome, FiGrid, FiUsers, FiPieChart, FiSettings } from "react-icons/fi";
 
 const Sidebar = () => {
   const links = [
-    { name: "Dashboard", path: "/dashboard", icon: <MdDashboard size={20} /> },
-    { name: "Catalog", path: "/catalog", icon: <MdCategory size={20} /> },
-    { name: "Staff", path: "/staff", icon: <MdPeople size={20} /> },
-    { name: "Reports", path: "/reports", icon: <MdAssessment size={20} /> },
-    { name: "Settings", path: "/settings", icon: <MdSettings size={20} /> },
+    { name: "Dashboard", path: "/dashboard", icon: <FiHome size={20} /> },
+    { name: "Catalog", path: "/catalog", icon: <FiGrid size={20} /> },
+    { name: "Staff", path: "/staff", icon: <FiUsers size={20} /> },
+    { name: "Reports", path: "/reports", icon: <FiPieChart size={20} /> },
+    { name: "Settings", path: "/settings", icon: <FiSettings size={20} /> },
   ];
 
   return (

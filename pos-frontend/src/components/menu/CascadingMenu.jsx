@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiImage, FiInbox } from "react-icons/fi";
 import { getDishImage } from "../../utils/dishImages";
 
 const DishCard = ({ variant, onAdd }) => {
@@ -70,7 +70,7 @@ const DishCard = ({ variant, onAdd }) => {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[hsl(var(--surface-strong))] to-[hsl(var(--border))]">
-            <span className="text-3xl opacity-40">🍽️</span>
+            <FiImage className="text-muted/40" size={32} strokeWidth={1.5} />
           </div>
         )}
 
@@ -240,7 +240,7 @@ const CascadingMenu = ({ categories, onAdd }) => {
                 ))
               ) : (
                 <div className="col-span-full rounded-[14px] bg-card border border-border px-6 py-12 text-center">
-                  <span className="text-4xl mb-3 block">🫙</span>
+                  <div className="flex justify-center mb-4"><FiInbox className="text-[hsl(var(--muted-soft))]" size={48} strokeWidth={1} /></div>
                   <p className="text-[16px] font-medium text-foreground">No dishes in this category yet.</p>
                 </div>
               )}

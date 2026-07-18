@@ -4,6 +4,7 @@ const tenantContext = require("../middlewares/tenantContext");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
+const Restaurant = require("../models/restaurantModel");
 const { ROLES } = require("../constants/roles");
 
 // Strip sensitive fields (password) before returning a user in any response.
@@ -82,6 +83,16 @@ const login = async (req, res, next) => {
         if(!isUserPresent || !isMatch){
             const error = createHttpError(401, "Invalid Credentials");
             return next(error);
+        }
+
+        // Block login for tenant users whose restaurant has been deactivated by a Super Admin.
+        // (Super Admin has no restaurantId, so this check is skipped for them.)
+        if (isUserPresent.restaurantId) {
+            const restaurant = await Restaurant.findById(isUserPresent.restaurantId).select("isActive");
+            if (restaurant && restaurant.isActive === false) {
+                const error = createHttpError(403, "This restaurant has been deactivated. Contact the administrator.");
+                return next(error);
+            }
         }
 
         const accessToken = jwt.sign({_id: isUserPresent._id}, config.accessTokenSecret, {

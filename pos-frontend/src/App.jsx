@@ -16,6 +16,9 @@ const Catalog = lazy(() => import("./pages/Catalog.jsx"));
 const Staff = lazy(() => import("./pages/Staff.jsx"));
 const Reports = lazy(() => import("./pages/Reports.jsx"));
 const Settings = lazy(() => import("./pages/Settings.jsx"));
+const Restaurants = lazy(() => import("./pages/platform/Restaurants.jsx"));
+const RestaurantDetail = lazy(() => import("./pages/platform/RestaurantDetail.jsx"));
+import PlatformLayout from "./components/platform/PlatformLayout";
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
@@ -24,17 +27,24 @@ import AdminLayout from "./components/shared/AdminLayout";
 import ErrorBoundary from "./components/shared/ErrorBoundary";
 import { ROLES } from "./constants/roles";
 
+// Where a freshly-authenticated user should land, based on their role.
+const homePathForRole = (role) =>
+  role === ROLES.SUPER_ADMIN ? "/platform" : "/menu";
+
 function Layout() {
   const isLoading = useLoadData();
   const location = useLocation();
-  const hideHeaderRoutes = ["/auth"];
-  const { isAuth } = useSelector(state => state.user);
+  const { isAuth, role } = useSelector(state => state.user);
 
   if(isLoading) return <FullScreenLoader />
 
+  // The tenant header is only for tenant screens — Super Admin's platform area has its own chrome.
+  const hideHeader = location.pathname === "/auth" || location.pathname.startsWith("/platform");
+
   return (
     <>
-      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+      {!hideHeader && <Header />}
+      <ErrorBoundary key={location.pathname}>
       <Suspense fallback={<FullScreenLoader />}>
         <Routes>
           <Route
@@ -45,7 +55,7 @@ function Layout() {
               </ProtectedRoutes>
             }
           />
-          <Route path="/auth" element={isAuth ? <Navigate to="/menu" /> : <Auth />} />
+          <Route path="/auth" element={isAuth ? <Navigate to={homePathForRole(role)} replace /> : <Auth />} />
           <Route
             path="/orders"
             element={
@@ -66,7 +76,7 @@ function Layout() {
           <Route
             element={
               <ProtectedRoutes>
-                <RoleGuard allowedRoles={[ROLES.ADMIN, ROLES.SUPER_ADMIN]}>
+                <RoleGuard allowedRoles={[ROLES.ADMIN]}>
                   <AdminLayout />
                 </RoleGuard>
               </ProtectedRoutes>
@@ -78,19 +88,49 @@ function Layout() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
+
+          {/* Platform area — Super Admin only, separate from the tenant screens. */}
+          <Route
+            path="/platform"
+            element={
+              <PlatformRoutes>
+                <PlatformLayout />
+              </PlatformRoutes>
+            }
+          >
+            <Route index element={<Restaurants />} />
+            <Route path="restaurants/:id" element={<RestaurantDetail />} />
+          </Route>
+
           <Route path="*" element={<div>Not Found</div>} />
         </Routes>
       </Suspense>
+      </ErrorBoundary>
     </>
   );
 }
 
+// Tenant screens: authenticated non-super-admins only. Super Admin is bounced to its platform area.
 function ProtectedRoutes({ children }) {
-  const { isAuth } = useSelector((state) => state.user);
+  const { isAuth, role } = useSelector((state) => state.user);
   if (!isAuth) {
-    return <Navigate to="/auth" />;
+    return <Navigate to="/auth" replace />;
   }
+  if (role === ROLES.SUPER_ADMIN) {
+    return <Navigate to="/platform" replace />;
+  }
+  return children;
+}
 
+// Platform screens: Super Admin only. Everyone else goes back to the tenant home.
+function PlatformRoutes({ children }) {
+  const { isAuth, role } = useSelector((state) => state.user);
+  if (!isAuth) {
+    return <Navigate to="/auth" replace />;
+  }
+  if (role !== ROLES.SUPER_ADMIN) {
+    return <Navigate to="/menu" replace />;
+  }
   return children;
 }
 

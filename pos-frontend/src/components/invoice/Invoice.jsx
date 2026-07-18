@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { FiCheck } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 import { getSettings } from "../../https";
 
@@ -58,7 +58,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
             <div
               className="w-12 h-12 rounded-full flex items-center justify-center shadow-md bg-success animate-pop-in"
             >
-              <FaCheck className="text-white text-base" />
+              <FiCheck className="text-white text-base" />
             </div>
           </div>
 
