@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiHome, FiList, FiGrid, FiMoreHorizontal } from "react-icons/fi";
+import { FiHome, FiList, FiGrid, FiMoreHorizontal, FiLogOut } from "react-icons/fi";
 import { BiSolidDish } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "./Modal";
@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { logout } from "../../https";
 import { removeUser } from "../../redux/slices/userSlice";
 import LogoutConfirmModal from "./LogoutConfirmModal";
+import { ROLES } from "../../constants/roles";
 
 const BottomNav = () => {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ const BottomNav = () => {
 
       <Modal isOpen={isMoreModalOpen} onClose={() => setIsMoreModalOpen(false)} title="More Options">
         <div className="space-y-2">
-          {["Admin", "Super Admin"].includes(userData.role) && (
+          {[ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(userData.role) && (
             <button
               onClick={() => { setIsMoreModalOpen(false); navigate("/dashboard"); }}
               className="w-full flex items-center gap-3 rounded-lg hover:bg-[hsl(var(--surface-soft))] px-4 py-3 text-left font-medium text-foreground transition-colors"

@@ -27,12 +27,25 @@
   --primary-active:   345 91% 46%;      /* Rausch-active: #e00b41 */
   --primary-disabled: 348 100% 91%;     /* #ffd1da */
 
+  /* Neutral aliases (shadcn-style names → Airbnb palette) */
+  --secondary:            0 0% 97%;     /* surface-soft #f7f7f7 */
+  --secondary-foreground: 0 0% 13%;     /* ink */
+  --accent:               0 0% 97%;     /* surface-soft */
+  --accent-foreground:    0 0% 13%;     /* ink */
+
   /* Status */
   --error:            9 80% 42%;        /* #c13515 */
-  
+  --success:          142 64% 38%;      /* #23a05b */
+  --success-foreground: 0 0% 100%;
+  --warning:          38 92% 50%;       /* #f6a609 */
+  --warning-foreground: 0 0% 13%;
+  --info:             217 91% 60%;      /* #3b82f6 */
+  --info-foreground:  0 0% 100%;
+
   /* Text */
   --body:             0 0% 25%;         /* #3f3f3f */
   --muted:            0 0% 42%;         /* #6a6a6a */
+  --muted-foreground: 0 0% 42%;         /* alias of muted */
   --muted-soft:       0 0% 57%;         /* #929292 */
 
   /* Borders & Hairlines */
@@ -68,9 +81,24 @@
   --surface-soft:     0 0% 16%;         /* #292929 */
   --surface-strong:   0 0% 20%;         /* #333333 */
 
+  /* Neutral aliases */
+  --secondary:            0 0% 16%;
+  --secondary-foreground: 0 0% 95%;
+  --accent:               0 0% 16%;
+  --accent-foreground:    0 0% 95%;
+
+  /* Status (brightened for dark surfaces) */
+  --success:          142 60% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning:          38 92% 55%;
+  --warning-foreground: 0 0% 13%;
+  --info:             217 91% 65%;
+  --info-foreground:  0 0% 100%;
+
   /* Text */
   --body:             0 0% 85%;
   --muted:            0 0% 65%;
+  --muted-foreground: 0 0% 65%;         /* alias of muted */
   --muted-soft:       0 0% 50%;
 
   /* Borders & Hairlines */

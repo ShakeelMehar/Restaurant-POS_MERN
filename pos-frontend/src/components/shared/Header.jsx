@@ -11,6 +11,7 @@ import NotificationDropdown from "./NotificationDropdown";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 import GlobalSearchModal from "./GlobalSearchModal";
 import ThemeToggle from "./ThemeToggle";
+import { ROLES } from "../../constants/roles";
 
 const Header = () => {
   const userData = useSelector((state) => state.user);
@@ -133,7 +134,7 @@ const Header = () => {
           >
             Orders
           </button>
-          {["Admin", "Super Admin"].includes(userData.role) && (
+          {[ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(userData.role) && (
             <button
               onClick={() => navigate("/dashboard")}
               className={`pb-1 transition-colors whitespace-nowrap text-[15px] border-b-2 ${
@@ -236,7 +237,7 @@ const Header = () => {
               >
                 Orders
               </button>
-              {["Admin", "Super Admin"].includes(userData.role) && (
+              {[ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(userData.role) && (
                 <>
                   <div className="text-[12px] font-bold text-muted uppercase tracking-wider mt-4 px-3 mb-1">Administration</div>
                   <button

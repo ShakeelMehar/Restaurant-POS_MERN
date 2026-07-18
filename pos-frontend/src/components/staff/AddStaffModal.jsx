@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { register, updateStaff } from "../../https";
+import { createCashier, updateStaff } from "../../https";
 import Modal from "../shared/Modal";
 
 const initialData = {
@@ -9,7 +9,6 @@ const initialData = {
   email: "",
   phone: "",
   password: "",
-  role: "Cashier", // Default to Cashier
 };
 
 const AddStaffModal = ({ isOpen, onClose, staffToEdit }) => {
@@ -23,7 +22,6 @@ const AddStaffModal = ({ isOpen, onClose, staffToEdit }) => {
         email: staffToEdit.email || "",
         phone: staffToEdit.phone || "",
         password: "",
-        role: staffToEdit.role || "Cashier",
       });
     } else {
       setFormData(initialData);
@@ -50,7 +48,7 @@ const AddStaffModal = ({ isOpen, onClose, staffToEdit }) => {
         delete payload.password; // Do not update password through this endpoint
         return updateStaff(staffToEdit._id, payload);
       }
-      return register(data);
+      return createCashier(data); // role is assigned server-side (always cashier)
     },
     onSuccess: (res) => {
       enqueueSnackbar(
@@ -141,21 +139,6 @@ const AddStaffModal = ({ isOpen, onClose, staffToEdit }) => {
             />
           </div>
         )}
-
-        <div>
-          <label className="mb-2 block text-sm font-medium text-foreground">
-            Role
-          </label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleInputChange}
-            className="input-base cursor-pointer"
-          >
-            <option value="Cashier">Cashier</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </div>
 
         <button
           type="submit"

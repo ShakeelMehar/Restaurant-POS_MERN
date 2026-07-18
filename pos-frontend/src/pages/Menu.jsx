@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FiBookOpen, FiShoppingCart } from "react-icons/fi";
 import MobileCartDrawer from "../components/menu/MobileCartDrawer";
+import { ROLES } from "../constants/roles";
 
 const Menu = () => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Menu = () => {
                             <span className="badge">Editing</span>
                         )}
                     </div>
-                    {["Admin", "Super Admin"].includes(role) && (
+                    {[ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(role) && (
                         <button
                             onClick={() => navigate("/catalog?tab=categories")}
                             className="btn btn-secondary !h-8 !px-3 !text-[13px]">

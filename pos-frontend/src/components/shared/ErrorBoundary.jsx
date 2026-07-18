@@ -17,12 +17,12 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-gray-800 p-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
           <h1 className="text-4xl font-bold mb-4">Oops, something went wrong.</h1>
-          <p className="text-lg mb-6">We're sorry, but an unexpected error occurred.</p>
+          <p className="text-lg mb-6 text-muted">We're sorry, but an unexpected error occurred.</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-primary text-primary-foreground rounded-[8px] hover:bg-primary-active transition"
           >
             Refresh Page
           </button>

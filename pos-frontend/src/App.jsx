@@ -22,6 +22,7 @@ import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
 import AdminLayout from "./components/shared/AdminLayout";
 import ErrorBoundary from "./components/shared/ErrorBoundary";
+import { ROLES } from "./constants/roles";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -65,7 +66,7 @@ function Layout() {
           <Route
             element={
               <ProtectedRoutes>
-                <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                <RoleGuard allowedRoles={[ROLES.ADMIN, ROLES.SUPER_ADMIN]}>
                   <AdminLayout />
                 </RoleGuard>
               </ProtectedRoutes>

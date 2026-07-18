@@ -1,14 +1,12 @@
 const { z } = require("zod");
 
-const registerSchema = z.object({
+// Cashier creation: role is assigned server-side (always "cashier"), never accepted from the client.
+const createCashierSchema = z.object({
     body: z.object({
         name: z.string().min(1, "Name is required"),
         phone: z.string().min(1, "Phone is required"),
         email: z.string().email("Invalid email format"),
-        password: z.string().min(6, "Password must be at least 6 characters"),
-        role: z.enum(["admin", "cashier", "super admin"], {
-            errorMap: () => ({ message: "Role must be 'admin', 'cashier', or 'super admin'" })
-        })
+        password: z.string().min(6, "Password must be at least 6 characters")
     })
 });
 
@@ -19,14 +17,12 @@ const loginSchema = z.object({
     })
 });
 
+// Staff edits do not change role — role is immutable through this endpoint.
 const updateStaffSchema = z.object({
     body: z.object({
         name: z.string().min(1, "Name is required"),
         phone: z.string().min(1, "Phone is required"),
-        email: z.string().email("Invalid email format"),
-        role: z.enum(["admin", "cashier", "super admin"], {
-            errorMap: () => ({ message: "Role must be 'admin', 'cashier', or 'super admin'" })
-        })
+        email: z.string().email("Invalid email format")
     }),
     params: z.object({
         id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid staff ID format")
@@ -43,7 +39,7 @@ const updateStaffPasswordSchema = z.object({
 });
 
 module.exports = {
-    registerSchema,
+    createCashierSchema,
     loginSchema,
     updateStaffSchema,
     updateStaffPasswordSchema

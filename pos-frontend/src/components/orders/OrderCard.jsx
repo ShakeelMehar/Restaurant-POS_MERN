@@ -28,7 +28,7 @@ const OrderCard = ({ order, onManage }) => {
               #{orderId}
             </h1>
             {order.isOffline && (
-               <span className="text-[10px] bg-amber-500/10 text-amber-500 px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FaWifi size={8}/> Offline</span>
+               <span className="text-[10px] bg-warning/10 text-warning px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FaWifi size={8}/> Offline</span>
             )}
           </div>
           <p className="text-muted text-[13px] mt-0.5 font-medium">{formatDateAndTime(order.orderDate)}</p>
@@ -38,19 +38,19 @@ const OrderCard = ({ order, onManage }) => {
         <div className="flex-shrink-0">
           {order.orderStatus === "Ready" ? (
              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[9999px] border border-[hsl(var(--border-strong))] bg-card text-[12px] font-bold text-foreground">
-               <FaCheckDouble className="text-green-600" /> {order.orderStatus}
+               <FaCheckDouble className="text-success" /> {order.orderStatus}
              </span>
           ) : order.orderStatus === "Held" ? (
              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[9999px] border border-[hsl(var(--border-strong))] bg-card text-[12px] font-bold text-foreground">
-               <FaCircle className="text-amber-500 text-[10px]" /> {order.orderStatus}
+               <FaCircle className="text-warning text-[10px]" /> {order.orderStatus}
              </span>
           ) : order.orderStatus === "Completed" ? (
              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[9999px] border border-[hsl(var(--border-strong))] bg-card text-[12px] font-bold text-foreground">
-               <FaCheckDouble className="text-blue-500" /> {order.orderStatus}
+               <FaCheckDouble className="text-info" /> {order.orderStatus}
              </span>
           ) : (
              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[9999px] border border-[hsl(var(--border-strong))] bg-card text-[12px] font-bold text-foreground">
-               <FaCircle className="text-yellow-500 text-[10px]" /> {order.orderStatus}
+               <FaCircle className="text-warning text-[10px]" /> {order.orderStatus}
              </span>
           )}
         </div>

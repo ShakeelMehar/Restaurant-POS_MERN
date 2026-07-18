@@ -101,7 +101,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
               Update Status
             </p>
             {order.isOffline && (
-              <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded font-bold">
+              <span className="text-[10px] bg-warning/10 text-warning px-2 py-0.5 rounded font-bold">
                 Waiting for sync...
               </span>
             )}

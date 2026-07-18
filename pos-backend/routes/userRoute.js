@@ -1,23 +1,25 @@
 const express = require("express");
-const { register, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword, updateStaff } = require("../controllers/userController");
+const { createCashier, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword, updateStaff } = require("../controllers/userController");
 const { isVerifiedUser } = require("../middlewares/tokenVerification");
 const { checkRole } = require("../middlewares/verifyRole");
 const validateRequest = require("../middlewares/validateRequest");
-const { registerSchema, loginSchema, updateStaffSchema, updateStaffPasswordSchema } = require("../validations/userValidation");
+const { createCashierSchema, loginSchema, updateStaffSchema, updateStaffPasswordSchema } = require("../validations/userValidation");
+const { ROLES } = require("../constants/roles");
 
 const router = express.Router();
 
 // Authentication Routes
-router.route("/register").post(isVerifiedUser, checkRole(["admin"]), validateRequest(registerSchema), register);
 router.route("/login").post(validateRequest(loginSchema), login);
 router.route("/logout").post(isVerifiedUser, logout);
 router.route("/").get(isVerifiedUser, getUserData);
 
-// Admin-only Staff Management Routes
-router.get("/staff", isVerifiedUser, checkRole(["admin"]), getAllStaff);
+// Admin-only Staff Management Routes (cashiers only — role is assigned server-side)
+router.route("/staff")
+    .get(isVerifiedUser, checkRole([ROLES.ADMIN]), getAllStaff)
+    .post(isVerifiedUser, checkRole([ROLES.ADMIN]), validateRequest(createCashierSchema), createCashier);
 router.route("/staff/:id")
-    .put(isVerifiedUser, checkRole(["admin"]), validateRequest(updateStaffSchema), updateStaff)
-    .delete(isVerifiedUser, checkRole(["admin"]), deleteStaff);
-router.put("/staff/:id/password", isVerifiedUser, checkRole(["admin"]), validateRequest(updateStaffPasswordSchema), updateStaffPassword);
+    .put(isVerifiedUser, checkRole([ROLES.ADMIN]), validateRequest(updateStaffSchema), updateStaff)
+    .delete(isVerifiedUser, checkRole([ROLES.ADMIN]), deleteStaff);
+router.put("/staff/:id/password", isVerifiedUser, checkRole([ROLES.ADMIN]), validateRequest(updateStaffPasswordSchema), updateStaffPassword);
 
 module.exports = router;

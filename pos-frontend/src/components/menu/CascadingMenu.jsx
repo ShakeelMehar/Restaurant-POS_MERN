@@ -75,7 +75,7 @@ const DishCard = ({ variant, onAdd }) => {
         )}
 
         {/* Add orb — Airbnb heart position, Rausch-fill on hover */}
-        <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-foreground shadow-[rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] backdrop-blur-sm transition-colors group-hover:bg-primary group-hover:text-white">
+        <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-slate-900 shadow-[rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] backdrop-blur-sm transition-colors group-hover:bg-primary group-hover:text-white">
           <FiPlus size={16} strokeWidth={2.5} />
         </div>
       </div>

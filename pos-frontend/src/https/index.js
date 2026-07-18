@@ -4,12 +4,12 @@ import { axiosWrapper } from "./axiosWrapper";
 
 // Auth Endpoints
 export const login = (data) => axiosWrapper.post("/api/user/login", data);
-export const register = (data) => axiosWrapper.post("/api/user/register", data);
 export const getUserData = () => axiosWrapper.get("/api/user");
 export const logout = () => axiosWrapper.post("/api/user/logout");
 
 // Staff Endpoints
 export const getAllStaff = () => axiosWrapper.get("/api/user/staff");
+export const createCashier = (data) => axiosWrapper.post("/api/user/staff", data);
 export const deleteStaff = (id) => axiosWrapper.delete(`/api/user/staff/${id}`);
 export const resetStaffPassword = (id, password) => axiosWrapper.put(`/api/user/staff/${id}/password`, { password });
 export const updateStaff = (id, data) => axiosWrapper.put(`/api/user/staff/${id}`, data);

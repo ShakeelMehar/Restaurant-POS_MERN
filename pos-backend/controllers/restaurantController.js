@@ -3,6 +3,7 @@ const crypto = require("node:crypto");
 const Restaurant = require("../models/restaurantModel");
 const User = require("../models/userModel");
 const tenantContext = require("../middlewares/tenantContext");
+const { ROLES } = require("../constants/roles");
 
 const createRestaurant = async (req, res, next) => {
     try {
@@ -41,7 +42,7 @@ const createRestaurant = async (req, res, next) => {
                 email: adminEmail,
                 phone: adminPhone,
                 password: tempPassword, // Will be hashed by pre-save hook
-                role: "admin",
+                role: ROLES.ADMIN,
                 restaurantId: restaurant._id,
                 forcePasswordChange: true, // Force password reset on first login
             });

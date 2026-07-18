@@ -56,7 +56,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
           {/* Receipt Header */}
           <div className="flex justify-center mb-4">
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center shadow-md bg-emerald-500 animate-pop-in"
+              className="w-12 h-12 rounded-full flex items-center justify-center shadow-md bg-success animate-pop-in"
             >
               <FaCheck className="text-white text-base" />
             </div>
@@ -117,7 +117,7 @@ const Invoice = ({ orderInfo, setShowInvoice }) => {
             </div>
             <div className="flex justify-between text-sm font-extrabold text-slate-950 pt-1.5">
               <span>Grand Total:</span>
-              <span className="text-emerald-600">PKR {orderInfo.bills.totalWithTax.toFixed(2)}</span>
+              <span className="text-success">PKR {orderInfo.bills.totalWithTax.toFixed(2)}</span>
             </div>
           </div>
 

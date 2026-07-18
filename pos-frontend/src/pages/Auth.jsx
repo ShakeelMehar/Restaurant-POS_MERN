@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Login from "../components/auth/Login";
-import Register from "../components/auth/Register";
 
 const Auth = () => {
-  const [isRegister, setIsRegister] = useState(false);
-
   useEffect(() => {
     document.title = "Restro | Authentication";
   }, []);
@@ -22,27 +19,11 @@ const Auth = () => {
             </h3>
           </div>
           <h1 className="text-[24px] font-bold text-foreground tracking-tight text-center">
-            {isRegister ? "Create an account" : "Log in to POS"}
+            Log in to POS
           </h1>
         </div>
 
-        {isRegister ? (
-          <Register setIsRegister={setIsRegister} />
-        ) : (
-          <Login />
-        )}
-
-        <div className="mt-8 pt-6 flex items-center justify-center gap-1 text-[15px] border-t border-[hsl(var(--border-strong))]">
-          <span className="text-foreground">
-            {isRegister ? "Already have an account?" : "Don't have an account?"}
-          </span>
-          <button
-            onClick={() => setIsRegister(!isRegister)}
-            className="font-bold text-foreground hover:underline underline-offset-2"
-          >
-            {isRegister ? "Log in" : "Sign up"}
-          </button>
-        </div>
+        <Login />
       </div>
     </div>
   );

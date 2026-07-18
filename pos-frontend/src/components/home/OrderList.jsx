@@ -5,8 +5,8 @@ const statusBadge = (status) => {
   if (status === "Ready")
     return "bg-success/10 text-success border border-success/25";
   if (status === "Completed")
-    return "bg-muted text-muted-foreground border border-border";
-  return "bg-blue-500/10 text-blue-600 border border-blue-500/25";
+    return "bg-surface-strong text-muted border border-border";
+  return "bg-info/10 text-info border border-info/25";
 };
 
 const OrderList = ({ order, onManage }) => {

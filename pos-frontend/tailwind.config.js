@@ -33,6 +33,14 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         error: {
           DEFAULT: "hsl(var(--error))",
           foreground: "#ffffff",
@@ -48,7 +56,6 @@ export default {
         'primary-blue': 'hsl(var(--primary))',
         'surface-soft': 'hsl(var(--surface-soft))',
         'surface-strong': 'hsl(var(--surface-strong))',
-        active: '#4338ca',
       },
       borderRadius: {
         DEFAULT: "var(--radius)",
@@ -60,9 +67,9 @@ export default {
         full: "var(--radius-full)",
       },
       fontFamily: {
-        inter: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-        jakarta: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        jakarta: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
       boxShadow: {
         'glow': 'var(--shadow-glow)',

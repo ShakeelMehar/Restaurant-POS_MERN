@@ -6,6 +6,7 @@ import { getAllStaff, deleteStaff } from "../https";
 import AddStaffModal from "../components/staff/AddStaffModal";
 import ResetPasswordModal from "../components/staff/ResetPasswordModal";
 import ConfirmModal from "../components/shared/ConfirmModal";
+import { ROLE_LABELS } from "../constants/roles";
 import {
     FiUserPlus,
     FiMail,
@@ -17,9 +18,9 @@ import {
 } from "react-icons/fi";
 
 const roleColors = {
-    Cashier: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    Admin: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-    "Super Admin": "bg-purple-500/10 text-purple-500 border-purple-500/20",
+    cashier: "bg-surface-strong text-muted border border-border",
+    admin: "bg-info/10 text-info border border-info/25",
+    super_admin: "bg-primary/10 text-primary border border-primary/25",
 };
 
 const Staff = () => {
@@ -127,8 +128,8 @@ const Staff = () => {
                                             <h2 className="text-[15px] font-bold text-foreground leading-tight">
                                                 {member.name}
                                             </h2>
-                                            <span className="mt-1 text-[10px] uppercase tracking-wider">
-                                                {member.role}
+                                            <span className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${roleColors[member.role] || "bg-surface-strong text-muted border border-border"}`}>
+                                                {ROLE_LABELS[member.role] || member.role}
                                             </span>
                                         </div>
                                     </div>

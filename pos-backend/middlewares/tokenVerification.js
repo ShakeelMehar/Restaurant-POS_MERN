@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const User = require("../models/userModel");
 const tenantContext = require("./tenantContext");
+const { ROLES } = require("../constants/roles");
 
 
 const isVerifiedUser = async (req, res, next) => {
@@ -36,7 +37,7 @@ const isVerifiedUser = async (req, res, next) => {
         req.user = user;
 
         // Wrap the rest of the request in the tenant context
-        tenantContext.run({ restaurantId: user.restaurantId, bypassIsolation: user.role === 'Super Admin' }, () => {
+        tenantContext.run({ restaurantId: user.restaurantId, bypassIsolation: user.role === ROLES.SUPER_ADMIN }, () => {
             next();
         });
 

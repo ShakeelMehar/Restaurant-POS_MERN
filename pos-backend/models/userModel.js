@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const tenantIsolation = require("./plugins/tenantIsolation");
+const { ROLES, ROLE_VALUES } = require("../constants/roles");
 
 const userSchema = new mongoose.Schema({
     restaurantId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Restaurant",
-        index: true
+        index: true,
+        // Super Admin is a platform-wide account with no tenant; everyone else must be bound to one.
+        required: function () { return this.role !== ROLES.SUPER_ADMIN; }
     },
     name : {
         type: String,
@@ -43,7 +46,9 @@ const userSchema = new mongoose.Schema({
 
     role: {
         type: String,
-        required: true
+        enum: ROLE_VALUES,
+        required: true,
+        index: true
     },
     isDeleted: {
         type: Boolean,
