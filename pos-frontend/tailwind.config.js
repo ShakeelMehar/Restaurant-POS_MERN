@@ -33,6 +33,10 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
+        error: {
+          DEFAULT: "hsl(var(--error))",
+          foreground: "#ffffff",
+        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

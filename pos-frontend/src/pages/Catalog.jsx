@@ -7,8 +7,8 @@ import BackButton from "../components/shared/BackButton";
 import AddCategoryModal from "../components/dashboard/AddCategoryModal";
 import AddDishModal from "../components/dashboard/AddDishModal";
 import ConfirmModal from "../components/shared/ConfirmModal";
-import { selectAllDishes, selectMenuCategories, selectTotalDishCount, deleteDish } from "../redux/slices/menuSlice";
-import { deleteProduct } from "../https/index";
+import { selectAllDishes, selectMenuCategories, selectTotalDishCount, deleteDish, removeCategory } from "../redux/slices/menuSlice";
+import { deleteProduct, deleteCategory } from "../https/index";
 import TabGroup from "../components/shared/TabGroup";
 import { FiPlus, FiGrid, FiEdit2, FiTrash2 } from "react-icons/fi";
 
@@ -23,6 +23,7 @@ const Catalog = () => {
   const [isDishModalOpen, setIsDishModalOpen] = useState(false);
   const [editingDish, setEditingDish] = useState(null);
   const [deletingDishId, setDeletingDishId] = useState(null);
+  const [deletingCategoryId, setDeletingCategoryId] = useState(null);
   const activeTab = searchParams.get("tab") === "dishes" ? "dishes" : "categories";
 
   useEffect(() => { document.title = "POS | Catalog"; }, []);
@@ -36,6 +37,18 @@ const Catalog = () => {
     },
     onError: (err) => {
       enqueueSnackbar(err?.response?.data?.message || "Failed to delete dish", { variant: "error" });
+    }
+  });
+
+  const deleteCategoryMutation = useMutation({
+    mutationFn: (id) => deleteCategory(id),
+    onSuccess: (_, id) => {
+      dispatch(removeCategory(id));
+      setDeletingCategoryId(null);
+      enqueueSnackbar("Category deleted successfully", { variant: "success" });
+    },
+    onError: (err) => {
+      enqueueSnackbar(err?.response?.data?.message || "Failed to delete category", { variant: "error" });
     }
   });
 
@@ -54,7 +67,27 @@ const Catalog = () => {
     }
   };
 
+  const handleDeleteCategory = (id) => {
+    setDeletingCategoryId(id);
+  };
+
+  const handleConfirmDeleteCategory = () => {
+    if (deletingCategoryId) {
+      deleteCategoryMutation.mutate(deletingCategoryId);
+    }
+  };
+
   const setTab = (tab) => setSearchParams({ tab });
+
+  const deletingDish = useMemo(
+    () => allDishes.find((d) => d.id === deletingDishId) || null,
+    [allDishes, deletingDishId]
+  );
+  const deletingCategory = useMemo(
+    () => categories.find((c) => c.id === deletingCategoryId) || null,
+    [categories, deletingCategoryId]
+  );
+  const categoryDishCount = deletingCategory?.items.length || 0;
 
   return (
     <section className="min-h-[calc(100dvh-4rem)] bg-background pb-24">
@@ -116,12 +149,23 @@ const Catalog = () => {
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={() => setTab("dishes")}
-                  className="btn btn-secondary flex-shrink-0 !h-8 text-xs px-3"
-                >
-                  View Dishes
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setTab("dishes")}
+                    className="btn btn-secondary flex-shrink-0 !h-8 text-xs px-3"
+                  >
+                    View Dishes
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCategory(category.id)}
+                    disabled={deleteCategoryMutation.isPending}
+                    title={`Delete ${category.name}`}
+                    aria-label={`Delete ${category.name}`}
+                    className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-error/10 hover:text-error focus-visible:bg-error/10 focus-visible:text-error disabled:opacity-40"
+                  >
+                    <FiTrash2 size={15} />
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -180,7 +224,7 @@ const Catalog = () => {
                 </div>
               </div>
 
-              {/* Actions */}
+              {/* Actions — Edit is primary; Delete is de-emphasized to prevent mis-taps */}
               <div className="flex gap-2 pt-3 mt-4 border-t border-border/50">
                 <button
                   onClick={() => handleEditDish(dish)}
@@ -191,9 +235,11 @@ const Catalog = () => {
                 <button
                   onClick={() => handleDeleteDish(dish.id)}
                   disabled={deleteMutation.isPending}
-                  className="btn btn-secondary flex-1 !h-9 text-xs !text-primary"
+                  title={`Delete ${dish.name}`}
+                  aria-label={`Delete ${dish.name}`}
+                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[12px] border border-border text-muted-foreground transition-colors hover:border-error/40 hover:bg-error/10 hover:text-error focus-visible:border-error/40 focus-visible:text-error disabled:opacity-40"
                 >
-                  <FiTrash2 size={12} /> Delete
+                  <FiTrash2 size={14} />
                 </button>
               </div>
             </div>
@@ -214,10 +260,31 @@ const Catalog = () => {
         isOpen={Boolean(deletingDishId)}
         onClose={() => setDeletingDishId(null)}
         onConfirm={handleConfirmDelete}
+        variant="danger"
         title="Delete Dish"
-        message="Are you sure you want to delete this dish? This action cannot be undone."
-        confirmText="Delete"
+        message="You're about to permanently delete"
+        itemName={deletingDish?.name}
+        confirmText="Delete Dish"
         isPending={deleteMutation.isPending}
+      />
+      <ConfirmModal
+        isOpen={Boolean(deletingCategoryId)}
+        onClose={() => setDeletingCategoryId(null)}
+        onConfirm={handleConfirmDeleteCategory}
+        variant="danger"
+        title="Delete Category"
+        message="You're about to permanently delete the category"
+        itemName={deletingCategory?.name}
+        requireText={categoryDishCount === 0 ? deletingCategory?.name : undefined}
+        blockReason={
+          categoryDishCount > 0
+            ? `This category still has ${categoryDishCount} ${
+                categoryDishCount === 1 ? "dish" : "dishes"
+              }. Move or delete them from the Dishes tab first, then you can remove the category.`
+            : undefined
+        }
+        confirmText="Delete Category"
+        isPending={deleteCategoryMutation.isPending}
       />
     </section>
   );

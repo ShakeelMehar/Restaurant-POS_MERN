@@ -143,7 +143,8 @@ const Staff = () => {
                                         }}
                                         disabled={deleteMutation.isPending}
                                         title="Remove Staff Member"
-                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-muted-foreground hover:bg-red-50 hover:text-primary transition-all disabled:opacity-50">
+                                        aria-label={`Remove ${member.name}`}
+                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-muted-foreground hover:bg-error/10 hover:text-error focus-visible:bg-error/10 focus-visible:text-error transition-all disabled:opacity-50">
                                         <FiTrash2 size={15} />
                                     </button>
                                 </div>
@@ -208,9 +209,11 @@ const Staff = () => {
                 isOpen={Boolean(deletingStaff)}
                 onClose={() => setDeletingStaff(null)}
                 onConfirm={handleConfirmDeleteStaff}
+                variant="danger"
                 title="Remove Staff Member"
-                message={`Are you sure you want to remove ${deletingStaff?.name || "this staff member"}? They will lose access to the POS system.`}
-                confirmText="Remove"
+                message="You're about to remove"
+                itemName={deletingStaff?.name}
+                confirmText="Remove Staff"
                 isPending={deleteMutation.isPending}
             />
         </section>

@@ -48,11 +48,9 @@ export const useInitializeData = () => {
               };
             });
 
-            if (mappedCatalog.length > 0) {
-              dispatch(setCategories(mappedCatalog));
-              await saveMenuCatalog(mappedCatalog);
-              return; // Success, skip fallback
-            }
+            dispatch(setCategories(mappedCatalog));
+            await saveMenuCatalog(mappedCatalog);
+            return; // Success, skip fallback
           } catch (apiError) {
              console.error("Backend fetch failed, falling back to Dexie", apiError);
           }

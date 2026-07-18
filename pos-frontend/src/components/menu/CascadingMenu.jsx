@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
+import { getDishImage } from "../../utils/dishImages";
 
 const DishCard = ({ variant, onAdd }) => {
   const itemDetails = variant.originalItemDetails || {};
   const hasPortions = itemDetails.hasPortions;
+  const dishImage = getDishImage(itemDetails.name || variant.name, itemDetails.category);
   
   const portionsConfig = itemDetails.portions || {};
   const availablePortions = [];
@@ -55,26 +57,48 @@ const DishCard = ({ variant, onAdd }) => {
   return (
     <div
       onClick={handleCardClick}
-      className="card-base card-hover flex flex-col justify-between p-3 min-h-[110px] sm:min-h-[120px] cursor-pointer active:scale-[0.98] transition-transform duration-150 border border-[hsl(var(--border-strong))] rounded-[12px] sm:rounded-[14px]"
+      className="group flex flex-col cursor-pointer active:scale-[0.98] transition-transform duration-150"
     >
-      <div>
-        <h3 className="text-[13px] font-semibold leading-snug mb-1 text-foreground">
+      {/* Photo plate — rounded-md clipping, 1:1 aspect, floating add orb */}
+      <div className="relative w-full aspect-square overflow-hidden rounded-[14px] bg-[hsl(var(--surface-strong))]">
+        {dishImage ? (
+          <img
+            src={dishImage}
+            alt={itemDetails.name || variant.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[hsl(var(--surface-strong))] to-[hsl(var(--border))]">
+            <span className="text-3xl opacity-40">🍽️</span>
+          </div>
+        )}
+
+        {/* Add orb — Airbnb heart position, Rausch-fill on hover */}
+        <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-foreground shadow-[rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px] backdrop-blur-sm transition-colors group-hover:bg-primary group-hover:text-white">
+          <FiPlus size={16} strokeWidth={2.5} />
+        </div>
+      </div>
+
+      {/* Meta block */}
+      <div className="pt-2 pb-1">
+        <h3 className="text-[14px] font-semibold leading-tight text-foreground truncate">
           {itemDetails.name || variant.name}
         </h3>
-        
-        {/* Render portion toggles if applicable */}
+
+        {/* Portion toggles */}
         {hasPortions && availablePortions.length > 0 && (
-          <div className="flex gap-1 mt-2 flex-wrap" onClick={(e) => e.stopPropagation()}>
+          <div className="flex gap-1 mt-1.5 flex-wrap" onClick={(e) => e.stopPropagation()}>
             {availablePortions.map((portion) => {
               const isSelected = selectedPortionId === portion.id;
               return (
                 <button
                   key={portion.id}
                   onClick={() => setSelectedPortionId(portion.id)}
-                  className={`px-2 py-0.5 rounded-[6px] text-[10px] font-bold uppercase transition-all duration-150 ${
+                  className={`px-2 py-0.5 rounded-[9999px] text-[10px] font-bold uppercase tracking-wide transition-all duration-150 ${
                     isSelected
-                      ? "bg-primary text-white shadow-sm"
-                      : "bg-[hsl(var(--surface-strong))] text-muted hover:bg-[hsl(var(--border))] hover:text-foreground"
+                      ? "bg-foreground text-[hsl(var(--background))]"
+                      : "bg-[hsl(var(--surface-strong))] text-muted hover:text-foreground"
                   }`}
                 >
                   {portion.label}
@@ -83,15 +107,10 @@ const DishCard = ({ variant, onAdd }) => {
             })}
           </div>
         )}
-      </div>
-      
-      <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/30">
-        <p className="text-foreground text-[13px] font-bold">
-          PKR {getActivePrice()}
+
+        <p className="mt-1 text-[14px] text-foreground">
+          <span className="font-semibold">PKR {getActivePrice()}</span>
         </p>
-        <div className="flex items-center justify-center h-7 w-7 rounded-full bg-[hsl(var(--surface-strong))] text-foreground hover:bg-primary hover:text-white transition-colors shadow-sm">
-          <FiPlus size={14} />
-        </div>
       </div>
     </div>
   );
@@ -210,7 +229,7 @@ const CascadingMenu = ({ categories, onAdd }) => {
       <div className="flex flex-col flex-1 overflow-hidden bg-background">
         {selectedCategory && (
           <div className="px-3 sm:px-4 pt-4 pb-20 lg:pb-4 overflow-y-auto hide-scrollbar flex-1 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-5 sm:gap-x-4 sm:gap-y-6">
               {categoryVariants.length > 0 ? (
                 categoryVariants.map((variant, index) => (
                   <DishCard

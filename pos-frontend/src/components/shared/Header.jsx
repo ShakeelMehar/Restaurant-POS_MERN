@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiSearch, FiBell, FiLogOut, FiMenu, FiX } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
-import logo from "../../assets/images/logo.png";
+const logo = "/vite.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { logout } from "../../https";

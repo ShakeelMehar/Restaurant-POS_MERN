@@ -8,7 +8,11 @@ const createProductSchema = z.object({
         price: z.number().min(0, "Price must be a positive number"),
         optionGroups: z.array(z.any()).optional(),
         hasPortions: z.boolean().optional(),
-        portions: z.array(z.any()).optional()
+        portions: z.object({
+            quarter: z.number().optional(),
+            half: z.number().optional(),
+            large: z.number().optional()
+        }).optional()
     })
 });
 
@@ -20,7 +24,11 @@ const updateProductSchema = z.object({
         price: z.number().min(0, "Price must be a positive number").optional(),
         optionGroups: z.array(z.any()).optional(),
         hasPortions: z.boolean().optional(),
-        portions: z.array(z.any()).optional()
+        portions: z.object({
+            quarter: z.number().optional(),
+            half: z.number().optional(),
+            large: z.number().optional()
+        }).optional()
     }),
     params: z.object({
         id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid product ID format")

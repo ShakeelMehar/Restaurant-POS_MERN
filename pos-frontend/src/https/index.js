@@ -32,6 +32,7 @@ export const updateOrderById = (orderId, orderData) =>
 // Menu Catalog Endpoints
 export const addCategory = (data) => axiosWrapper.post("/api/category/", data);
 export const getCategories = () => axiosWrapper.get("/api/category");
+export const deleteCategory = (id) => axiosWrapper.delete(`/api/category/${id}`);
 export const addProduct = (data) => axiosWrapper.post("/api/product/", data);
 export const getProducts = () => axiosWrapper.get("/api/product?page=1&limit=1000");
 export const updateProduct = (id, data) => axiosWrapper.put(`/api/product/${id}`, data);

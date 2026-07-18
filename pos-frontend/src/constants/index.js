@@ -1,74 +1,53 @@
-import butterChicken from "../assets/images/butter-chicken-4.jpg";
-import palakPaneer from "../assets/images/Saag-Paneer-1.jpg";
-import biryani from "../assets/images/hyderabadibiryani.jpg";
-import masalaDosa from "../assets/images/masala-dosa.jpg";
-import choleBhature from "../assets/images/chole-bhature.jpg";
-import rajmaChawal from "../assets/images/rajma-chawal-1.jpg";
-import paneerTikka from "../assets/images/paneer-tika.webp";
-import gulabJamun from "../assets/images/gulab-jamun.webp";
-import pooriSabji from "../assets/images/poori-sabji.webp";
-import roganJosh from "../assets/images/rogan-josh.jpg";
+import beefPulao from "../assets/images/menu/beef_pulao_1784401560663.png";
+import chickenBiryani from "../assets/images/menu/chicken_biryani_1784401550527.png";
+import internationalDrinks from "../assets/images/menu/international_drinks_1784401578939.png";
+import kachumberSalad from "../assets/images/menu/kachumber_salad_1784401588292.png";
+import mintRaita from "../assets/images/menu/mint_raita_1784401598077.png";
+import pakistaniDrinks from "../assets/images/menu/pakistani_drinks_1784401569732.png";
+import shamiTikki from "../assets/images/menu/shami_tikki_1784401606274.png";
 
 export const popularDishes = [
     {
         id: 1,
-        image: butterChicken,
-        name: "Chicken Karahi",
-        numberOfOrders: 250,
-    },
-    {
-        id: 2,
-        image: palakPaneer,
-        name: "Palak Gosht",
-        numberOfOrders: 190,
-    },
-    {
-        id: 3,
-        image: biryani,
-        name: "Sindhi Biryani",
+        image: chickenBiryani,
+        name: "Chicken Biryani",
         numberOfOrders: 300,
     },
     {
-        id: 4,
-        image: masalaDosa,
-        name: "Nihari",
+        id: 2,
+        image: beefPulao,
+        name: "Beef Pulao",
+        numberOfOrders: 250,
+    },
+    {
+        id: 3,
+        image: shamiTikki,
+        name: "Shami Tikki",
         numberOfOrders: 220,
     },
     {
-        id: 5,
-        image: choleBhature,
-        name: "Halwa Puri",
-        numberOfOrders: 270,
-    },
-    {
-        id: 6,
-        image: rajmaChawal,
-        name: "Daal Chawal",
+        id: 4,
+        image: kachumberSalad,
+        name: "Kachumber Salad",
         numberOfOrders: 180,
     },
     {
+        id: 5,
+        image: mintRaita,
+        name: "Mint Raita",
+        numberOfOrders: 190,
+    },
+    {
+        id: 6,
+        image: pakistaniDrinks,
+        name: "Pakistani Drinks",
+        numberOfOrders: 270,
+    },
+    {
         id: 7,
-        image: paneerTikka,
-        name: "Chicken Tikka",
+        image: internationalDrinks,
+        name: "International Drinks",
         numberOfOrders: 210,
-    },
-    {
-        id: 8,
-        image: gulabJamun,
-        name: "Gulab Jamun",
-        numberOfOrders: 310,
-    },
-    {
-        id: 9,
-        image: pooriSabji,
-        name: "Samosa Chaat",
-        numberOfOrders: 140,
-    },
-    {
-        id: 10,
-        image: roganJosh,
-        name: "Mutton Korma",
-        numberOfOrders: 160,
     },
 ];
 

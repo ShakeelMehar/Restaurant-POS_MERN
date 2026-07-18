@@ -24,6 +24,10 @@ const menuSlice = createSlice({
       });
     },
 
+    removeCategory: (state, action) => {
+      state.categories = state.categories.filter((cat) => cat.id !== action.payload);
+    },
+
     addDish: (state, action) => {
       const { categoryId, name, price, category, hasPortions, portions } = action.payload;
       const targetCategory = state.categories.find(
@@ -96,5 +100,5 @@ export const selectAllDishes = createSelector(
     )
 );
 
-export const { setCategories, addCategory, addDish, updateDish, deleteDish } = menuSlice.actions;
+export const { setCategories, addCategory, removeCategory, addDish, updateDish, deleteDish } = menuSlice.actions;
 export default menuSlice.reducer;
