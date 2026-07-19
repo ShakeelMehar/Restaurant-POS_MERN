@@ -1,4 +1,4 @@
-import { db } from './db';
+import { db, ensureQueueIdempotencyKey } from './db';
 
 /**
  * Drains the pending offline-order queue, oldest first.
@@ -25,12 +25,13 @@ export async function replayQueuedOrders(send) {
       const { _id, ...payload } = record.payload;
 
       // Backfill idempotency key on legacy records and persist it BEFORE sending,
-      // so a lost ACK on this very attempt is still safe to replay.
+      // so a lost ACK on this very attempt is still safe to replay. Done via an
+      // atomic transaction so a concurrent drainer (page vs service worker) can't
+      // assign a divergent key to the same record and cause a duplicate order.
       if (!payload.idempotencyKey) {
-        payload.idempotencyKey = crypto.randomUUID();
-        await db.ordersQueue.update(record.id, {
-          payload: { ...record.payload, idempotencyKey: payload.idempotencyKey },
-        });
+        const key = await ensureQueueIdempotencyKey(record.id);
+        if (!key) continue; // record was deleted by another drainer — nothing to do
+        payload.idempotencyKey = key;
       }
 
       await send(payload);

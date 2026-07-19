@@ -14,6 +14,41 @@ db.version(3).stores({
   meta: 'key', // small key/value store: which tenant this cache belongs to, etc.
 });
 
+// v4: backfill an idempotencyKey onto any queue record that predates keys, so no
+// record is ever key-less by the time a drainer (in-app hook OR service worker)
+// runs. Without this, two drainers racing on the same key-less record would each
+// assign a DIFFERENT key and the server would insert duplicate orders.
+db.version(4).stores({
+  menu: 'id',
+  ordersQueue: '++id, status, createdAt',
+  meta: 'key',
+}).upgrade((tx) =>
+  tx.table('ordersQueue').toCollection().modify((record) => {
+    if (record.payload && !record.payload.idempotencyKey) {
+      record.payload.idempotencyKey = crypto.randomUUID();
+    }
+  })
+);
+
+/**
+ * Atomically ensure a queue record carries an idempotencyKey, returning the
+ * definitive key. Runs inside a single rw transaction: IndexedDB serializes
+ * overlapping rw transactions across connections (page and service worker), so
+ * if both drainers hit the same key-less record, the second one reads back the
+ * key the first committed rather than generating a divergent one.
+ * @returns the record's idempotencyKey, or null if the record no longer exists.
+ */
+export const ensureQueueIdempotencyKey = (id) =>
+  db.transaction('rw', db.ordersQueue, async () => {
+    const record = await db.ordersQueue.get(id);
+    if (!record) return null;
+    if (!record.payload.idempotencyKey) {
+      record.payload.idempotencyKey = crypto.randomUUID();
+      await db.ordersQueue.put(record);
+    }
+    return record.payload.idempotencyKey;
+  });
+
 /**
  * Tenant cache guard (docs/v3 05_Offline_Sync §3).
  * Call on every successful login. If the cache on this device belongs to a

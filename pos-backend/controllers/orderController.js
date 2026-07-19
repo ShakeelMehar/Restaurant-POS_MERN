@@ -71,15 +71,10 @@ const addOrder = async (req, res, next) => {
       placedAt,
     } = req.body;
 
-    // Idempotent replay: if this key was already committed (e.g. the client lost
-    // our 201 during an offline-sync retry), return the original order instead
-    // of inserting a duplicate. Tenant scoping is applied by the isolation plugin.
-    if (idempotencyKey) {
-      const existing = await Order.findOne({ idempotencyKey });
-      if (existing) {
-        return res.status(200).json({ success: true, message: "Order already recorded.", data: existing });
-      }
-    }
+    // Idempotent replay is enforced by the partial-unique index on
+    // { restaurantId, idempotencyKey }: a duplicate save throws E11000 and is
+    // caught below, which returns the original order. No pre-check query is
+    // needed on the common (non-duplicate) path.
 
     if (!bills || bills.total == null || bills.totalWithTax == null) {
       return next(createHttpError(400, "Bill details are required."));
