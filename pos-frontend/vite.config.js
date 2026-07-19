@@ -7,9 +7,18 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
       registerType: 'autoUpdate',
+      injectManifest: {
+        // App shell only — API responses are handled by the app's own caching,
+        // not precached here.
+        globPatterns: ['**/*.{js,css,html,svg}'],
+      },
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: 'module',
       },
       manifest: {
         name: 'Restaurant POS System',

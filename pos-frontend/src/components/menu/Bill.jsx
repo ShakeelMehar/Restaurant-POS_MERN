@@ -6,6 +6,7 @@ import {
   updateOrderById, verifyPaymentRazorpay, getSettings
 } from "../../https/index";
 import { db } from "../../utils/db";
+import { requestOrderSync } from "../../utils/backgroundSync";
 import { enqueueSnackbar } from "notistack";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { removeAllItems } from "../../redux/slices/cartSlice";
@@ -150,6 +151,10 @@ const Bill = () => {
           status: 'pending',
           createdAt: new Date().toISOString(),
         });
+        // Register a background sync so the order replays even if this tab is
+        // closed before reconnect (Chromium). No-op elsewhere — the in-app loop
+        // still covers those browsers.
+        requestOrderSync();
         return { data: { data: localOrder } };
       };
 
