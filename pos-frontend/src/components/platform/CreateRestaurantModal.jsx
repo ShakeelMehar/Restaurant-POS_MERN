@@ -4,6 +4,7 @@ import { enqueueSnackbar } from "notistack";
 import { FiCopy, FiCheck, FiAlertTriangle } from "react-icons/fi";
 import { createRestaurant } from "../../https";
 import Modal from "../shared/Modal";
+import PhoneInput from "../shared/PhoneInput";
 
 const initialData = {
   restaurantName: "",
@@ -126,12 +127,10 @@ const CreateRestaurantModal = ({ isOpen, onClose }) => {
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-foreground">Restaurant Phone</label>
-              <input
+              <PhoneInput
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="03XX-XXXXXXX"
-                className="input-base"
               />
             </div>
           </div>
@@ -173,12 +172,10 @@ const CreateRestaurantModal = ({ isOpen, onClose }) => {
                   <label className="mb-2 block text-sm font-medium text-foreground">
                     Admin Phone <span className="text-error">*</span>
                   </label>
-                  <input
+                  <PhoneInput
                     name="adminPhone"
                     value={formData.adminPhone}
                     onChange={handleChange}
-                    placeholder="03XX-XXXXXXX"
-                    className="input-base"
                     required
                   />
                 </div>
