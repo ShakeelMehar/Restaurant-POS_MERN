@@ -116,9 +116,16 @@ const RestaurantDetail = () => {
               {restaurant.name?.charAt(0)?.toUpperCase() || "?"}
             </div>
             <div className="min-w-0">
-              <h1 className="text-[22px] font-medium text-foreground tracking-tight truncate">
-                {restaurant.name}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-[22px] font-medium text-foreground tracking-tight truncate">
+                  {restaurant.name}
+                </h1>
+                {restaurant.restaurantCode && (
+                  <span className="text-[12px] bg-muted/30 text-muted px-2 py-0.5 rounded font-mono font-medium tracking-wide flex-shrink-0 mt-0.5">
+                    {restaurant.restaurantCode}
+                  </span>
+                )}
+              </div>
               <div className="mt-1 space-y-0.5">
                 {restaurant.address && <InfoRow icon={FiMapPin}>{restaurant.address}</InfoRow>}
                 {restaurant.phone && <InfoRow icon={FiPhone}>{restaurant.phone}</InfoRow>}

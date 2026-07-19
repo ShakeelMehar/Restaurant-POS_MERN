@@ -67,8 +67,13 @@ const Restaurants = () => {
                     {r.name?.charAt(0)?.toUpperCase() || "?"}
                   </div>
                   <div className="min-w-0">
-                    <h2 className="text-[16px] font-semibold text-foreground leading-tight truncate">
-                      {r.name}
+                    <h2 className="text-[16px] font-semibold text-foreground leading-tight flex items-center gap-2 truncate">
+                      <span className="truncate">{r.name}</span>
+                      {r.restaurantCode && (
+                        <span className="text-[11px] bg-muted/30 text-muted px-1.5 py-0.5 rounded font-mono font-medium tracking-wide flex-shrink-0">
+                          {r.restaurantCode}
+                        </span>
+                      )}
                     </h2>
                     <p className="text-[12px] text-muted-foreground truncate">
                       {r.admins[0]?.email || "No admin"}

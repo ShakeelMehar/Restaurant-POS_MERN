@@ -23,7 +23,9 @@ const createRestaurant = async (req, res, next) => {
         }
 
         // 2. Create the Restaurant document (no tenant isolation needed — Restaurant is the root entity)
+        const restaurantCode = `R-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
         const restaurant = await Restaurant.create({
+            restaurantCode,
             name: restaurantName,
             address: address || "",
             phone: phone || "",
@@ -36,18 +38,24 @@ const createRestaurant = async (req, res, next) => {
 
         // 4. Create the initial Restaurant Admin user, bound to the new restaurant
         let newAdmin;
-        await tenantContext.run({ restaurantId: restaurant._id, bypassIsolation: false }, async () => {
-            newAdmin = new User({
-                name: adminName,
-                email: adminEmail,
-                phone: adminPhone,
-                password: tempPassword, // Will be hashed by pre-save hook
-                role: ROLES.ADMIN,
-                restaurantId: restaurant._id,
-                forcePasswordChange: true, // Force password reset on first login
+        try {
+            await tenantContext.run({ restaurantId: restaurant._id, bypassIsolation: false }, async () => {
+                newAdmin = new User({
+                    name: adminName,
+                    email: adminEmail,
+                    phone: adminPhone,
+                    password: tempPassword, // Will be hashed by pre-save hook
+                    role: ROLES.ADMIN,
+                    restaurantId: restaurant._id,
+                    forcePasswordChange: true, // Force password reset on first login
+                });
+                await newAdmin.save();
             });
-            await newAdmin.save();
-        });
+        } catch (error) {
+            // Rollback restaurant creation if admin validation/save fails
+            await Restaurant.findByIdAndDelete(restaurant._id);
+            throw error; // Re-throw to be caught by the outer catch and sent to the client
+        }
 
         // 5. Return temp password ONCE in the response — it is never stored in plain text
         res.status(201).json({
@@ -185,10 +193,38 @@ const resetRestaurantAdminPassword = async (req, res, next) => {
     }
 };
 
+// PUT /api/admin/restaurants/:id — Super Admin: update restaurant details.
+const updateRestaurant = async (req, res, next) => {
+    try {
+        const { name, address, phone, taxId, logo } = req.body;
+
+        if (!name) {
+            return next(createHttpError(400, "Restaurant name is required."));
+        }
+
+        const restaurant = await Restaurant.findByIdAndUpdate(
+            req.params.id,
+            { name, address, phone, taxId, logo },
+            { new: true, runValidators: true }
+        ).lean();
+        
+        if (!restaurant) return next(createHttpError(404, "Restaurant not found."));
+
+        res.status(200).json({
+            success: true,
+            message: "Restaurant updated successfully.",
+            data: restaurant,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createRestaurant,
     listRestaurants,
     getRestaurantById,
+    updateRestaurant,
     setRestaurantStatus,
     resetRestaurantAdminPassword,
 };

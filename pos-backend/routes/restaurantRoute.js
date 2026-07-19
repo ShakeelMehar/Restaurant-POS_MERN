@@ -3,6 +3,7 @@ const {
     createRestaurant,
     listRestaurants,
     getRestaurantById,
+    updateRestaurant,
     setRestaurantStatus,
     resetRestaurantAdminPassword,
 } = require("../controllers/restaurantController");
@@ -20,6 +21,7 @@ router.route("/restaurants")
     .post(createRestaurant);
 
 router.get("/restaurants/:id", getRestaurantById);
+router.put("/restaurants/:id", updateRestaurant);
 router.patch("/restaurants/:id/status", setRestaurantStatus);
 router.post("/restaurants/:id/reset-admin-password", resetRestaurantAdminPassword);
 
