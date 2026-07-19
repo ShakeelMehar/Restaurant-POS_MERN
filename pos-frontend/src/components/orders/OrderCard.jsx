@@ -42,7 +42,11 @@ const OrderCard = ({ order, onManage }) => {
               #{orderId}
             </h1>
             {order.isOffline && (
-               <span className="text-[10px] bg-warning/10 text-warning px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FiWifi size={8}/> Offline</span>
+              order.syncStatus === 'failed' ? (
+                <span className="text-[10px] bg-error/10 text-error px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FiWifi size={8}/> Sync Failed</span>
+              ) : (
+                <span className="text-[10px] bg-warning/10 text-warning px-1.5 py-0.5 rounded font-bold flex items-center gap-1"><FiWifi size={8}/> Offline</span>
+              )
             )}
           </div>
           <p className="text-muted text-[13px] mt-0.5 font-medium">{formatDateAndTime(order.orderDate)}</p>

@@ -32,6 +32,10 @@ export const createOrderRazorpay = (data) =>
 export const verifyPaymentRazorpay = (data) =>
   axiosWrapper.post("/api/payment//verify-payment", data);
 
+// Health check — short timeout; used to verify the API is truly reachable
+// before replaying the offline queue (navigator.onLine is not a real signal)
+export const pingServer = () => axiosWrapper.get("/api/health", { timeout: 5000 });
+
 // Order Endpoints
 export const addOrder = (data) => axiosWrapper.post("/api/order/", data);
 export const getOrders = () => axiosWrapper.get("/api/order?page=1&limit=1000");

@@ -37,10 +37,27 @@ const orderSchema = new mongoose.Schema({
     paymentData: {
         razorpay_order_id: String,
         razorpay_payment_id: String
+    },
+    // Client-generated key so offline replays can be de-duplicated server-side
+    idempotencyKey: { type: String },
+    // When the cashier actually took the order (offline orders sync hours later)
+    placedAt: { type: Date },
+    // Audit: totals the client submitted differed from server-recomputed prices
+    // (e.g. an admin changed prices while the device was offline)
+    priceDrift: { type: Boolean, default: false },
+    clientBills: {
+        total: Number,
+        tax: Number,
+        totalWithTax: Number
     }
 }, { timestamps : true } );
 
 orderSchema.index({ restaurantId: 1, createdAt: -1 });
+// Unique per tenant, but only for orders that carry a key (legacy orders have none)
+orderSchema.index(
+    { restaurantId: 1, idempotencyKey: 1 },
+    { unique: true, partialFilterExpression: { idempotencyKey: { $type: "string" } } }
+);
 
 orderSchema.plugin(tenantIsolation);
 

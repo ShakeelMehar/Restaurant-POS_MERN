@@ -19,7 +19,9 @@ const addOrderSchema = z.object({
         paymentData: z.object({
             razorpay_order_id: z.string().optional(),
             razorpay_payment_id: z.string().optional()
-        }).optional()
+        }).optional(),
+        idempotencyKey: z.string().min(8).max(128).optional(),
+        placedAt: z.string().optional()
     })
 });
 

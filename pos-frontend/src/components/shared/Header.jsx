@@ -11,6 +11,7 @@ import NotificationDropdown from "./NotificationDropdown";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 import GlobalSearchModal from "./GlobalSearchModal";
 import ThemeToggle from "./ThemeToggle";
+import SyncStatusBadge from "./SyncStatusBadge";
 import { ROLES } from "../../constants/roles";
 
 const Header = () => {
@@ -150,6 +151,9 @@ const Header = () => {
 
         {/* ── RIGHT ACTIONS ── */}
         <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Offline queue indicator */}
+          <SyncStatusBadge />
+
           {/* Theme Toggle */}
           <ThemeToggle />
 

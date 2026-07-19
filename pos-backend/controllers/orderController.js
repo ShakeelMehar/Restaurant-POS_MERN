@@ -67,7 +67,19 @@ const addOrder = async (req, res, next) => {
       items,
       paymentMethod,
       paymentData,
+      idempotencyKey,
+      placedAt,
     } = req.body;
+
+    // Idempotent replay: if this key was already committed (e.g. the client lost
+    // our 201 during an offline-sync retry), return the original order instead
+    // of inserting a duplicate. Tenant scoping is applied by the isolation plugin.
+    if (idempotencyKey) {
+      const existing = await Order.findOne({ idempotencyKey });
+      if (existing) {
+        return res.status(200).json({ success: true, message: "Order already recorded.", data: existing });
+      }
+    }
 
     if (!bills || bills.total == null || bills.totalWithTax == null) {
       return next(createHttpError(400, "Bill details are required."));
@@ -78,6 +90,17 @@ const addOrder = async (req, res, next) => {
     }
 
     const serverBills = await calculateServerSideTotal(items);
+
+    // Audit: the client's totals were computed from its (possibly stale, offline)
+    // cached prices. If they differ from the server-recomputed totals — e.g. an
+    // admin changed prices during the outage — flag it and keep the client's
+    // figures, since that's what was printed on the customer's receipt.
+    const clientTotalWithTax = Number(bills.totalWithTax);
+    const priceDrift = Math.abs(clientTotalWithTax - serverBills.totalWithTax) > 0.01;
+    const clientBills = priceDrift
+      ? { total: Number(bills.total), tax: Number(bills.tax) || 0, totalWithTax: clientTotalWithTax }
+      : undefined;
+
     bills.total = serverBills.total;
     bills.tax = serverBills.tax;
     bills.totalWithTax = serverBills.totalWithTax;
@@ -140,9 +163,25 @@ const addOrder = async (req, res, next) => {
         razorpay_payment_id: paymentData.razorpay_payment_id
       } : undefined,
       cashier: req.user._id, // Set the cashier to the authenticated user ID
+      idempotencyKey: idempotencyKey || undefined,
+      placedAt: placedAt && !isNaN(Date.parse(placedAt)) ? new Date(placedAt) : undefined,
+      priceDrift,
+      clientBills,
     });
 
-    await order.save();
+    try {
+      await order.save();
+    } catch (saveError) {
+      // Race: two replays with the same key hit the unique index simultaneously.
+      // The loser fetches and returns the winner's document.
+      if (saveError.code === 11000 && idempotencyKey) {
+        const existing = await Order.findOne({ idempotencyKey });
+        if (existing) {
+          return res.status(200).json({ success: true, message: "Order already recorded.", data: existing });
+        }
+      }
+      throw saveError;
+    }
 
     res.status(201).json({ success: true, message: "Order created!", data: order });
   } catch (error) {

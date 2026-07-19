@@ -30,6 +30,13 @@ const loginLimiter = rateLimit({
 
 // Middlewares
 app.use(helmet());
+
+// Health check — registered BEFORE the rate limiter: clients poll this every ~30s
+// to verify real API reachability (navigator.onLine only reports an interface).
+app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
 app.use(limiter);
 app.use(compression());
 app.use(cors({

@@ -4,6 +4,7 @@ import { login } from "../../https/index";
 import { enqueueSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
+import { ensureTenantCache } from "../../utils/db";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
 
@@ -22,11 +23,14 @@ const Login = () => {
 
     const loginMutation = useMutation({
         mutationFn: (reqData) => login(reqData),
-        onSuccess: (res) => {
+        onSuccess: async (res) => {
             const { _id, name, email, phone, role, restaurantId, forcePasswordChange } = res.data.data;
             if (res.data.accessToken) {
                 localStorage.setItem("accessToken", res.data.accessToken);
             }
+            // Purge the offline cache if it belongs to a different restaurant —
+            // must happen before any catalog download or queue replay kicks in
+            await ensureTenantCache(restaurantId);
             dispatch(setUser({ _id, name, email, phone, role, restaurantId, forcePasswordChange }));
             navigate("/");
         },

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import Modal from "../shared/Modal";
 import { updateOrderById } from "../../https";
+import { db } from "../../utils/db";
 import { formatDateAndTime, getAvatarName } from "../../utils";
 import { setEditingOrder } from "../../redux/slices/customerSlice";
 import { setCart } from "../../redux/slices/cartSlice";
@@ -33,6 +34,32 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
   });
 
 
+
+  const isFailedSync = order?.isOffline && order?.syncStatus === "failed";
+
+  // Failed queue record → back to 'pending'; the sync loop picks it up (≤30s)
+  const handleRetrySync = async () => {
+    try {
+      await db.ordersQueue.update(order.queueId, { status: "pending", errorReason: undefined });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      enqueueSnackbar("Order queued for retry.", { variant: "success" });
+      onClose();
+    } catch {
+      enqueueSnackbar("Could not re-queue the order.", { variant: "error" });
+    }
+  };
+
+  const handleDiscard = async () => {
+    if (!window.confirm("Discard this unsynced order permanently? It was never saved to the server.")) return;
+    try {
+      await db.ordersQueue.delete(order.queueId);
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      enqueueSnackbar("Offline order discarded.", { variant: "success" });
+      onClose();
+    } catch {
+      enqueueSnackbar("Could not discard the order.", { variant: "error" });
+    }
+  };
 
   const handleStatusChange = (nextStatus) => {
     if (!order?._id || nextStatus === order.orderStatus || order.isOffline) {
@@ -101,9 +128,15 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
               Update Status
             </p>
             {order.isOffline && (
-              <span className="text-[10px] bg-warning/10 text-warning px-2 py-0.5 rounded font-bold">
-                Waiting for sync...
-              </span>
+              isFailedSync ? (
+                <span className="text-[10px] bg-error/10 text-error px-2 py-0.5 rounded font-bold">
+                  Sync failed
+                </span>
+              ) : (
+                <span className="text-[10px] bg-warning/10 text-warning px-2 py-0.5 rounded font-bold">
+                  Waiting for sync...
+                </span>
+              )
             )}
           </div>
           <div className="flex gap-2 bg-[hsl(var(--surface-soft))] p-1 rounded-[9999px] overflow-x-auto hide-scrollbar">
@@ -155,19 +188,41 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
           </div>
         </div>
 
+        {isFailedSync && (
+          <div className="rounded-[12px] bg-error/10 border border-error/20 px-4 py-3">
+            <p className="text-[13px] font-bold text-error">Server rejected this order</p>
+            <p className="mt-0.5 text-[13px] text-muted">
+              {order.syncError || "Unknown error"}. It exists only on this device.
+            </p>
+          </div>
+        )}
+
         <div className="flex gap-3 pt-2">
-          <button
-            onClick={onClose}
-            className="flex-1 btn btn-secondary"
-          >
-            Close
-          </button>
-          <button
-            onClick={handleEditOrder}
-            className="flex-1 btn btn-primary"
-          >
-            Modify In Menu
-          </button>
+          {isFailedSync ? (
+            <>
+              <button onClick={handleDiscard} className="flex-1 btn btn-secondary">
+                Discard
+              </button>
+              <button onClick={handleRetrySync} className="flex-1 btn btn-primary">
+                Retry Sync
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={onClose}
+                className="flex-1 btn btn-secondary"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleEditOrder}
+                className="flex-1 btn btn-primary"
+              >
+                Modify In Menu
+              </button>
+            </>
+          )}
         </div>
       </div>
     </Modal>

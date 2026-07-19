@@ -35,11 +35,15 @@ const Orders = () => {
         console.error("Failed to fetch online orders:", err);
       }
       try {
-        const pending = await db.ordersQueue.where('status').equals('pending').toArray();
-        offlineQueue = pending.map(record => ({
+        // Failed records must stay visible — they need operator action (retry/discard)
+        const queued = await db.ordersQueue.where('status').anyOf('pending', 'failed').toArray();
+        offlineQueue = queued.map(record => ({
           ...record.payload,
           _id: record.payload._id || `local-${record.id}`,
-          isOffline: true
+          isOffline: true,
+          queueId: record.id,
+          syncStatus: record.status,
+          syncError: record.errorReason,
         }));
       } catch (err) {
         console.error("Failed to fetch offline orders:", err);

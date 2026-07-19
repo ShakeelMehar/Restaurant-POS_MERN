@@ -131,12 +131,22 @@ const Bill = () => {
     }
   };
 
-  const orderMutation = useMutation({ 
+  const orderMutation = useMutation({
     mutationFn: async (d) => {
+      // One key per order, generated before the first send attempt, so the server
+      // can de-duplicate replays (lost ACK, offline-sync retries) of this same order.
+      // placedAt records when the cashier actually took the order — for offline
+      // orders this can be hours before the server's createdAt.
+      const payload = {
+        ...d,
+        idempotencyKey: crypto.randomUUID(),
+        placedAt: new Date().toISOString(),
+      };
+
       const queueOffline = async () => {
-        const localOrder = { ...d, _id: `local-${Date.now()}` };
+        const localOrder = { ...payload, _id: `local-${Date.now()}` };
         await db.ordersQueue.add({
-          payload: d,
+          payload,
           status: 'pending',
           createdAt: new Date().toISOString(),
         });
@@ -146,9 +156,9 @@ const Bill = () => {
       if (!navigator.onLine) {
         return queueOffline();
       }
-      
+
       try {
-        return await addOrder(d);
+        return await addOrder(payload);
       } catch (error) {
         // If it's a network error (no response from server), queue it instead of failing
         if (!error.response || error.code === 'ERR_NETWORK') {
@@ -156,7 +166,7 @@ const Bill = () => {
         }
         throw error;
       }
-    }, 
+    },
     onSuccess: (r, variables) => handleOrderSaved(r.data.data, { showInvoice: variables.orderStatus !== "Held" }),
     onError: (error) => {
       console.error("Order placement failed:", error);
