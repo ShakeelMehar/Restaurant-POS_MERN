@@ -16,6 +16,7 @@ const Catalog = lazy(() => import("./pages/Catalog.jsx"));
 const Staff = lazy(() => import("./pages/Staff.jsx"));
 const Reports = lazy(() => import("./pages/Reports.jsx"));
 const Settings = lazy(() => import("./pages/Settings.jsx"));
+const ChangePassword = lazy(() => import("./pages/ChangePassword.jsx"));
 const Restaurants = lazy(() => import("./pages/platform/Restaurants.jsx"));
 const RestaurantDetail = lazy(() => import("./pages/platform/RestaurantDetail.jsx"));
 import PlatformLayout from "./components/platform/PlatformLayout";
@@ -38,8 +39,12 @@ function Layout() {
 
   if(isLoading) return <FullScreenLoader />
 
-  // The tenant header is only for tenant screens — Super Admin's platform area has its own chrome.
-  const hideHeader = location.pathname === "/auth" || location.pathname.startsWith("/platform");
+  // The tenant header is only for tenant screens — the auth, forced-reset, and platform
+  // screens all have their own full-screen chrome.
+  const hideHeader =
+    location.pathname === "/auth" ||
+    location.pathname === "/change-password" ||
+    location.pathname.startsWith("/platform");
 
   return (
     <>
@@ -56,6 +61,12 @@ function Layout() {
             }
           />
           <Route path="/auth" element={isAuth ? <Navigate to={homePathForRole(role)} replace /> : <Auth />} />
+          <Route
+            path="/change-password"
+            element={
+              !isAuth ? <Navigate to="/auth" replace /> : <ChangePassword />
+            }
+          />
           <Route
             path="/orders"
             element={
@@ -112,9 +123,12 @@ function Layout() {
 
 // Tenant screens: authenticated non-super-admins only. Super Admin is bounced to its platform area.
 function ProtectedRoutes({ children }) {
-  const { isAuth, role } = useSelector((state) => state.user);
+  const { isAuth, role, forcePasswordChange } = useSelector((state) => state.user);
   if (!isAuth) {
     return <Navigate to="/auth" replace />;
+  }
+  if (forcePasswordChange) {
+    return <Navigate to="/change-password" replace />;
   }
   if (role === ROLES.SUPER_ADMIN) {
     return <Navigate to="/platform" replace />;
@@ -124,9 +138,12 @@ function ProtectedRoutes({ children }) {
 
 // Platform screens: Super Admin only. Everyone else goes back to the tenant home.
 function PlatformRoutes({ children }) {
-  const { isAuth, role } = useSelector((state) => state.user);
+  const { isAuth, role, forcePasswordChange } = useSelector((state) => state.user);
   if (!isAuth) {
     return <Navigate to="/auth" replace />;
+  }
+  if (forcePasswordChange) {
+    return <Navigate to="/change-password" replace />;
   }
   if (role !== ROLES.SUPER_ADMIN) {
     return <Navigate to="/menu" replace />;

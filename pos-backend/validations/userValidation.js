@@ -29,6 +29,12 @@ const updateStaffSchema = z.object({
     })
 });
 
+const changePasswordSchema = z.object({
+    body: z.object({
+        newPassword: z.string().min(6, "Password must be at least 6 characters")
+    })
+});
+
 const updateStaffPasswordSchema = z.object({
     body: z.object({
         password: z.string().min(6, "Password must be at least 6 characters")
@@ -41,6 +47,7 @@ const updateStaffPasswordSchema = z.object({
 module.exports = {
     createCashierSchema,
     loginSchema,
+    changePasswordSchema,
     updateStaffSchema,
     updateStaffPasswordSchema
 };

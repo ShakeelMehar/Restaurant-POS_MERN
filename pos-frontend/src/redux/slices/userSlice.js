@@ -7,6 +7,7 @@ const initialState = {
     phone: "",
     role: "",
     restaurantId: "",
+    forcePasswordChange: false,
     isAuth: false
 }
 
@@ -15,14 +16,20 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            const { _id, name, phone, email, role, restaurantId } = action.payload;
+            const { _id, name, phone, email, role, restaurantId, forcePasswordChange } = action.payload;
             state._id = _id;
             state.name = name;
             state.phone = phone;
             state.email = email;
             state.role = role;
             state.restaurantId = restaurantId || "";
+            state.forcePasswordChange = Boolean(forcePasswordChange);
             state.isAuth = true;
+        },
+
+        // Called after a successful self-service password change to lift the forced-reset gate.
+        clearForcePasswordChange: (state) => {
+            state.forcePasswordChange = false;
         },
 
         removeUser: (state) => {
@@ -32,10 +39,11 @@ const userSlice = createSlice({
             state.phone = "";
             state.role = "";
             state.restaurantId = "";
+            state.forcePasswordChange = false;
             state.isAuth = false;
         }
     }
 })
 
-export const { setUser, removeUser } = userSlice.actions;
+export const { setUser, clearForcePasswordChange, removeUser } = userSlice.actions;
 export default userSlice.reducer;

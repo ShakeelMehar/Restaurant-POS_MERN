@@ -44,7 +44,9 @@ async function seedSuperAdmin() {
                 phone,
                 password, // hashed by the pre-save hook
                 role: ROLES.SUPER_ADMIN,
-                forcePasswordChange: true,
+                // The operator chose this password via env var, so there's nothing temporary
+                // to force-replace. (forcePasswordChange is only for system-generated passwords.)
+                forcePasswordChange: false,
             });
             await superAdmin.save();
             console.log(`Super Admin created: ${superAdmin.email} (id: ${superAdmin._id})`);

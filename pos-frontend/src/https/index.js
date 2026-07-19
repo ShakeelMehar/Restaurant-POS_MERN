@@ -6,6 +6,8 @@ import { axiosWrapper } from "./axiosWrapper";
 export const login = (data) => axiosWrapper.post("/api/user/login", data);
 export const getUserData = () => axiosWrapper.get("/api/user");
 export const logout = () => axiosWrapper.post("/api/user/logout");
+export const changePassword = (newPassword) =>
+  axiosWrapper.put("/api/user/change-password", { newPassword });
 
 // Staff Endpoints
 export const getAllStaff = () => axiosWrapper.get("/api/user/staff");

@@ -118,9 +118,37 @@ const login = async (req, res, next) => {
 
 }
 
+// Self-service password change — used by the forced first-login reset (forcePasswordChange)
+// and any authenticated user changing their own password. Clears the forcePasswordChange flag.
+const changePassword = async (req, res, next) => {
+    try {
+        const { newPassword } = req.body;
+        if (!newPassword || newPassword.length < 6) {
+            return next(createHttpError(400, "New password must be at least 6 characters."));
+        }
+
+        const user = await User.findById(req.user._id);
+        if (!user) return next(createHttpError(404, "User not found."));
+
+        // Disallow reusing the current password.
+        const isSame = await bcrypt.compare(newPassword, user.password);
+        if (isSame) {
+            return next(createHttpError(400, "New password must be different from the current one."));
+        }
+
+        user.password = newPassword; // hashed by the pre-save hook
+        user.forcePasswordChange = false;
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Password updated successfully." });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getUserData = async (req, res, next) => {
     try {
-        
+
         let user = await User.findById(req.user._id).select("-password");
         res.status(200).json({success: true, data: user});
 
@@ -227,4 +255,4 @@ const updateStaff = async (req, res, next) => {
     }
 };
 
-module.exports = { createCashier, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword, updateStaff }
+module.exports = { createCashier, login, getUserData, logout, changePassword, getAllStaff, deleteStaff, updateStaffPassword, updateStaff }
