@@ -84,8 +84,11 @@ const menuSlice = createSlice({
 });
 
 export const selectMenuCategories = (state) => state.menu.categories;
-export const selectTotalDishCount = (state) =>
-  getTotalDishCount(state.menu.categories);
+// ⚡ Bolt: Memoized selectors to prevent unnecessary re-renders
+export const selectTotalDishCount = createSelector(
+  [selectMenuCategories],
+  (categories) => getTotalDishCount(categories)
+);
 export const selectAllDishes = createSelector(
   [selectMenuCategories],
   (categories) =>
