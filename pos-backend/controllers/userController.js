@@ -21,9 +21,10 @@ const register = async (req, res, next) => {
                 const error = createHttpError(400, "User already exist!");
                 return next(error);
             }
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = {
                 _id: "mock-user-" + Date.now(),
-                name, phone, email, password, role
+                name, phone, email, password: hashedPassword, role
             };
             mockDb.users.push(newUser);
             return res.status(201).json({success: true, message: "New user created!", data: newUser});
@@ -134,4 +135,65 @@ const logout = async (req, res, next) => {
 
 
 
-module.exports = { register, login, getUserData, logout }
+const getAllStaff = async (req, res, next) => {
+    try {
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const staff = mockDb.users.filter(u => u.role && u.role.toLowerCase() === "cashier");
+            return res.status(200).json({ success: true, data: staff });
+        }
+        const staff = await User.find({ role: { $regex: new RegExp("^cashier$", "i") } }).select("-password");
+        res.status(200).json({ success: true, data: staff });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteStaff = async (req, res, next) => {
+    try {
+        const staffId = req.params.id;
+
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const index = mockDb.users.findIndex(u => u._id === staffId);
+            if (index === -1) return next(createHttpError(404, "User not found"));
+            mockDb.users.splice(index, 1);
+            return res.status(200).json({ success: true, message: "Staff removed successfully" });
+        }
+
+        const user = await User.findByIdAndDelete(staffId);
+        if (!user) return next(createHttpError(404, "User not found"));
+        res.status(200).json({ success: true, message: "Staff removed successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updateStaffPassword = async (req, res, next) => {
+    try {
+        const staffId = req.params.id;
+        const { password } = req.body;
+        if (!password) return next(createHttpError(400, "Password is required"));
+        
+        if (global.dbConnected === false) {
+            const mockDb = require("../utils/mockDb");
+            const user = mockDb.users.find(u => u._id === staffId);
+            if (!user) return next(createHttpError(404, "User not found"));
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            user.password = hashedPassword;
+            return res.status(200).json({ success: true, message: "Password updated successfully" });
+        }
+
+        const user = await User.findById(staffId);
+        if (!user) return next(createHttpError(404, "User not found"));
+        
+        user.password = password; // Will be hashed by pre-save hook
+        await user.save();
+        res.status(200).json({ success: true, message: "Password updated successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { register, login, getUserData, logout, getAllStaff, deleteStaff, updateStaffPassword }

@@ -43,10 +43,10 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Category">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Category Name
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="text"
               name="name"
@@ -60,10 +60,10 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Icon
           </label>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <div className="rounded-lg bg-background p-4">
             <input
               type="text"
               name="icon"
@@ -77,10 +77,10 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[#ababab]">
+          <label className="mb-2 block text-sm font-medium text-muted-foreground">
             Card Color
           </label>
-          <div className="flex items-center gap-4 rounded-lg bg-[#1f1f1f] p-4">
+          <div className="flex items-center gap-4 rounded-lg bg-background p-4">
             <input
               type="color"
               name="bgColor"
@@ -88,7 +88,7 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
               onChange={handleInputChange}
               className="h-10 w-14 cursor-pointer rounded border-none bg-transparent"
             />
-            <span className="text-sm text-[#ababab]">{categoryData.bgColor}</span>
+            <span className="text-sm text-muted-foreground">{categoryData.bgColor}</span>
           </div>
         </div>
 

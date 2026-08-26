@@ -5,11 +5,12 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { Home, Auth, Orders, Tables, Menu, Dashboard, Catalog } from "./pages";
+import { Auth, Orders, Tables, Menu, Dashboard, Catalog, Staff, Reports } from "./pages";
 import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
+import AdminLayout from "./components/shared/AdminLayout";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -27,11 +28,11 @@ function Layout() {
           path="/"
           element={
             <ProtectedRoutes>
-              <Home />
+              <Navigate to="/menu" replace />
             </ProtectedRoutes>
           }
         />
-        <Route path="/auth" element={isAuth ? <Navigate to="/" /> : <Auth />} />
+        <Route path="/auth" element={isAuth ? <Navigate to="/menu" /> : <Auth />} />
         <Route
           path="/orders"
           element={
@@ -57,21 +58,19 @@ function Layout() {
           }
         />
         <Route
-          path="/dashboard"
           element={
             <ProtectedRoutes>
-              <Dashboard />
+              <RoleGuard allowedRoles={["Admin", "Super Admin"]}>
+                <AdminLayout />
+              </RoleGuard>
             </ProtectedRoutes>
           }
-        />
-        <Route
-          path="/catalog"
-          element={
-            <ProtectedRoutes>
-              <Catalog />
-            </ProtectedRoutes>
-          }
-        />
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/staff" element={<Staff />} />
+          <Route path="/reports" element={<Reports />} />
+        </Route>
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
     </>
@@ -84,6 +83,14 @@ function ProtectedRoutes({ children }) {
     return <Navigate to="/auth" />;
   }
 
+  return children;
+}
+
+function RoleGuard({ allowedRoles, children }) {
+  const { role } = useSelector((state) => state.user);
+  if (!allowedRoles.includes(role)) {
+    return <Navigate to="/menu" replace />;
+  }
   return children;
 }
 

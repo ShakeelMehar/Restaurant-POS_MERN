@@ -1,180 +1,116 @@
 import React, { useState } from "react";
-import { FaHome } from "react-icons/fa";
-import { MdOutlineReorder, MdTableBar } from "react-icons/md";
-import { CiCircleMore } from "react-icons/ci";
+import { FiHome, FiList, FiGrid, FiMoreHorizontal } from "react-icons/fi";
+import { MdTableBar } from "react-icons/md";
 import { BiSolidDish } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setCustomer } from "../../redux/slices/customerSlice";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../../https";
 import { removeUser } from "../../redux/slices/userSlice";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 
 const BottomNav = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
-    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-    const [guestCount, setGuestCount] = useState(0);
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user);
+  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-    const openMoreModal = () => setIsMoreModalOpen(true);
-    const closeMoreModal = () => setIsMoreModalOpen(false);
+  const isActive = (path) => location.pathname === path;
 
-    const increment = () => {
-        if (guestCount >= 6) return;
-        setGuestCount((prev) => prev + 1);
-    };
-    const decrement = () => {
-        if (guestCount <= 0) return;
-        setGuestCount((prev) => prev - 1);
-    };
+  const logoutMutation = useMutation({
+    mutationFn: () => logout(),
+    onSuccess: () => {
+      dispatch(removeUser());
+      setIsLogoutModalOpen(false);
+      setIsMoreModalOpen(false);
+      navigate("/auth");
+    },
+  });
 
-    const isActive = (path) => location.pathname === path;
-
-    const logoutMutation = useMutation({
-        mutationFn: () => logout(),
-        onSuccess: () => {
-            dispatch(removeUser());
-            setIsLogoutModalOpen(false);
-            closeMoreModal();
-            navigate("/auth");
-        },
-    });
-
-    const handleCreateOrder = () => {
-        // send the data to store
-        dispatch(setCustomer({ name, phone, guests: guestCount }));
-        closeModal();
-        navigate("/tables");
-    };
-
-    const handleDashboardNavigation = () => {
-        closeMoreModal();
-        navigate("/dashboard");
-    };
-
-    const navButtonClass = (path) =>
-        `flex min-w-0 flex-col items-center justify-center gap-1 rounded-[18px] py-2 text-[11px] font-bold sm:flex-row sm:gap-2 sm:text-sm ${
-            isActive(path) ? "bg-[#343434] text-[#f5f5f5]" : "text-[#ababab]"
-        }`;
-
+  const NavBtn = ({ path, icon: Icon, label, onClick }) => {
+    const active = path ? isActive(path) : false;
     return (
-        <div className="fixed bottom-0 left-0 right-0 grid h-16 grid-cols-4 items-center gap-2 bg-[#262626] px-2 py-2">
-            <button onClick={() => navigate("/")} className={navButtonClass("/")}>
-                <FaHome size={18} /> <p>Home</p>
-            </button>
-            <button
-                onClick={() => navigate("/orders")}
-                className={navButtonClass("/orders")}>
-                <MdOutlineReorder size={18} /> <p>Orders</p>
-            </button>
-            <button
-                onClick={() => navigate("/tables")}
-                className={navButtonClass("/tables")}>
-                <MdTableBar size={18} /> <p>Tables</p>
-            </button>
-            <button onClick={openMoreModal} className={navButtonClass("/dashboard")}>
-                <CiCircleMore size={18} /> <p>More</p>
-            </button>
-
-            <button
-                disabled={isActive("/tables") || isActive("/menu")}
-                onClick={openModal}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-[#F6B100] p-4 text-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-70">
-                <BiSolidDish size={40} />
-            </button>
-
-            <Modal isOpen={isModalOpen} onClose={closeModal} title="Create Order">
-                <div>
-                    <label className="block text-[#ababab] mb-2 text-sm font-medium">
-                        Customer Name
-                    </label>
-                    <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
-                        <input
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            type="text"
-                            name=""
-                            placeholder="Enter customer name"
-                            id=""
-                            className="bg-transparent flex-1 text-white focus:outline-none"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-                        Customer Phone
-                    </label>
-                    <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
-                        <input
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            type="number"
-                            name=""
-                            placeholder="+92-300-1234567"
-                            id=""
-                            className="bg-transparent flex-1 text-white focus:outline-none"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <label className="block mb-2 mt-3 text-sm font-medium text-[#ababab]">
-                        Guest
-                    </label>
-                    <div className="flex items-center justify-between bg-[#1f1f1f] px-4 py-3 rounded-lg">
-                        <button onClick={decrement} className="text-yellow-500 text-2xl">
-                            &minus;
-                        </button>
-                        <span className="text-white">{guestCount} Person</span>
-                        <button onClick={increment} className="text-yellow-500 text-2xl">
-                            &#43;
-                        </button>
-                    </div>
-                </div>
-                <button
-                    onClick={handleCreateOrder}
-                    className="w-full bg-[#F6B100] text-[#f5f5f5] rounded-lg py-3 mt-8 hover:bg-yellow-700">
-                    Create Order
-                </button>
-            </Modal>
-
-            <Modal isOpen={isMoreModalOpen} onClose={closeMoreModal} title="More">
-                <div className="space-y-3">
-                    {userData.role === "Admin" && (
-                        <button
-                            onClick={handleDashboardNavigation}
-                            className="w-full rounded-lg bg-[#1f1f1f] px-4 py-3 text-left font-semibold text-[#f5f5f5]">
-                            Open Dashboard
-                        </button>
-                    )}
-                    <button
-                        onClick={() => {
-                            closeMoreModal();
-                            setIsLogoutModalOpen(true);
-                        }}
-                        className="w-full rounded-lg bg-[#1f1f1f] px-4 py-3 text-left font-semibold text-[#f5f5f5]">
-                        Logout
-                    </button>
-                </div>
-            </Modal>
-
-            <LogoutConfirmModal
-                isOpen={isLogoutModalOpen}
-                onClose={() => setIsLogoutModalOpen(false)}
-                onConfirm={() => logoutMutation.mutate()}
-                isPending={logoutMutation.isPending}
-            />
+      <button
+        onClick={onClick || (() => navigate(path))}
+        className={`flex flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 flex-1 transition-all duration-200 ${
+          active
+            ? "text-primary"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        <div className={`relative flex items-center justify-center h-7 w-7 rounded-xl transition-all duration-200 ${
+          active ? "bg-primary/15" : "bg-transparent"
+        }`}>
+          <Icon size={17} />
+          {active && (
+            <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
+          )}
         </div>
+        <span className={`text-[10px] font-bold leading-none ${active ? "text-primary" : ""}`}>
+          {label}
+        </span>
+      </button>
     );
+  };
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/90 backdrop-blur-md border-t border-border">
+      <div className="flex items-center justify-around px-2 py-2 pb-safe">
+        <NavBtn path="/menu" icon={FiHome} label="POS" />
+        <NavBtn path="/orders" icon={FiList} label="Orders" />
+
+        {/* Center FAB */}
+        <div className="flex-none mx-2">
+          <button
+            disabled={isActive("/menu")}
+            onClick={() => navigate("/menu")}
+            className="relative flex items-center justify-center h-14 w-14 -mt-6 rounded-full bg-gradient-to-br from-primary to-amber-500 shadow-lg shadow-primary/40 text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-glow active:scale-95 animate-pulse-ring"
+          >
+            <BiSolidDish size={28} />
+          </button>
+        </div>
+
+        <NavBtn path="/tables" icon={MdTableBar} label="Tables" />
+        <NavBtn
+          path="/dashboard"
+          icon={FiMoreHorizontal}
+          label="More"
+          onClick={() => setIsMoreModalOpen(true)}
+        />
+      </div>
+
+      <Modal isOpen={isMoreModalOpen} onClose={() => setIsMoreModalOpen(false)} title="More Options">
+        <div className="space-y-2">
+          {["Admin", "Super Admin"].includes(userData.role) && (
+            <button
+              onClick={() => { setIsMoreModalOpen(false); navigate("/dashboard"); }}
+              className="w-full flex items-center gap-3 rounded-xl bg-secondary hover:bg-muted border border-border px-4 py-3.5 text-left font-semibold text-foreground transition-all hover:border-primary/30"
+            >
+              <FiGrid size={18} className="text-primary" />
+              Open Dashboard
+            </button>
+          )}
+          <button
+            onClick={() => { setIsMoreModalOpen(false); setIsLogoutModalOpen(true); }}
+            className="w-full flex items-center gap-3 rounded-xl bg-secondary hover:bg-destructive/10 border border-border hover:border-destructive/30 px-4 py-3.5 text-left font-semibold text-foreground transition-all"
+          >
+            <FiMoreHorizontal size={18} className="text-muted-foreground" />
+            Logout
+          </button>
+        </div>
+      </Modal>
+
+      <LogoutConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={() => logoutMutation.mutate()}
+        isPending={logoutMutation.isPending}
+      />
+    </div>
+  );
 };
 
 export default BottomNav;

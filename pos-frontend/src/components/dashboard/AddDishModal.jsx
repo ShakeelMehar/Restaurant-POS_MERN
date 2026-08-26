@@ -70,7 +70,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title="Add Dish">
       {categories.length === 0 ? (
         <div className="space-y-4">
-          <p className="text-sm text-[#ababab]">
+          <p className="text-sm text-muted-foreground">
             Add a category first. Dishes need a target category before they can
             be created.
           </p>
@@ -84,10 +84,10 @@ const AddDishModal = ({ isOpen, onClose }) => {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-[#ababab]">
+            <label className="mb-2 block text-sm font-medium text-muted-foreground">
               Category
             </label>
-            <div className="rounded-lg bg-[#1f1f1f] p-4">
+            <div className="rounded-lg bg-background p-4">
               <select
                 name="categoryId"
                 value={dishData.categoryId}
@@ -99,7 +99,7 @@ const AddDishModal = ({ isOpen, onClose }) => {
                   <option
                     key={category.id}
                     value={category.id}
-                    className="bg-[#1f1f1f]"
+                    className="bg-background"
                   >
                     {category.name}
                   </option>
@@ -109,10 +109,10 @@ const AddDishModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-[#ababab]">
+            <label className="mb-2 block text-sm font-medium text-muted-foreground">
               Dish Name
             </label>
-            <div className="rounded-lg bg-[#1f1f1f] p-4">
+            <div className="rounded-lg bg-background p-4">
               <input
                 type="text"
                 name="name"
@@ -126,10 +126,10 @@ const AddDishModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-[#ababab]">
+            <label className="mb-2 block text-sm font-medium text-muted-foreground">
               Price
             </label>
-            <div className="rounded-lg bg-[#1f1f1f] p-4">
+            <div className="rounded-lg bg-background p-4">
               <input
                 type="number"
                 name="price"
@@ -144,10 +144,10 @@ const AddDishModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-[#ababab]">
+            <label className="mb-2 block text-sm font-medium text-muted-foreground">
               Item Type
             </label>
-            <div className="rounded-lg bg-[#1f1f1f] p-4">
+            <div className="rounded-lg bg-background p-4">
               <input
                 type="text"
                 name="category"

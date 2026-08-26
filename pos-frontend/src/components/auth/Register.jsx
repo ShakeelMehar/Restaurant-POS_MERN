@@ -2,23 +2,24 @@ import React, { useState } from "react";
 import { register } from "../../https";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
+import { FiUser, FiMail, FiPhone, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
 
-const Register = ({setIsRegister}) => {
+const FieldIcon = ({ icon: Icon }) => (
+  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+    <Icon size={16} className="text-muted-foreground" />
+  </div>
+);
+
+const Register = ({ setIsRegister }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    role: "",
+    name: "", email: "", phone: "", password: "", role: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
-  const handleRoleSelection = (selectedRole) => {
+  const handleRoleSelection = (selectedRole) =>
     setFormData({ ...formData, role: selectedRole });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,122 +29,77 @@ const Register = ({setIsRegister}) => {
   const registerMutation = useMutation({
     mutationFn: (reqData) => register(reqData),
     onSuccess: (res) => {
-      const { data } = res;
-      enqueueSnackbar(data.message, { variant: "success" });
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        role: "",
-      });
-      
-      setTimeout(() => {
-        setIsRegister(false);
-      }, 1500);
+      enqueueSnackbar(res.data.message, { variant: "success" });
+      setFormData({ name: "", email: "", phone: "", password: "", role: "" });
+      setTimeout(() => setIsRegister(false), 1500);
     },
     onError: (error) => {
-      const { response } = error;
-      const message = response.data.message;
-      enqueueSnackbar(message, { variant: "error" });
+      enqueueSnackbar(error?.response?.data?.message || "Registration failed", { variant: "error" });
     },
   });
 
+  const fields = [
+    { name: "name",     icon: FiUser,  type: "text",     placeholder: "e.g. John Doe",         label: "Employee Name" },
+    { name: "email",    icon: FiMail,  type: "email",    placeholder: "name@restaurant.com",   label: "Email Address" },
+    { name: "phone",    icon: FiPhone, type: "number",   placeholder: "+92 300 1234567",        label: "Phone Number" },
+    { name: "password", icon: FiLock,  type: "password", placeholder: "••••••••",               label: "Password" },
+  ];
+
+  const roles = ["Cashier", "Admin", "Super Admin"];
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-[#ababab] mb-2 text-sm font-medium">
-            Employee Name
-          </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter employee name"
-              className="bg-transparent flex-1 text-white focus:outline-none"
-              required
-            />
+    <div className="w-full">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {fields.map(({ name, icon, type, placeholder, label }) => (
+          <div key={name}>
+            <label className="form-label">{label}</label>
+            <div className="relative">
+              <FieldIcon icon={icon} />
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={placeholder}
+                required
+                className="input-base pl-11"
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Employee Email
-          </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter employee email"
-              className="bg-transparent flex-1 text-white focus:outline-none"
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Employee Phone
-          </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
-            <input
-              type="number"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Enter employee phone"
-              className="bg-transparent flex-1 text-white focus:outline-none"
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Password
-          </label>
-          <div className="flex item-center rounded-lg p-5 px-4 bg-[#1f1f1f]">
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter password"
-              className="bg-transparent flex-1 text-white focus:outline-none"
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">
-            Choose your role
-          </label>
+        ))}
 
-          <div className="flex item-center gap-3 mt-4">
-            {["Waiter", "Cashier", "Admin"].map((role) => {
-              return (
-                <button
-                  key={role}
-                  type="button"
-                  onClick={() => handleRoleSelection(role)}
-                  className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] ${
-                    formData.role === role ? "bg-indigo-700" : ""
-                  }`}
-                >
-                  {role}
-                </button>
-              );
-            })}
+        {/* Role Selector */}
+        <div>
+          <label className="form-label">Choose Role</label>
+          <div className="flex gap-2 mt-1">
+            {roles.map((role) => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => handleRoleSelection(role)}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-2 transition-all duration-200 ${
+                  formData.role === role
+                    ? "bg-gradient-to-r from-primary to-amber-500 border-transparent text-primary-foreground shadow-md shadow-primary/30"
+                    : "bg-secondary border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                }`}
+              >
+                {role}
+              </button>
+            ))}
           </div>
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
-          className="w-full rounded-lg mt-6 py-3 text-lg bg-yellow-400 text-gray-900 font-bold"
+          disabled={registerMutation.isPending}
+          className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-primary to-amber-500 hover:from-amber-500 hover:to-primary text-primary-foreground font-bold rounded-xl py-3.5 mt-2 transition-all duration-200 shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Sign up
+          {registerMutation.isPending ? (
+            <><FiLoader size={18} className="animate-spin" /> Creating Account…</>
+          ) : (
+            <>Create Account <FiArrowRight size={18} /></>
+          )}
         </button>
       </form>
     </div>
