@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = [];
 
@@ -32,12 +32,20 @@ const cartSlice = createSlice({
             return action.payload;
         },
 
-        removeAllItems: (state) => {
+        removeAllItems: () => {
             return [];
         }
     }
 })
 
-export const getTotalPrice = (state) => state.cart.reduce((total, item) => total + item.price, 0);
+export const selectCartItems = (state) => state.cart;
+
+// Memoized selector for performance optimization
+// Prevents recalculating the total price unless cart items change
+export const getTotalPrice = createSelector(
+  [selectCartItems],
+  (cart) => cart.reduce((total, item) => total + item.price, 0)
+);
+
 export const { addItems, removeItem, removeAllItems, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
