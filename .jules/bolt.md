@@ -1,0 +1,3 @@
+## 2026-08-28 - [Redux Array Selectors Memoization]
+**Learning:** Returning a new array directly from a Redux selector (like mapping over a list without memoization) creates a new object reference on every state change. This causes any component using that selector to re-render, even if the relevant portion of the state hasn't changed.
+**Action:** Always use `createSelector` from `@reduxjs/toolkit` for array-returning or transforming selectors to memoize the result based on the specific piece of state it depends on.
