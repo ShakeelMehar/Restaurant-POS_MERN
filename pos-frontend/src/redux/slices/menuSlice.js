@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createSelector } from "@reduxjs/toolkit";
 import { getTotalDishCount, loadMenuCatalog } from "../../utils/menuCatalog";
 
 const initialState = {
@@ -42,10 +42,23 @@ const menuSlice = createSlice({
 });
 
 export const selectMenuCategories = (state) => state.menu.categories;
-export const selectTotalDishCount = (state) =>
-  getTotalDishCount(state.menu.categories);
-export const selectAllDishes = (state) =>
-  state.menu.categories.flatMap((category) =>
+
+// ⚡ Bolt Performance Optimization:
+// Memoized this selector using `createSelector` to prevent returning a new array
+// reference on every state change, which previously caused unnecessary re-renders
+// in components using `selectTotalDishCount`.
+export const selectTotalDishCount = createSelector(
+  [selectMenuCategories],
+  (categories) => getTotalDishCount(categories)
+);
+
+// ⚡ Bolt Performance Optimization:
+// Memoized this selector using `createSelector` to prevent returning a new array
+// reference (via flatMap/map) on every state change. This prevents expensive
+// unnecessary re-renders in components like `Catalog` and `PopularDishes`.
+export const selectAllDishes = createSelector(
+  [selectMenuCategories],
+  (categories) => categories.flatMap((category) =>
     category.items.map((dish) => ({
       ...dish,
       categoryId: category.id,
@@ -53,7 +66,8 @@ export const selectAllDishes = (state) =>
       bgColor: category.bgColor,
       icon: category.icon,
     }))
-  );
+  )
+);
 
 export const { addCategory, addDish } = menuSlice.actions;
 export default menuSlice.reducer;
