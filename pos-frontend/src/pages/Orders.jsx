@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import OrderCard from "../components/orders/OrderCard";
 import OrderDetailsModal from "../components/orders/OrderDetailsModal";
 import BackButton from "../components/shared/BackButton";
@@ -31,23 +31,31 @@ const Orders = () => {
     if (isError) enqueueSnackbar("Something went wrong!", { variant: "error" });
   }, [isError]);
 
-  const allOrders = resData?.data?.data || [];
+  const allOrders = useMemo(() => resData?.data?.data || [], [resData]);
 
-  const getCount = (id) => {
-    if (id === "all") return allOrders.length;
-    if (id === "progress") return allOrders.filter((o) => o.orderStatus === "In Progress").length;
-    if (id === "ready") return allOrders.filter((o) => o.orderStatus === "Ready").length;
-    if (id === "completed") return allOrders.filter((o) => o.orderStatus === "Completed").length;
-    return 0;
-  };
+  // ⚡ Bolt Optimization: Computed order counts in a single O(N) pass
+  // instead of iterating allOrders O(N*4) times on every render.
+  const orderCounts = useMemo(() => {
+    const counts = { all: allOrders.length, progress: 0, ready: 0, completed: 0 };
+    allOrders.forEach((o) => {
+      if (o.orderStatus === "In Progress") counts.progress++;
+      else if (o.orderStatus === "Ready") counts.ready++;
+      else if (o.orderStatus === "Completed") counts.completed++;
+    });
+    return counts;
+  }, [allOrders]);
 
-  const filteredOrders = allOrders.filter((order) => {
-    if (status === "all") return true;
-    if (status === "progress") return order.orderStatus === "In Progress";
-    if (status === "ready") return order.orderStatus === "Ready";
-    if (status === "completed") return order.orderStatus === "Completed";
-    return true;
-  });
+  // ⚡ Bolt Optimization: Memoize filtered list to prevent unnecessary recalculation
+  // on every render when dependencies haven't changed.
+  const filteredOrders = useMemo(() => {
+    return allOrders.filter((order) => {
+      if (status === "all") return true;
+      if (status === "progress") return order.orderStatus === "In Progress";
+      if (status === "ready") return order.orderStatus === "Ready";
+      if (status === "completed") return order.orderStatus === "Completed";
+      return true;
+    });
+  }, [allOrders, status]);
 
   return (
     <section className="min-h-[calc(100vh-4rem)] bg-background pb-24">
@@ -65,7 +73,7 @@ const Orders = () => {
         <div className="flex items-center gap-1.5 flex-wrap">
           {FILTERS.map(({ id, label }) => {
             const isActive = status === id;
-            const count = getCount(id);
+            const count = orderCounts[id] || 0;
             return (
               <button
                 key={id}
