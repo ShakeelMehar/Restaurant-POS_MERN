@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createSelector } from "@reduxjs/toolkit";
 import { getTotalDishCount, loadMenuCatalog } from "../../utils/menuCatalog";
 
 const initialState = {
@@ -42,18 +42,28 @@ const menuSlice = createSlice({
 });
 
 export const selectMenuCategories = (state) => state.menu.categories;
-export const selectTotalDishCount = (state) =>
-  getTotalDishCount(state.menu.categories);
-export const selectAllDishes = (state) =>
-  state.menu.categories.flatMap((category) =>
-    category.items.map((dish) => ({
-      ...dish,
-      categoryId: category.id,
-      categoryName: category.name,
-      bgColor: category.bgColor,
-      icon: category.icon,
-    }))
-  );
+
+// Memoized to prevent unnecessary recalculations and re-renders
+export const selectTotalDishCount = createSelector(
+  [selectMenuCategories],
+  (categories) => getTotalDishCount(categories)
+);
+
+// Memoized to prevent returning a new array with new object references on every call,
+// which previously caused excessive React component re-renders
+export const selectAllDishes = createSelector(
+  [selectMenuCategories],
+  (categories) =>
+    categories.flatMap((category) =>
+      category.items.map((dish) => ({
+        ...dish,
+        categoryId: category.id,
+        categoryName: category.name,
+        bgColor: category.bgColor,
+        icon: category.icon,
+      }))
+    )
+);
 
 export const { addCategory, addDish } = menuSlice.actions;
 export default menuSlice.reducer;
