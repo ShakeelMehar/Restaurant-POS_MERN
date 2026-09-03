@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = [];
 
@@ -38,6 +38,13 @@ const cartSlice = createSlice({
     }
 })
 
-export const getTotalPrice = (state) => state.cart.reduce((total, item) => total + item.price, 0);
+const selectCart = (state) => state.cart;
+
+// ⚡ Bolt: Memoize derived data to avoid unnecessary recalculations
+export const getTotalPrice = createSelector(
+  [selectCart],
+  (cart) => cart.reduce((total, item) => total + item.price, 0)
+);
+
 export const { addItems, removeItem, removeAllItems, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
