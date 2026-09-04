@@ -1,0 +1,3 @@
+## 2024-05-18 - Memoizing Redux Selectors for Derived Data
+**Learning:** In the POS frontend, Redux selectors that return derived data or newly constructed arrays (e.g., using map/flatMap) create new references on every state update. This causes all components consuming these selectors via useSelector to needlessly re-render, even if the underlying data hasn't changed.
+**Action:** Always wrap selectors that compute derived data or construct new arrays in Redux Toolkit's createSelector. This ensures the output is memoized and a stable reference is returned, preventing unnecessary React re-renders.
